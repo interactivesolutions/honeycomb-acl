@@ -3,6 +3,7 @@
 namespace interactivesolutions\honeycombacl\providers;
 
 use Illuminate\Support\ServiceProvider;
+use interactivesolutions\honeycombacl\console\commands\GenerateACLPermissions;
 
 class HCACLServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,9 @@ class HCACLServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $commands = [];
+    protected $commands = [
+        GenerateACLPermissions::class
+    ];
 
     protected $namespace = 'interactivesolutions\honeycombacl\http\controllers';
 

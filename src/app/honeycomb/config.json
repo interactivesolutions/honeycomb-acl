@@ -10,7 +10,7 @@
                 "name": "admin.acl.permissions",
                 "controller": "interactivesolutions\\honeycombacl\\http\\controllers\\acl\\PermissionsController",
                 "actions": [
-                    "interactivesolutions_honeycomb_acl_acl_permissions_list",
+                    "interactivesolutions_honeycomb_acl_acl_permissions_list"
                 ]
             },
             {
