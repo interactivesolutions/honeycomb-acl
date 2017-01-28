@@ -16,6 +16,17 @@
                     "interactivesolutions_honeycomb_acl_acl_permissions_delete",
                     "interactivesolutions_honeycomb_acl_acl_permissions_force_delete"
                 ]
+            },
+            {
+                "name": "admin.acl.roles",
+                "controller": "interactivesolutions\\honeycombacl\\http\\controllers\\acl\\RolesController",
+                "actions": [
+                    "interactivesolutions_honeycomb_acl_acl_roles_list",
+                    "interactivesolutions_honeycomb_acl_acl_roles_create",
+                    "interactivesolutions_honeycomb_acl_acl_roles_update",
+                    "interactivesolutions_honeycomb_acl_acl_roles_delete",
+                    "interactivesolutions_honeycomb_acl_acl_roles_force_delete"
+                ]
             }
         ],
         "roles-actions": []
