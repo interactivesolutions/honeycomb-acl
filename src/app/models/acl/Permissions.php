@@ -18,6 +18,12 @@ class Permissions extends HCUuidModel
      *
      * @var array
      */
-    protected $fillable = ['id','name','controller','action'];
+    protected $fillable = ['id', 'name', 'controller', 'action'];
 
+    public static function deletePermission($action)
+    {
+        $permission = Permissions::where('action', $action)->first();
+        RolesPermissionsConnections::where('permission_id', $permission->id)->forceDelete();
+        $permission->forceDelete();
+    }
 }
