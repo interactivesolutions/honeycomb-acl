@@ -1,21 +1,23 @@
 {
-    "general":
-    {
+    "general": {
         "serviceProviderNameSpace": "HCACL"
     },
-    "formData":
-    [
-    ],
-    "adminMenu":
-    [
-    ],
-    "acl":
-    {
-        "permissions" :
-        [
+    "formData": [],
+    "adminMenu": [],
+    "acl": {
+        "permissions": [
+            {
+                "name": "admin.acl.permissions",
+                "controller": "interactivesolutions\\honeycombacl\\http\\controllers\\acl\\PermissionsController",
+                "actions": [
+                    "interactivesolutions_honeycomb_acl_acl_permissions_list",
+                    "interactivesolutions_honeycomb_acl_acl_permissions_create",
+                    "interactivesolutions_honeycomb_acl_acl_permissions_update",
+                    "interactivesolutions_honeycomb_acl_acl_permissions_delete",
+                    "interactivesolutions_honeycomb_acl_acl_permissions_force_delete"
+                ]
+            }
         ],
-        "roles-actions" :
-        [
-        ]
+        "roles-actions": []
     }
 }

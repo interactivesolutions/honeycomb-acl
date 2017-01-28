@@ -1,5 +1,4 @@
 <?php
-//./packages/interactivesolutions/honeycomb-acl/src/app/routes/routes.acl.permissions.php
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function ()
 {
@@ -21,4 +20,3 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function ()
         Route::delete('acl/permissions/force', ['as' => 'admin.api.acl.permissions.force.multi', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_acl_permissions_force_delete'], 'uses' => 'acl\\PermissionsController@forceDelete']);
     });
 });
-
