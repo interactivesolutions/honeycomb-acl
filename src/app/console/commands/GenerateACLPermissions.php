@@ -84,14 +84,14 @@ class GenerateACLPermissions extends HCCommand
                 $config = json_decode(file_get_contents($filePath), true);
 
                 if (is_null($config))
-                    $this->info('not valid json file: ' . $filePath);
+                    $this->info('Invalid json file: ' . $filePath);
                 else
                 {
                     $packageName = array_get($config, 'general.serviceProviderNameSpace');
 
                     if (is_null($packageName) || $packageName == '')
                     {
-                        $this->error('SKIPPING! Package must have name! file: ' . $filePath);
+                        $this->error('SKIPPING! Package must have a name! file: ' . $filePath);
                         continue;
                     }
 

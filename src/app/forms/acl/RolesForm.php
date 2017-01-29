@@ -13,8 +13,7 @@ class RolesForm extends HCCoreFormValidator
     {
         return [
             'name' => 'required',
-'slug' => 'required',
-
+            'slug' => 'required',
         ];
     }
 }

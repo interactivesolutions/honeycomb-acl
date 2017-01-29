@@ -49,8 +49,9 @@ class HCACLServiceProvider extends ServiceProvider
     {
         $filePath = __DIR__ . '/../Http/helpers.php';
 
-        if (\File::isFile($filePath))
+        if (\File::isFile($filePath)) {
             require_once $filePath;
+        }
     }
 
     /**

@@ -13,9 +13,8 @@ class PermissionsForm extends HCCoreFormValidator
     {
         return [
             'name' => 'required',
-'controller' => 'required',
-'action' => 'required',
-
+            'controller' => 'required',
+            'action' => 'required',
         ];
     }
 }

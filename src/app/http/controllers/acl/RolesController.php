@@ -50,14 +50,13 @@ class RolesController extends HCBaseController
     {
         return [
             'name'     => [
-    "type"  => "text",
-    "label" => trans('HCACL::acl_roles.name'),
-],
-'slug'     => [
-    "type"  => "text",
-    "label" => trans('HCACL::acl_roles.slug'),
-],
-
+            "type"  => "text",
+            "label" => trans('HCACL::acl_roles.name'),
+            ],
+            'slug'     => [
+            "type"  => "text",
+            "label" => trans('HCACL::acl_roles.slug'),
+            ],
         ];
     }
 
@@ -178,8 +177,7 @@ class RolesController extends HCBaseController
             $list = $list->where(function ($query) use ($parameter)
             {
                 $query->where('name', 'LIKE', '%' . $parameter . '%')
-->orWhere('slug', 'LIKE', '%' . $parameter . '%')
-;
+                      ->orWhere('slug', 'LIKE', '%' . $parameter . '%');
             });
         }
 
@@ -195,8 +193,9 @@ class RolesController extends HCBaseController
     {
         $_data = request()->all();
 
+        $data = [];
         array_set($data, 'record.name', array_get($_data, 'name'));
-array_set($data, 'record.slug', array_get($_data, 'slug'));
+        array_set($data, 'record.slug', array_get($_data, 'slug'));
 
         return $data;
     }

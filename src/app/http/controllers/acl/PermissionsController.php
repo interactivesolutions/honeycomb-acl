@@ -50,18 +50,17 @@ class PermissionsController extends HCBaseController
     {
         return [
             'name'     => [
-    "type"  => "text",
-    "label" => trans('HCACL::acl_permissions.name'),
-],
-'controller'     => [
-    "type"  => "text",
-    "label" => trans('HCACL::acl_permissions.controller'),
-],
-'action'     => [
-    "type"  => "text",
-    "label" => trans('HCACL::acl_permissions.action'),
-],
-
+                "type"  => "text",
+                "label" => trans('HCACL::acl_permissions.name'),
+                ],
+            'controller'     => [
+                "type"  => "text",
+                "label" => trans('HCACL::acl_permissions.controller'),
+            ],
+            'action'     => [
+                "type"  => "text",
+                "label" => trans('HCACL::acl_permissions.action'),
+            ],
         ];
     }
 
@@ -182,9 +181,8 @@ class PermissionsController extends HCBaseController
             $list = $list->where(function ($query) use ($parameter)
             {
                 $query->where('name', 'LIKE', '%' . $parameter . '%')
-->orWhere('controller', 'LIKE', '%' . $parameter . '%')
-->orWhere('action', 'LIKE', '%' . $parameter . '%')
-;
+                      ->orWhere('controller', 'LIKE', '%' . $parameter . '%')
+                      ->orWhere('action', 'LIKE', '%' . $parameter . '%')
             });
         }
 
@@ -200,9 +198,10 @@ class PermissionsController extends HCBaseController
     {
         $_data = request()->all();
 
+        $data = [];
         array_set($data, 'record.name', array_get($_data, 'name'));
-array_set($data, 'record.controller', array_get($_data, 'controller'));
-array_set($data, 'record.action', array_get($_data, 'action'));
+        array_set($data, 'record.controller', array_get($_data, 'controller'));
+        array_set($data, 'record.action', array_get($_data, 'action'));
 
         return $data;
     }
