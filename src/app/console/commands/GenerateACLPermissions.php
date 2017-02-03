@@ -47,9 +47,9 @@ class GenerateACLPermissions extends HCCommand
      *
      * @param Filesystem $filesystem
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct (Filesystem $filesystem)
     {
-        parent::__construct($filesystem);
+        parent::__construct ($filesystem);
 
         $this->filesystem = $filesystem;
     }
@@ -59,47 +59,43 @@ class GenerateACLPermissions extends HCCommand
      *
      * @return mixed
      */
-    public function handle()
+    public function handle ()
     {
-        $this->comment('Scanning permissions..');
+        $this->comment ('Scanning permissions..');
 
-        $this->scanRolesAndPermissions();
-        $this->generateRolesAndPermissions();
+        $this->scanRolesAndPermissions ();
+        $this->generateRolesAndPermissions ();
 
-        Cache::forget('permissions');
+        Cache::forget ('permissions');
 
-        $this->comment('-');
+        $this->comment ('-');
     }
 
     /**
      * Scans roles and permissions and create roles, permissions and roles_permissions
      */
-    private function scanRolesAndPermissions()
+    private function scanRolesAndPermissions ()
     {
-        $files = $this->getConfigFiles();
+        $files = $this->getConfigFiles ();
 
         if (!empty($files))
-            foreach ($files as $filePath)
-            {
-                $config = json_decode(file_get_contents($filePath), true);
+            foreach ($files as $filePath) {
+                $config = json_decode (file_get_contents ($filePath), true);
 
-                if (is_null($config))
-                    $this->info('Invalid json file: ' . $filePath);
-                else
-                {
-                    $packageName = array_get($config, 'general.serviceProviderNameSpace');
+                if (is_null ($config))
+                    $this->info ('Invalid json file: ' . $filePath);
+                else {
+                    $packageName = array_get ($config, 'general.serviceProviderNameSpace');
 
-                    if (is_null($packageName) || $packageName == '')
-                    {
-                        $this->error('SKIPPING! Package must have a name! file: ' . $filePath);
+                    if (is_null ($packageName) || $packageName == '') {
+                        $this->error ('SKIPPING! Package must have a name! file: ' . $filePath);
                         continue;
                     }
 
-                    if (array_key_exists('acl', $config))
-                    {
+                    if (array_key_exists ('acl', $config)) {
                         $this->aclData[] = [
                             'packageName' => $packageName,
-                            'acl'         => array_get($config, 'acl'),
+                            'acl' => array_get ($config, 'acl'),
                         ];
                     }
                 }
@@ -109,11 +105,13 @@ class GenerateACLPermissions extends HCCommand
     /**
      * Create roles, permissions and roles_permissions
      */
-    private function generateRolesAndPermissions()
+    private function generateRolesAndPermissions ()
     {
         if (!empty($this->aclData))
-            foreach ($this->aclData as $acl)
-                $this->createPermissions($acl['acl']);
+            foreach ($this->aclData as $acl) {
+                $this->createPermissions ($acl['acl']);
+                $this->createRolesPermissions ($acl['acl']);
+            }
     }
 
     /**
@@ -121,20 +119,17 @@ class GenerateACLPermissions extends HCCommand
      *
      * @param $aclData
      */
-    private function createPermissions($aclData)
+    private function createPermissions ($aclData)
     {
-        if (array_key_exists('permissions', $aclData))
-        {
-            foreach ($aclData['permissions'] as $permission)
-            {
-                $this->removeDeletedPermissions($permission);
+        if (array_key_exists ('permissions', $aclData)) {
+            foreach ($aclData['permissions'] as $permission) {
+                $this->removeDeletedPermissions ($permission);
 
-                foreach ($permission['actions'] as $action)
-                {
-                    $permissionId = Permissions::firstOrCreate([
-                        'name'       => $permission['name'],
+                foreach ($permission['actions'] as $action) {
+                    $permissionId = Permissions::firstOrCreate ([
+                        'name' => $permission['name'],
                         'controller' => $permission['controller'],
-                        'action'     => $action,
+                        'action' => $action,
                     ]);
 
                     $this->permissionsIdList[$action] = $permissionId->id;
@@ -148,19 +143,43 @@ class GenerateACLPermissions extends HCCommand
      *
      * @param $permission
      */
-    private function removeDeletedPermissions($permission)
+    private function removeDeletedPermissions ($permission)
     {
-        $configActions = collect($permission['actions']);
+        $configActions = collect ($permission['actions']);
 
-        $actions = Permissions::where('name', $permission['name'])->pluck('action');
+        $actions = Permissions::where ('name', $permission['name'])->pluck ('action');
 
-        $removedActions = $actions->diff($configActions);
+        $removedActions = $actions->diff ($configActions);
 
-        if (!$removedActions->isEmpty())
+        if (!$removedActions->isEmpty ())
             foreach ($removedActions as $action)
-                Permissions::deletePermission($action);
+                Permissions::deletePermission ($action);
     }
 
-    //TODO create roles creation from config parameter "roles"
-    //TODO create predefined roles actions from config parameter "roles-actions"
+    /**
+     * Creating roles permissions
+     *
+     * @param $aclData
+     * @internal param $acl
+     */
+    private function createRolesPermissions ($aclData)
+    {
+        if (array_key_exists ('rolesActions', $aclData)) {
+            foreach ($aclData['rolesActions'] as $role => $actions) {
+                $roleRecord = Roles::where ('slug', $role)->first();
+
+                if (!$roleRecord)
+                    $roleRecord = Roles::create (['slug' => $role, 'name' => ucfirst (str_replace (['-', '_'], ' ', $role))]);
+
+                foreach ($actions as $action)
+                {
+                    $permission = Permissions::where('action', $action)->first();
+                    $connection = RolesPermissionsConnections::where(['role_id' => $roleRecord->id, 'permission_id' => $permission->id])->first();
+
+                    if (!$connection)
+                        RolesPermissionsConnections::create(['role_id' => $roleRecord->id, 'permission_id' => $permission->id]);
+                }
+            }
+        }
+    }
 }
