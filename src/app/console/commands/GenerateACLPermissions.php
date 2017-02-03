@@ -21,12 +21,7 @@ class GenerateACLPermissions extends HCCommand
      *
      * @var string
      */
-    protected $description = 'Go through all packages, find HoneyComb related and store all permissions';
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
+    protected $description = 'Go through all packages, find HoneyComb configuration file and store all permissions / roles / connections';
 
     /**
      * Permissions id list
@@ -41,18 +36,6 @@ class GenerateACLPermissions extends HCCommand
      * @var
      */
     private $aclData;
-
-    /**
-     * PrepareOctopusProject constructor.
-     *
-     * @param Filesystem $filesystem
-     */
-    public function __construct (Filesystem $filesystem)
-    {
-        parent::__construct ($filesystem);
-
-        $this->filesystem = $filesystem;
-    }
 
     /**
      * Execute the console command.
@@ -166,18 +149,12 @@ class GenerateACLPermissions extends HCCommand
     {
         if (array_key_exists ('rolesActions', $aclData)) {
             foreach ($aclData['rolesActions'] as $role => $actions) {
-                $roleRecord = Roles::where ('slug', $role)->first();
-
-                if (!$roleRecord)
-                    $roleRecord = Roles::create (['slug' => $role, 'name' => ucfirst (str_replace (['-', '_'], ' ', $role))]);
+                $roleRecord = Roles::firstOrCreate (['slug' => $role, 'name' => ucfirst (str_replace (['-', '_'], ' ', $role))]);
 
                 foreach ($actions as $action)
                 {
                     $permission = Permissions::where('action', $action)->first();
-                    $connection = RolesPermissionsConnections::where(['role_id' => $roleRecord->id, 'permission_id' => $permission->id])->first();
-
-                    if (!$connection)
-                        RolesPermissionsConnections::create(['role_id' => $roleRecord->id, 'permission_id' => $permission->id]);
+                    $connection = RolesPermissionsConnections::firstOrCreate(['role_id' => $roleRecord->id, 'permission_id' => $permission->id]);
                 }
             }
         }
