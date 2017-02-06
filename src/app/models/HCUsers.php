@@ -20,4 +20,15 @@ class HCUsers extends HCUuidModel
      */
     protected $fillable = ['id', 'activated_at', 'remember_token', 'last_login', 'last_visited', 'last_activity'];
 
+    /**
+     * Update last login timestamp
+     *
+     * @param null $time
+     */
+    public function updateLastLogin($time = null)
+    {
+        $this->last_login = $time ? $time : $this->freshTimestamp();
+        $this->save();
+    }
+
 }
