@@ -78,7 +78,7 @@ class GenerateACLPermissions extends HCCommand
                     if (array_key_exists ('acl', $config)) {
                         $this->aclData[] = [
                             'packageName' => $packageName,
-                            'acl' => array_get ($config, 'acl'),
+                            'acl'         => array_get ($config, 'acl'),
                         ];
                     }
                 }
@@ -110,9 +110,9 @@ class GenerateACLPermissions extends HCCommand
 
                 foreach ($permission['actions'] as $action) {
                     $permissionId = Permissions::firstOrCreate ([
-                        'name' => $permission['name'],
+                        'name'       => $permission['name'],
                         'controller' => $permission['controller'],
-                        'action' => $action,
+                        'action'     => $action,
                     ]);
 
                     $this->permissionsIdList[$action] = $permissionId->id;
@@ -151,10 +151,9 @@ class GenerateACLPermissions extends HCCommand
             foreach ($aclData['rolesActions'] as $role => $actions) {
                 $roleRecord = Roles::firstOrCreate (['slug' => $role, 'name' => ucfirst (str_replace (['-', '_'], ' ', $role))]);
 
-                foreach ($actions as $action)
-                {
-                    $permission = Permissions::where('action', $action)->first();
-                    $connection = RolesPermissionsConnections::firstOrCreate(['role_id' => $roleRecord->id, 'permission_id' => $permission->id]);
+                foreach ($actions as $action) {
+                    $permission = Permissions::where ('action', $action)->first ();
+                    $connection = RolesPermissionsConnections::firstOrCreate (['role_id' => $roleRecord->id, 'permission_id' => $permission->id]);
                 }
             }
         }
