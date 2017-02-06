@@ -23,6 +23,17 @@
                     "interactivesolutions_honeycomb_acl_acl_roles_delete",
                     "interactivesolutions_honeycomb_acl_acl_roles_force_delete"
                 ]
+            },
+            {
+                "name": "admin.users",
+                "controller": "interactivesolutions\\honeycombacl\\http\\controllers\\HCUsersController",
+                "actions": [
+                    "interactivesolutions_honeycomb_acl_users_list",
+                    "interactivesolutions_honeycomb_acl_users_create",
+                    "interactivesolutions_honeycomb_acl_users_update",
+                    "interactivesolutions_honeycomb_acl_users_delete",
+                    "interactivesolutions_honeycomb_acl_users_force_delete"
+                ]
             }
         ],
         "rolesActions": {
@@ -31,6 +42,10 @@
                 "interactivesolutions_honeycomb_acl_acl_roles_create",
                 "interactivesolutions_honeycomb_acl_acl_roles_update",
                 "interactivesolutions_honeycomb_acl_acl_roles_delete",
+                "interactivesolutions_honeycomb_acl_users_list",
+                "interactivesolutions_honeycomb_acl_users_create",
+                "interactivesolutions_honeycomb_acl_users_update",
+                "interactivesolutions_honeycomb_acl_users_delete"
             ]
         }
     }
