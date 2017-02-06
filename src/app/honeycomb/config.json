@@ -38,6 +38,7 @@
         ],
         "rolesActions": {
             "project-admin": [
+                "interactivesolutions_honeycomb_acl_acl_permissions_list",
                 "interactivesolutions_honeycomb_acl_acl_roles_list",
                 "interactivesolutions_honeycomb_acl_acl_roles_create",
                 "interactivesolutions_honeycomb_acl_acl_roles_update",
