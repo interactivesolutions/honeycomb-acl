@@ -2,9 +2,9 @@
 
 namespace interactivesolutions\honeycombacl\models\acl;
 
-use interactivesolutions\honeycombcore\models\HCUuidModel;
+use interactivesolutions\honeycombcore\models\HCModel;
 
-class RolesPermissionsConnections extends HCUuidModel
+class RolesPermissionsConnections extends HCModel
 {
     /**
      * The database table used by the model.
