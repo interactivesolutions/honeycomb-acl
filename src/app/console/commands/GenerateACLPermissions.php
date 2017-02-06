@@ -147,6 +147,10 @@ class GenerateACLPermissions extends HCCommand
      */
     private function createRolesPermissions ($aclData)
     {
+        //TODO extend DB with "manual" option which stands if user has created this role action connection
+        //TODO gather all actions
+        //TODO if manual connection leave it else delete all connections
+
         if (array_key_exists ('rolesActions', $aclData)) {
             foreach ($aclData['rolesActions'] as $role => $actions) {
                 $roleRecord = Roles::firstOrCreate (['slug' => $role, 'name' => ucfirst (str_replace (['-', '_'], ' ', $role))]);
