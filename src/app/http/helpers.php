@@ -1,1 +1,41 @@
 <?php
+
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
+use interactivesolutions\honeycombacl\models\acl\Permissions;
+
+if (!function_exists ('getHCPermissions')) {
+    /**
+     * @param bool $forceReCache
+     * @internal param bool $force
+     */
+    function getHCPermissions ($forceReCache = false)
+    {
+        if ($forceReCache || !Cache::has('hc-permissions'))
+        {
+            $expiresAt = Carbon::now ()->addHour (12);
+            $permissions = getPermissions ();
+            Cache::put ('hc-permissions', $permissions, $expiresAt);
+        }
+
+        return Cache::get ('hc-permissions');
+    }
+
+    /**
+     * Fetch the collection of site permissions.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     * @throws \Exception
+     */
+    function getPermissions ()
+    {
+        try {
+            return Permissions::with ('roles')->get ();
+        } catch (\Exception $e) {
+            $msg = $e->getMessage ();
+
+            if ($e->getCode () != 1045)
+                throw new \Exception($msg);
+        }
+    }
+}
