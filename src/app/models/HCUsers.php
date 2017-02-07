@@ -46,6 +46,8 @@ class HCUsers extends HCUuidModel implements AuthenticatableContract, Authorizab
     {
         $this->last_login = $time ? $time : $this->freshTimestamp();
         $this->save();
+
+        $this->updateLastActivity();
     }
 
     /**
