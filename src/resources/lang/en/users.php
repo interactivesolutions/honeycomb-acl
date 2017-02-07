@@ -15,5 +15,6 @@ return [
     'recovery'       => 'Recovery',
     'password'       => 'Password',
     'phone'          => 'Phone',
+    'page_title'     => 'Users'
 
 ];
