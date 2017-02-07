@@ -52,10 +52,6 @@ class HCUsersController extends HCBaseController
                 "type"  => "text",
                 "label" => trans ('HCACL::users.activated_at'),
             ],
-            'remember_token' => [
-                "type"  => "text",
-                "label" => trans ('HCACL::users.remember_token'),
-            ],
             'last_login'     => [
                 "type"  => "text",
                 "label" => trans ('HCACL::users.last_login'),
@@ -68,7 +64,6 @@ class HCUsersController extends HCBaseController
                 "type"  => "text",
                 "label" => trans ('HCACL::users.last_activity'),
             ],
-
         ];
     }
 
