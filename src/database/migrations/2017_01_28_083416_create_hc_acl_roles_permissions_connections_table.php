@@ -14,7 +14,6 @@ class CreateHcAclRolesPermissionsConnectionsTable extends Migration {
 	{
 		Schema::create('hc_acl_roles_permissions_connections', function(Blueprint $table)
 		{
-			$table->string('id', 36)->unique('id_UNIQUE');
 			$table->integer('count', true);
 			$table->timestamps();
 			$table->string('role_id', 36)->index('fk_hc_roles_permissions_connections_hc_acl_roles_idx');
