@@ -2,8 +2,13 @@
 
 namespace interactivesolutions\honeycombacl\providers;
 
+use Cache;
+use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
+use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use interactivesolutions\honeycombacl\console\commands\GenerateACLPermissions;
+use interaktyvussprendimai\ocv3acl\http\middleware\HCACLPermissionsMiddleware;
 
 class HCACLServiceProvider extends ServiceProvider
 {
@@ -20,17 +25,19 @@ class HCACLServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap the application services.
+     * @param GateContract $gate
+     * @param Router $router
      */
-    public function boot ()
+    public function boot (GateContract $gate, Router $router)
     {
         // register artisan commands
         $this->commands ($this->commands);
 
         // loading views
-        $this->loadViewsFrom (__DIR__ . '/../resources/views', 'HCACL');
+        $this->loadViewsFrom (__DIR__ . '/../../resources/views', 'HCACL');
 
         // loading translations
-        $this->loadTranslationsFrom (__DIR__ . '/../resources/lang', 'HCACL');
+        $this->loadTranslationsFrom (__DIR__ . '/../../resources/lang', 'HCACL');
 
         // registering elements to publish
         $this->registerPublishElements ();
@@ -40,6 +47,9 @@ class HCACLServiceProvider extends ServiceProvider
 
         // registering routes
         $this->registerRoutes ();
+
+        // registering middleware
+        $this->registerMiddleware ($gate, $router);
     }
 
     /**
@@ -78,6 +88,40 @@ class HCACLServiceProvider extends ServiceProvider
         \Route::group (['namespace' => $this->namespace], function ($router) {
             require __DIR__ . '/../../app/honeycomb/routes.php';
         });
+    }
+
+    /**
+     * @param $gate
+     * @param $router
+     */
+    private function registerMiddleware ($gate, $router)
+    {
+        $this->registerACLPermissions($gate);
+        $router->middleware ('acl', HCACLPermissionsMiddleware::class);
+    }
+
+    /**
+     * Register acl permissions
+     *
+     * @param $gate
+     */
+    protected function registerACLPermissions (GateContract $gate)
+    {
+        $gate->before (function ($user, $ability) {
+            if ($user->isSuperAdmin ()) {
+                return true;
+            }
+        });
+
+        $permissions = getHCPermissions(true);
+
+        if (!is_null ($permissions)) {
+            foreach ($permissions as $permission) {
+                $gate->define ($permission->action, function ($user) use ($permission) {
+                    return $user->hasPermission ($permission);
+                });
+            }
+        }
     }
 }
 

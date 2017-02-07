@@ -1,5 +1,6 @@
 <?php namespace interactivesolutions\honeycombacl\http\controllers;
 
+use Illuminate\Support\Facades\Hash;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use interactivesolutions\honeycombacl\models\HCUsers;
 use interactivesolutions\honeycombacl\forms\HCUsersForm;
@@ -202,11 +203,8 @@ class HCUsersController extends HCBaseController
     {
         $_data = request ()->all ();
 
-        array_set ($data, 'record.activated_at', array_get ($_data, 'activated_at'));
-        array_set ($data, 'record.remember_token', array_get ($_data, 'remember_token'));
-        array_set ($data, 'record.last_login', array_get ($_data, 'last_login'));
-        array_set ($data, 'record.last_visited', array_get ($_data, 'last_visited'));
-        array_set ($data, 'record.last_activity', array_get ($_data, 'last_activity'));
+        array_set ($data, 'record.email', array_get ($_data, 'email'));
+        array_set ($data, 'record.password', Hash::make (array_get ($_data, 'password')));
 
         return $data;
     }

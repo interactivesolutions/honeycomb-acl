@@ -15,6 +15,7 @@ if (!function_exists ('getHCPermissions')) {
         {
             $expiresAt = Carbon::now ()->addHour (12);
             $permissions = getPermissions ();
+
             Cache::put ('hc-permissions', $permissions, $expiresAt);
         }
 

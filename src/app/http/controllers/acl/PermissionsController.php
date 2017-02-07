@@ -182,7 +182,7 @@ class PermissionsController extends HCBaseController
             {
                 $query->where('name', 'LIKE', '%' . $parameter . '%')
                       ->orWhere('controller', 'LIKE', '%' . $parameter . '%')
-                      ->orWhere('action', 'LIKE', '%' . $parameter . '%')
+                      ->orWhere('action', 'LIKE', '%' . $parameter . '%');
             });
         }
 
