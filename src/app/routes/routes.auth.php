@@ -10,3 +10,5 @@ Route::group (['prefix' => 'auth', 'middleware' => ['web']], function () {
 
     Route::get ('logout', ['as' => 'auth.logout', 'middleware' => 'auth', 'uses' => 'HCAuthController@logout']);
 });
+
+Route::get ('admin', ['as' => 'auth.logout', 'middleware' => ['web', 'auth'], 'uses' => 'HCAuthController@showLogin']);

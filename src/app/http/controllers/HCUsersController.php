@@ -7,7 +7,6 @@ use interactivesolutions\honeycombacl\forms\HCUsersForm;
 
 class HCUsersController extends HCBaseController
 {
-
     /**
      * Returning configured admin view
      *
@@ -18,24 +17,24 @@ class HCUsersController extends HCBaseController
         $config = [
             'title'       => trans ('HCACL::users.page_title'),
             'listURL'     => route ('admin.api.users'),
-            'newFormUrl'  => route ('admin.api.form-manager', ['users-new']),
-            'editFormUrl' => route ('admin.api.form-manager', ['users-edit']),
-            'imagesUrl'   => route ('resource.get', ['/']),
+    //        'newFormUrl'  => route ('admin.api.form-manager', ['users-new']),
+    //        'editFormUrl' => route ('admin.api.form-manager', ['users-edit']),
+    //        'imagesUrl'   => route ('resource.get', ['/']),
             'headers'     => $this->getAdminListHeader (),
         ];
 
-        if ($this->user->can ('interactivesolutions_honeycomb_acl_users_create'))
+        if ($this->user()->can ('interactivesolutions_honeycomb_acl_users_create'))
             $config['actions'][] = 'new';
 
-        if ($this->user->can ('interactivesolutions_honeycomb_acl_users_update')) {
+        if ($this->user()->can ('interactivesolutions_honeycomb_acl_users_update')) {
             $config['actions'][] = 'update';
             $config['actions'][] = 'restore';
         }
 
-        if ($this->user->can ('interactivesolutions_honeycomb_acl_users_delete'))
+        if ($this->user()->can ('interactivesolutions_honeycomb_acl_users_delete'))
             $config['actions'][] = 'delete';
 
-        if ($this->user->can ('interactivesolutions_honeycomb_acl_users_search'))
+        if ($this->user()->can ('interactivesolutions_honeycomb_acl_users_search'))
             $config['actions'][] = 'search';
 
         return view ('HCCoreUI::admin.content.list', ['config' => $config]);

@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 use interactivesolutions\honeycombacl\models\acl\Permissions;
 
 if (!function_exists ('getHCPermissions')) {
@@ -31,7 +32,11 @@ if (!function_exists ('getHCPermissions')) {
     function getPermissions ()
     {
         try {
-            return Permissions::with ('roles')->get ();
+            if( class_exists(Permissions::class) ) {
+                if( Schema::hasTable(Permissions::getTableName()) ) {
+                    return Permissions::with('roles')->get();
+                }
+            }
         } catch (\Exception $e) {
             $msg = $e->getMessage ();
 

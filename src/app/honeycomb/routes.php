@@ -80,3 +80,5 @@ Route::group (['prefix' => 'admin', 'middleware' => ['web', 'auth']], function (
         Route::delete ('users/force', ['as' => 'admin.api.users.force.multi', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_force_delete'], 'uses' => 'HCUsersController@forceDelete']);
     });
 });
+
+Route::get ('admin', ['as' => 'admin.index', 'middleware' => ['web', 'auth'], 'uses' => 'HCAuthController@showLogin']);

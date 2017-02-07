@@ -3,7 +3,6 @@
 namespace interactivesolutions\honeycombacl\providers;
 
 use Cache;
-use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
