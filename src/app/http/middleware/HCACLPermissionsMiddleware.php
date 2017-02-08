@@ -1,6 +1,6 @@
 <?php
 
-namespace interaktyvussprendimai\ocv3acl\http\middleware;
+namespace interactivesolutions\honeycombacl\http\middleware;
 
 use Closure;
 use HCLog;
