@@ -8,7 +8,8 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use interactivesolutions\honeycombacl\console\commands\GenerateACLPermissions;
 use interactivesolutions\honeycombacl\console\commands\GenerateAdminMenu;
-use interaktyvussprendimai\ocv3acl\http\middleware\HCACLPermissionsMiddleware;
+use interactivesolutions\honeycombacl\http\middleware\HCACLAuthenticate;
+use interactivesolutions\honeycombacl\http\middleware\HCACLPermissionsMiddleware;
 
 class HCACLServiceProvider extends ServiceProvider
 {
@@ -99,6 +100,7 @@ class HCACLServiceProvider extends ServiceProvider
     {
         $this->registerACLPermissions($gate);
         $router->middleware ('acl', HCACLPermissionsMiddleware::class);
+        $router->middleware ('auth', HCACLAuthenticate::class);
     }
 
     /**
