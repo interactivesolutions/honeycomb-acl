@@ -15,6 +15,11 @@ return [
     'recovery'       => 'Recovery',
     'password'       => 'Password',
     'phone'          => 'Phone',
-    'page_title'     => 'Users'
+    'page_title'     => 'Users',
+
+    'errors' =>
+    [
+        'not_activated' => 'USER IS NOT ACTIVATED'
+    ]
 
 ];
