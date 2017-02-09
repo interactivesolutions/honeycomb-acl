@@ -2,9 +2,9 @@
 
 namespace interactivesolutions\honeycombacl\models\acl;
 
-use interactivesolutions\honeycombcore\models\HCUuidModel;
+use interactivesolutions\honeycombcore\models\HCModel;
 
-class RolesUsersConnections extends HCUuidModel
+class RolesUsersConnections extends HCModel
 {
     /**
      * The database table used by the model.
@@ -19,5 +19,4 @@ class RolesUsersConnections extends HCUuidModel
      * @var array
      */
     protected $fillable = ['role_id', 'user_id'];
-
 }
