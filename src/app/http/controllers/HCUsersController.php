@@ -1,6 +1,7 @@
 <?php namespace interactivesolutions\honeycombacl\http\controllers;
 
 use Illuminate\Support\Facades\Hash;
+use interactivesolutions\honeycombacl\models\acl\RolesUsersConnections;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use interactivesolutions\honeycombacl\models\HCUsers;
 use interactivesolutions\honeycombacl\forms\HCUsersForm;
@@ -81,6 +82,9 @@ class HCUsersController extends HCBaseController
         (new HCUsersForm())->validateForm ();
 
         $record = HCUsers::create (array_get ($data, 'record'));
+
+        //TODO roleUser only
+        $record->roleSuperAdmin();
 
         return $this->getSingleRecord ($record->id);
     }
