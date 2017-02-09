@@ -2,7 +2,6 @@
 
 namespace interactivesolutions\honeycombacl\models\traits;
 
-
 use interactivesolutions\honeycombacl\models\acl\Permissions;
 use interactivesolutions\honeycombacl\models\acl\Roles;
 use interactivesolutions\honeycombacl\models\acl\RolesUsersConnections;
@@ -106,5 +105,77 @@ trait UserRoles
     public function currentRolesArray()
     {
         return $this->roles()->lists('slug');
+    }
+
+    /**
+     * Attach user role to user
+     */
+    public function roleUser ()
+    {
+        RolesUsersConnections::create (['user_id' => $this-id, 'role_id' => Roles::where ('slug', 'user')->first ()['id']]);
+    }
+
+    /**
+     * Attach super admin role to user
+     */
+    public function roleSuperAdmin ()
+    {
+        RolesUsersConnections::create (['user_id' => $this->id, 'role_id' => Roles::where ('slug', 'super-admin')->first ()['id']]);
+    }
+
+    /**
+     * Attach project admin role to user
+     */
+    public function roleProjectAdmin ()
+    {
+        RolesUsersConnections::create (['user_id' => $this->id, 'role_id' => Roles::where ('slug', 'project-admin')->first ()['id']]);
+    }
+
+    /**
+     * Attach editor role to user
+     */
+    public function roleEditor ()
+    {
+        RolesUsersConnections::create (['user_id' => $this->id, 'role_id' => Roles::where ('slug', 'editor')->first ()['id']]);
+    }
+
+    /**
+     * Attach author role to user
+     */
+    public function roleAuthor ()
+    {
+        RolesUsersConnections::create (['user_id' => $this->id, 'role_id' => Roles::where ('slug', 'author')->first ()['id']]);
+    }
+
+    /**
+     * Attach contributor role to user
+     */
+    public function roleContributor ()
+    {
+        RolesUsersConnections::create (['user_id' => $this->id, 'role_id' => Roles::where ('slug', 'contributor')->first ()['id']]);
+    }
+
+    /**
+     * Attach moderator role to user
+     */
+    public function roleModerator ()
+    {
+        RolesUsersConnections::create (['user_id' => $this->id, 'role_id' => Roles::where ('slug', 'moderator')->first ()['id']]);
+    }
+
+    /**
+     * Attach member role to user
+     */
+    public function roleMember ()
+    {
+        RolesUsersConnections::create (['user_id' => $this->id, 'role_id' => Roles::where ('slug', 'subscriber')->first ()['id']]);
+    }
+
+    /**
+     * Attach subscriber role to user
+     */
+    public function roleSubscriber ()
+    {
+        RolesUsersConnections::create (['user_id' => $this->id, 'role_id' => Roles::where ('slug', 'subscriber')->first ()['id']]);
     }
 }
