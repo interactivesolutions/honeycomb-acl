@@ -3,7 +3,29 @@
         "serviceProviderNameSpace": "HCACL"
     },
     "formData": [],
-    "adminMenu": [],
+    "adminMenu": [
+        {
+            "path" : "admin/users",
+            "translation" : "HCACL::users.page_title",
+            "icon" : "fa-users",
+            "aclPermission" : "interactivesolutions_honeycomb_acl_users_list",
+            "children" :
+            [
+                {
+                    "path" : "admin/users/roles",
+                    "translation" : "HCACL::acl_roles.page_title",
+                    "icon" : "fa-user-md",
+                    "aclPermission" : "interactivesolutions_honeycomb_acl_acl_roles_list"
+                },
+                {
+                    "path" : "admin/users/permissions",
+                    "translation" : "HCACL::acl_permissions.page_title",
+                    "icon" : "fa-server",
+                    "aclPermission" : "interactivesolutions_honeycomb_acl_acl_permissions_list"
+                }
+            ]
+        }
+    ],
     "acl": {
         "permissions": [
             {
