@@ -57,13 +57,15 @@ class HCAuthController extends HCBaseController
         //TODO validate form
         //TODO user throttles
 
-        $auth = auth ()->guard ('web');
+        if (!auth ()->guard ('web')->attempt ($data))
+            return response (['success' => false, 'message' => 'AUTH-002 - ' . trans ('HCACL::users.errors.login')]);
 
-        if (!$auth->attempt ($data)) {
-            return response (['success' => false, 'message' => 'AUTH-002 - ' . trans ('users::users.errors.login')]);
+        if (!$this->user()['activated_at'])
+        {
+            $this->logout();
+            return response (['success' => false, 'message' => 'AUTH-004 - ' . trans ('HCACL::users.errors.not_activated')]);
         }
 
-        //TODO check if user is not activated
         //TODO update providers?
 
         auth ()->user ()->updateLastLogin ();
