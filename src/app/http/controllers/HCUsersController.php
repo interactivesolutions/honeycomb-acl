@@ -152,7 +152,7 @@ class HCUsersController extends HCBaseController
         $list = HCUsers::with ($with)->select ($select)
             // add filters
             ->where (function ($query) use ($select) {
-                $query->where ($this->getRequestParameters ($select));
+                $query = $this->getRequestParameters ($query, $select);
             });
 
         $list = $this->checkForDeleted ($list);
@@ -160,12 +160,8 @@ class HCUsersController extends HCBaseController
         // add search items
         $list = $this->listSearch ($list);
 
-        $orderData = request ()->input ('_order');
-
-        if ($orderData)
-            foreach ($orderData as $column => $direction)
-                if (strtolower ($direction) == 'asc' || strtolower ($direction) == 'desc')
-                    $list = $list->orderBy ($column, $direction);
+        // ordering data
+        $list = $this->orderData($list, $select);
 
         return $list->paginate ($this->recordsPerPage)->toArray ();
     }
