@@ -2,7 +2,7 @@
 
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use interactivesolutions\honeycombacl\models\acl\Permissions;
-use interactivesolutions\honeycombacl\forms\acl\PermissionsForm;
+use interactivesolutions\honeycombacl\validators\acl\PermissionsValidator;
 
 class PermissionsController extends HCBaseController
 {
@@ -75,7 +75,7 @@ class PermissionsController extends HCBaseController
         if(is_null($data))
             $data = $this->getInputData();
 
-        (new PermissionsForm())->validateForm();
+        (new PermissionsValidator())->validateForm();
 
         $record = Permissions::create(array_get($data, 'record'));
 

@@ -1,10 +1,9 @@
 <?php namespace interactivesolutions\honeycombacl\http\controllers;
 
 use Illuminate\Support\Facades\Hash;
-use interactivesolutions\honeycombacl\models\acl\RolesUsersConnections;
+use interactivesolutions\honeycombacl\validators\HCUsersValidator;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use interactivesolutions\honeycombacl\models\HCUsers;
-use interactivesolutions\honeycombacl\forms\HCUsersForm;
 
 class HCUsersController extends HCBaseController
 {
@@ -79,7 +78,7 @@ class HCUsersController extends HCBaseController
         if (is_null ($data))
             $data = $this->getInputData ();
 
-        (new HCUsersForm())->validateForm ();
+        (new HCUsersValidator())->validateForm ();
 
         $record = HCUsers::create (array_get ($data, 'record'));
 
@@ -101,7 +100,7 @@ class HCUsersController extends HCBaseController
 
         //TODO read request parameters only once fo getting data and validating it
         $data = $this->getInputData ();
-        (new HCUsersForm())->validateForm ();
+        (new HCUsersValidator())->validateForm ();
 
         $record->update (array_get ($data, 'record'));
 

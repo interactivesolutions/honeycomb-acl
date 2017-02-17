@@ -2,7 +2,7 @@
 
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use interactivesolutions\honeycombacl\models\acl\Roles;
-use interactivesolutions\honeycombacl\forms\acl\RolesForm;
+use interactivesolutions\honeycombacl\validators\acl\RolesValidator;
 
 class RolesController extends HCBaseController
 {
@@ -71,7 +71,7 @@ class RolesController extends HCBaseController
         if(is_null($data))
             $data = $this->getInputData();
 
-        (new RolesForm())->validateForm();
+        (new RolesValidator())->validateForm();
 
         $record = Roles::create(array_get($data, 'record'));
 

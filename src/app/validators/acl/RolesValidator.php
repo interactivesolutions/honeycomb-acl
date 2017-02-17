@@ -1,8 +1,8 @@
-<?php namespace interactivesolutions\honeycombacl\forms;
+<?php namespace interactivesolutions\honeycombacl\validators\acl;
 
 use interactivesolutions\honeycombcore\http\controllers\HCCoreFormValidator;
 
-class HCUsersForm extends HCCoreFormValidator
+class RolesValidator extends HCCoreFormValidator
 {
     /**
      * Get the validation rules that apply to the request.
@@ -12,7 +12,8 @@ class HCUsersForm extends HCCoreFormValidator
     protected function rules()
     {
         return [
-            
+            'name' => 'required',
+            'slug' => 'required',
         ];
     }
 }
