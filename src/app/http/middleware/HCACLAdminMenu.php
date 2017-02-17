@@ -20,7 +20,7 @@ class HCACLAdminMenu
         if (auth ()->check ()) {
             if ($request->segment (1) == 'admin') {
                 if (!Cache::has ('hc-admin-menu'))
-                    Artisan::call ('hc:menu');
+                    Artisan::call ('hc:admin-menu');
 
                 // get menu items from cache
                 $menu = Cache::get ('hc-admin-menu');
