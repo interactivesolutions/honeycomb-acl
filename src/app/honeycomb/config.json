@@ -2,7 +2,9 @@
     "general": {
         "serviceProviderNameSpace": "HCACL"
     },
-    "formData": [],
+    "formData": {
+        "users": "interactivesolutions\\honeycombacl\\forms\\HCUsersForm"
+    },
     "adminMenu": [
         {
             "path" : "admin/users",
