@@ -7,7 +7,7 @@ use interactivesolutions\honeycombacl\models\acl\Roles;
 use interactivesolutions\honeycombacl\models\acl\RolesPermissionsConnections;
 use interactivesolutions\honeycombcore\commands\HCCommand;
 
-class GenerateACLPermissions extends HCCommand
+class HCPermissions extends HCCommand
 {
     /**
      * The name and signature of the console command.
