@@ -6,7 +6,7 @@ use Cache;
 use Carbon\Carbon;
 use interactivesolutions\honeycombcore\commands\HCCommand;
 
-class GenerateAdminMenu extends HCCommand
+class HCAdminMenu extends HCCommand
 {
     /**
      * The name and signature of the console command.

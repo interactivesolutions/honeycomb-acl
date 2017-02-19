@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use interactivesolutions\honeycombacl\console\commands\GenerateACLPermissions;
-use interactivesolutions\honeycombacl\console\commands\GenerateAdminMenu;
+use interactivesolutions\honeycombacl\console\commands\HCAdminMenu;
 use interactivesolutions\honeycombacl\http\middleware\HCACLAdminMenu;
 use interactivesolutions\honeycombacl\http\middleware\HCACLAuthenticate;
 use interactivesolutions\honeycombacl\http\middleware\HCACLPermissionsMiddleware;
@@ -21,7 +21,7 @@ class HCACLServiceProvider extends ServiceProvider
      */
     protected $commands = [
         GenerateACLPermissions::class,
-        GenerateAdminMenu::class
+        HCAdminMenu::class
     ];
 
     protected $namespace = 'interactivesolutions\honeycombacl\http\controllers';
