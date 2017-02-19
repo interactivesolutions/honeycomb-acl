@@ -6,6 +6,7 @@ use Cache;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use interactivesolutions\honeycombacl\console\commands\HCForms;
 use interactivesolutions\honeycombacl\console\commands\HCPermissions;
 use interactivesolutions\honeycombacl\console\commands\HCAdminMenu;
 use interactivesolutions\honeycombacl\http\middleware\HCACLAdminMenu;
@@ -21,7 +22,8 @@ class HCACLServiceProvider extends ServiceProvider
      */
     protected $commands = [
         HCPermissions::class,
-        HCAdminMenu::class
+        HCAdminMenu::class,
+        HCForms::class,
     ];
 
     protected $namespace = 'interactivesolutions\honeycombacl\http\controllers';
