@@ -23,19 +23,19 @@ class PermissionsController extends HCBaseController
             'headers'     => $this->getAdminListHeader(),
         ];
 
-        if ($this->user->can('interactivesolutions_honeycomb_acl_acl_permissions_create'))
+        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_create'))
             $config['actions'][] = 'new';
 
-        if ($this->user->can('interactivesolutions_honeycomb_acl_acl_permissions_update'))
+        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_update'))
         {
             $config['actions'][] = 'update';
             $config['actions'][] = 'restore';
         }
 
-        if ($this->user->can('interactivesolutions_honeycomb_acl_acl_permissions_delete'))
+        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_delete'))
             $config['actions'][] = 'delete';
 
-        if ($this->user->can('interactivesolutions_honeycomb_acl_acl_permissions_search'))
+        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_search'))
             $config['actions'][] = 'search';
 
         return view('HCCoreUI::admin.content.list', ['config' => $config]);
@@ -145,7 +145,7 @@ class PermissionsController extends HCBaseController
         $list = Permissions::with($with)->select($select)
         // add filters
         ->where(function ($query) use ($select) {
-            $query->where($this->getRequestParameters($select));
+            $query = $this->getRequestParameters($query, $select);
         });
 
         $list = $this->checkForDeleted($list);
@@ -153,15 +153,7 @@ class PermissionsController extends HCBaseController
         // add search items
         $list = $this->listSearch($list);
 
-        $orderData = request()->input('_order');
-
-        if ($orderData)
-            foreach($orderData as $column => $direction)
-                if (strtolower($direction) == 'asc' || strtolower($direction) == 'desc')
-                    $list = $list->orderBy($column, $direction);
-
-        // setOrdering
-        $list = $list->orderBy($this->field, $this->ordering);
+        $list = $this->orderData($list, $select);
 
         return $list->paginate($this->recordsPerPage)->toArray();
     }
