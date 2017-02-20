@@ -17,23 +17,8 @@ class PermissionsController extends HCBaseController
         $config = [
             'title'       => trans('HCACL::acl_permissions.page_title'),
             'listURL'     => route('admin.api.acl.permissions'),
-            'newFormUrl'  => route('admin.api.form-manager', ['acl-permissions-new']),
-            'editFormUrl' => route('admin.api.form-manager', ['acl-permissions-edit']),
-            'imagesUrl'   => route('resource.get', ['/']),
             'headers'     => $this->getAdminListHeader(),
         ];
-
-        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_create'))
-            $config['actions'][] = 'new';
-
-        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_update'))
-        {
-            $config['actions'][] = 'update';
-            $config['actions'][] = 'restore';
-        }
-
-        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_delete'))
-            $config['actions'][] = 'delete';
 
         if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_search'))
             $config['actions'][] = 'search';
@@ -62,76 +47,6 @@ class PermissionsController extends HCBaseController
                 "label" => trans('HCACL::acl_permissions.action'),
             ],
         ];
-    }
-
-    /**
-    * Create item
-    *
-    * @param null $data
-    * @return mixed
-    */
-    protected function __create($data = null)
-    {
-        if(is_null($data))
-            $data = $this->getInputData();
-
-        (new PermissionsValidator())->validateForm();
-
-        $record = Permissions::create(array_get($data, 'record'));
-
-        return $this->getSingleRecord($record->id);
-    }
-
-    /**
-    * Updates existing item based on ID
-    *
-    * @param $id
-    * @return mixed
-    */
-    protected function __update($id)
-    {
-        $record = Permissions::findOrFail($id);
-
-        //TODO read request parameters only once fo getting data and validating it
-        $data = $this->getInputData();
-        (new PermissionsForm())->validateForm();
-
-        $record->update(array_get($data, 'record'));
-
-        return $this->getSingleRecord($record->id);
-    }
-
-    /**
-    * Delete records table
-    *
-    * @param $list
-    * @return mixed|void
-    */
-    protected function __delete(array $list)
-    {
-        Permissions::destroy($list);
-    }
-
-    /**
-    * Delete records table
-    *
-    * @param $list
-    * @return mixed|void
-    */
-    protected function __forceDelete(array $list)
-    {
-        Permissions::onlyTrashed()->whereIn('id', $list)->forceDelete();
-    }
-
-    /**
-    * Restore multiple records
-    *
-    * @param $list
-    * @return mixed|void
-    */
-    protected function __restore(array $list)
-    {
-        Permissions::whereIn('id', $list)->restore();
     }
 
     /**
@@ -179,42 +94,5 @@ class PermissionsController extends HCBaseController
         }
 
         return $list;
-    }
-
-    /**
-     * Getting user data on POST call
-     *
-     * @return mixed
-     */
-    protected function getInputData()
-    {
-        $_data = request()->all();
-
-        $data = [];
-        array_set($data, 'record.name', array_get($_data, 'name'));
-        array_set($data, 'record.controller', array_get($_data, 'controller'));
-        array_set($data, 'record.action', array_get($_data, 'action'));
-
-        return $data;
-    }
-
-    /**
-     * Getting single record
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function getSingleRecord($id)
-    {
-        $with = [];
-
-        $select = Permissions::getFillableFields();
-
-        $record = Permissions::with($with)
-            ->select($select)
-            ->where('id', $id)
-            ->firstOrFail();
-
-        return $record;
     }
 }
