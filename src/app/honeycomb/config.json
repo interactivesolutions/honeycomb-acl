@@ -1,0 +1,77 @@
+{
+    "general": {
+        "serviceProviderNameSpace": "HCACL"
+    },
+    "formData": {
+        "users": "interactivesolutions\\honeycombacl\\forms\\HCUsersForm"
+    },
+    "adminMenu": [
+        {
+            "path" : "admin/users",
+            "translation" : "HCACL::users.page_title",
+            "icon" : "fa-users",
+            "aclPermission" : "interactivesolutions_honeycomb_acl_users_list",
+            "children" :
+            [
+                {
+                    "path" : "admin/users/roles",
+                    "translation" : "HCACL::acl_roles.page_title",
+                    "icon" : "fa-user-md",
+                    "aclPermission" : "interactivesolutions_honeycomb_acl_acl_roles_list"
+                },
+                {
+                    "path" : "admin/users/permissions",
+                    "translation" : "HCACL::acl_permissions.page_title",
+                    "icon" : "fa-server",
+                    "aclPermission" : "interactivesolutions_honeycomb_acl_acl_permissions_list"
+                }
+            ]
+        }
+    ],
+    "acl": {
+        "permissions": [
+            {
+                "name": "admin.acl.permissions",
+                "controller": "interactivesolutions\\honeycombacl\\http\\controllers\\acl\\PermissionsController",
+                "actions": [
+                    "interactivesolutions_honeycomb_acl_acl_permissions_list"
+                ]
+            },
+            {
+                "name": "admin.acl.roles",
+                "controller": "interactivesolutions\\honeycombacl\\http\\controllers\\acl\\RolesController",
+                "actions": [
+                    "interactivesolutions_honeycomb_acl_acl_roles_list",
+                    "interactivesolutions_honeycomb_acl_acl_roles_create",
+                    "interactivesolutions_honeycomb_acl_acl_roles_update",
+                    "interactivesolutions_honeycomb_acl_acl_roles_delete",
+                    "interactivesolutions_honeycomb_acl_acl_roles_force_delete"
+                ]
+            },
+            {
+                "name": "admin.users",
+                "controller": "interactivesolutions\\honeycombacl\\http\\controllers\\HCUsersController",
+                "actions": [
+                    "interactivesolutions_honeycomb_acl_users_list",
+                    "interactivesolutions_honeycomb_acl_users_create",
+                    "interactivesolutions_honeycomb_acl_users_update",
+                    "interactivesolutions_honeycomb_acl_users_delete",
+                    "interactivesolutions_honeycomb_acl_users_force_delete"
+                ]
+            }
+        ],
+        "rolesActions": {
+            "project-admin": [
+                "interactivesolutions_honeycomb_acl_acl_permissions_list",
+                "interactivesolutions_honeycomb_acl_acl_roles_list",
+                "interactivesolutions_honeycomb_acl_acl_roles_create",
+                "interactivesolutions_honeycomb_acl_acl_roles_update",
+                "interactivesolutions_honeycomb_acl_acl_roles_delete",
+                "interactivesolutions_honeycomb_acl_users_list",
+                "interactivesolutions_honeycomb_acl_users_create",
+                "interactivesolutions_honeycomb_acl_users_update",
+                "interactivesolutions_honeycomb_acl_users_delete"
+            ]
+        }
+    }
+}
