@@ -4,6 +4,7 @@ namespace interactivesolutions\honeycombacl\http\middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class HCACLAuthenticate
 {
@@ -15,7 +16,7 @@ class HCACLAuthenticate
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next,  $guard = null)
     {
         if (Auth::guard($guard)->guest()) {
             if ($request->ajax()) {

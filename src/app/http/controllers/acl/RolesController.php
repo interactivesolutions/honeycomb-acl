@@ -1,5 +1,6 @@
 <?php namespace interactivesolutions\honeycombacl\http\controllers\acl;
 
+use Illuminate\Database\Eloquent\Builder;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use interactivesolutions\honeycombacl\models\acl\Roles;
 use interactivesolutions\honeycombacl\validators\acl\RolesValidator;
@@ -65,7 +66,7 @@ class RolesController extends HCBaseController
      * @param null $data
      * @return mixed
      */
-    protected function __create ($data = null)
+    protected function __create (array $data = null)
     {
         if (is_null ($data))
             $data = $this->getInputData ();
@@ -81,7 +82,7 @@ class RolesController extends HCBaseController
      * @param $id
      * @return mixed
      */
-    protected function __update ($id)
+    protected function __update (string $id)
     {
         $record = Roles::findOrFail ($id);
 
@@ -155,7 +156,7 @@ class RolesController extends HCBaseController
      * @param $list
      * @return mixed
      */
-    protected function listSearch ($list)
+    protected function listSearch (Builder $list)
     {
         if (request ()->has ('q')) {
             $parameter = request ()->input ('q');
@@ -193,7 +194,7 @@ class RolesController extends HCBaseController
      * @param $id
      * @return mixed
      */
-    public function getSingleRecord ($id)
+    public function getSingleRecord (string $id)
     {
         $with = [];
 

@@ -5,7 +5,7 @@ namespace interactivesolutions\honeycombacl\http\middleware;
 use Artisan;
 use Closure;
 use Illuminate\Support\Facades\Cache;
-
+use Illuminate\Http\Request;
 class HCACLAdminMenu
 {
     /**
@@ -15,7 +15,7 @@ class HCACLAdminMenu
      * @param  \Closure $next
      * @return mixed
      */
-    public function handle ($request, Closure $next)
+    public function handle ( Request $request, Closure $next)
     {
         if (auth ()->check ()) {
             if ($request->segment (1) == 'admin') {
@@ -48,7 +48,7 @@ class HCACLAdminMenu
      * @param $menuItems
      * @return array
      */
-    private function filterAdminMenuHolder ($menuItems)
+    private function filterAdminMenuHolder (array $menuItems)
     {
         $user = auth ()->user ();
 
@@ -95,7 +95,7 @@ class HCACLAdminMenu
      * @param $adminMenu
      * @return array
      */
-    private function sortByAsc ($adminMenu)
+    private function sortByAsc (array $adminMenu)
     {
         if (is_null ($adminMenu)) {
             return $adminMenu;
@@ -116,7 +116,7 @@ class HCACLAdminMenu
      * @param $menu
      * @return array
      */
-    private function formatParentMenu ($menu)
+    private function formatParentMenu (array $menu)
     {
         $children = [];
 

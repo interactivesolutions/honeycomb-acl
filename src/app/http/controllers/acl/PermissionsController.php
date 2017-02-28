@@ -1,5 +1,6 @@
 <?php namespace interactivesolutions\honeycombacl\http\controllers\acl;
 
+use Illuminate\Database\Eloquent\Builder;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use interactivesolutions\honeycombacl\models\acl\Permissions;
 use interactivesolutions\honeycombacl\validators\acl\PermissionsValidator;
@@ -79,7 +80,7 @@ class PermissionsController extends HCBaseController
     * @param $list
     * @return mixed
     */
-    protected function listSearch($list)
+    protected function listSearch(Builder $list)
     {
         if(request()->has('q'))
         {

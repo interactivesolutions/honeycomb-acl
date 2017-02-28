@@ -165,7 +165,7 @@ class HCAuthController extends HCBaseController
      * @param $data
      * @return mixed
      */
-    protected function getData ($data)
+    protected function getData (array $data)
     {
         /* // get nickname from first part of email and add timestamp after it
          $nickname = head (explode ('@', array_get ($data, 'userData.email'))) . '_' . Carbon::now ()->timestamp;
@@ -234,7 +234,7 @@ class HCAuthController extends HCBaseController
      * @param $token
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function showActivation ($token)
+    public function showActivation (string $token)
     {
         /*$message = null;
 

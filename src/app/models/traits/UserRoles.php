@@ -24,7 +24,7 @@ trait UserRoles
      * @param  string $role
      * @return mixed
      */
-    public function assignRole($role)
+    public function assignRole(string $role)
     {
         return $this->roles()->save(
             Roles::whereSlug($role)->firstOrFail()
@@ -37,7 +37,7 @@ trait UserRoles
      * @param  mixed $role
      * @return boolean
      */
-    public function hasRole($role)
+    public function hasRole(string $role)
     {
         if( is_string($role) ) {
             return $this->roles->contains('slug', $role);

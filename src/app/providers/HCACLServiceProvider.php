@@ -99,7 +99,7 @@ class HCACLServiceProvider extends ServiceProvider
      * @param $gate
      * @param $router
      */
-    private function registerMiddleware ($gate, $router)
+    private function registerMiddleware (GateContract $gate, Router $router)
     {
         $this->registerACLPermissions($gate);
         $router->middleware ('acl', HCACLPermissionsMiddleware::class);
