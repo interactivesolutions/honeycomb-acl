@@ -1,13 +1,13 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\database\seeder;
+namespace interactivesolutions\honeycombacl\database\seeds;
 
 use HCLog;
 use DB;
 use Exception;
 
 use Illuminate\Database\Seeder;
-use interactivesolutions\honeycombacl\models\acl\Roles;
+use interactivesolutions\honeycombacl\app\models\acl\Roles;
 
 class UserRolesSeeder extends Seeder
 {
@@ -19,7 +19,6 @@ class UserRolesSeeder extends Seeder
     public function run ()
     {
         // http://stackoverflow.com/q/1598411
-
         $list = [
             ["name" => "Super Admin", "slug" => "super-admin"], // Manage everything
             ["name" => "Project Admin", "slug" => "project-admin"], // Manage most aspects of the site
