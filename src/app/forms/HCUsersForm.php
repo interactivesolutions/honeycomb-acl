@@ -1,6 +1,6 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\forms;
+namespace interactivesolutions\honeycombacl\app\forms;
 
 class HCUsersForm
 {

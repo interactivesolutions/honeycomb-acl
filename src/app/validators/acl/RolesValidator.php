@@ -1,4 +1,4 @@
-<?php namespace interactivesolutions\honeycombacl\validators\acl;
+<?php namespace interactivesolutions\honeycombacl\app\validators\acl;
 
 use interactivesolutions\honeycombcore\http\controllers\HCCoreFormValidator;
 

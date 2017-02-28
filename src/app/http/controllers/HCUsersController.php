@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
-use interactivesolutions\honeycombacl\validators\HCUsersValidator;
+use interactivesolutions\honeycombacl\app\validators\HCUsersValidator;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use interactivesolutions\honeycombacl\app\models\HCUsers;
 

@@ -1,10 +1,10 @@
-<?php namespace interactivesolutions\honeycombacl\console\commands;
+<?php namespace interactivesolutions\honeycombacl\app\console\commands;
 
 use Cache;
 use Illuminate\Filesystem\Filesystem;
-use interactivesolutions\honeycombacl\models\acl\Permissions;
-use interactivesolutions\honeycombacl\models\acl\Roles;
-use interactivesolutions\honeycombacl\models\acl\RolesPermissionsConnections;
+use interactivesolutions\honeycombacl\app\models\acl\Permissions;
+use interactivesolutions\honeycombacl\app\models\acl\Roles;
+use interactivesolutions\honeycombacl\app\models\acl\RolesPermissionsConnections;
 use interactivesolutions\honeycombcore\commands\HCCommand;
 
 class HCPermissions extends HCCommand
