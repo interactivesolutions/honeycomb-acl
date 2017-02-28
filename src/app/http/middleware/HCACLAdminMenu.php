@@ -1,6 +1,6 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\http\middleware;
+namespace interactivesolutions\honeycombacl\app\http\middleware;
 
 use Artisan;
 use Closure;

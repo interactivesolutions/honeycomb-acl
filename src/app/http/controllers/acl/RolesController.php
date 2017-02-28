@@ -1,8 +1,8 @@
-<?php namespace interactivesolutions\honeycombacl\http\controllers\acl;
+<?php namespace interactivesolutions\honeycombacl\app\http\controllers\acl;
 
 use Illuminate\Database\Eloquent\Builder;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
-use interactivesolutions\honeycombacl\models\acl\Roles;
+use interactivesolutions\honeycombacl\app\models\acl\Roles;
 use interactivesolutions\honeycombacl\validators\acl\RolesValidator;
 
 class RolesController extends HCBaseController
@@ -20,7 +20,7 @@ class RolesController extends HCBaseController
             'listURL'     => route ('admin.api.acl.roles'),
             'newFormUrl'  => route ('admin.api.form-manager', ['acl-roles-new']),
             'editFormUrl' => route ('admin.api.form-manager', ['acl-roles-edit']),
-            'imagesUrl'   => route ('resource.get', ['/']),
+        //    'imagesUrl'   => route ('resource.get', ['/']),
             'headers'     => $this->getAdminListHeader (),
         ];
 

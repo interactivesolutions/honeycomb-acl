@@ -1,6 +1,6 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\models;
+namespace interactivesolutions\honeycombacl\app\models;
 
 use interactivesolutions\honeycombcore\models\HCUuidModel;
 

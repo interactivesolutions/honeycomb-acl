@@ -1,9 +1,10 @@
-<?php namespace interactivesolutions\honeycombacl\http\controllers\acl;
+<?php
+
+namespace interactivesolutions\honeycombacl\app\http\controllers\acl;
 
 use Illuminate\Database\Eloquent\Builder;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
-use interactivesolutions\honeycombacl\models\acl\Permissions;
-use interactivesolutions\honeycombacl\validators\acl\PermissionsValidator;
+use interactivesolutions\honeycombacl\app\models\acl\Permissions;
 
 class PermissionsController extends HCBaseController
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\models;
+namespace interactivesolutions\honeycombacl\app\models;
 
 use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use interactivesolutions\honeycombacl\models\traits\UserRoles;
+use interactivesolutions\honeycombacl\app\models\traits\UserRoles;
 use interactivesolutions\honeycombcore\models\HCUuidModel;
 
 class HCUsers extends HCUuidModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract

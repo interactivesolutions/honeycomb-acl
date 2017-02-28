@@ -1,10 +1,10 @@
-<?php namespace interactivesolutions\honeycombacl\http\controllers;
+<?php namespace interactivesolutions\honeycombacl\app\http\controllers;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 use interactivesolutions\honeycombacl\validators\HCUsersValidator;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
-use interactivesolutions\honeycombacl\models\HCUsers;
+use interactivesolutions\honeycombacl\app\models\HCUsers;
 
 class HCUsersController extends HCBaseController
 {
@@ -71,7 +71,7 @@ class HCUsersController extends HCBaseController
     /**
      * Create item
      *
-     * @param null $data
+     * @param array|null $data
      * @return mixed
      */
     protected function __create (array $data = null)

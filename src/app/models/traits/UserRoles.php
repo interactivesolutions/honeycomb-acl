@@ -1,10 +1,10 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\models\traits;
+namespace interactivesolutions\honeycombacl\app\models\traits;
 
-use interactivesolutions\honeycombacl\models\acl\Permissions;
-use interactivesolutions\honeycombacl\models\acl\Roles;
-use interactivesolutions\honeycombacl\models\acl\RolesUsersConnections;
+use interactivesolutions\honeycombacl\app\models\acl\Permissions;
+use interactivesolutions\honeycombacl\app\models\acl\Roles;
+use interactivesolutions\honeycombacl\app\models\acl\RolesUsersConnections;
 
 trait UserRoles
 {
