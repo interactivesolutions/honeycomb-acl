@@ -13,32 +13,32 @@ class RolesController extends HCBaseController
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function adminView ()
+    public function adminView()
     {
         $config = [
-            'title'       => trans ('HCACL::acl_roles.page_title'),
-            'listURL'     => route ('admin.api.acl.roles'),
-            'newFormUrl'  => route ('admin.api.form-manager', ['acl-roles-new']),
-            'editFormUrl' => route ('admin.api.form-manager', ['acl-roles-edit']),
-        //    'imagesUrl'   => route ('resource.get', ['/']),
-            'headers'     => $this->getAdminListHeader (),
+            'title'       => trans('HCACL::acl_roles.page_title'),
+            'listURL'     => route('admin.api.acl.roles'),
+            'newFormUrl'  => route('admin.api.form-manager', ['acl-roles-new']),
+            'editFormUrl' => route('admin.api.form-manager', ['acl-roles-edit']),
+            //    'imagesUrl'   => route ('resource.get', ['/']),
+            'headers'     => $this->getAdminListHeader(),
         ];
 
-        if ($this->user ()->can ('interactivesolutions_honeycomb_acl_acl_roles_create'))
+        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_roles_create'))
             $config['actions'][] = 'new';
 
-        if ($this->user ()->can ('interactivesolutions_honeycomb_acl_acl_roles_update')) {
+        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_roles_update')) {
             $config['actions'][] = 'update';
             $config['actions'][] = 'restore';
         }
 
-        if ($this->user ()->can ('interactivesolutions_honeycomb_acl_acl_roles_delete'))
+        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_roles_delete'))
             $config['actions'][] = 'delete';
 
-        if ($this->user ()->can ('interactivesolutions_honeycomb_acl_acl_roles_search'))
+        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_roles_search'))
             $config['actions'][] = 'search';
 
-        return view ('HCCoreUI::admin.content.list', ['config' => $config]);
+        return view('HCCoreUI::admin.content.list', ['config' => $config]);
     }
 
     /**
@@ -46,16 +46,16 @@ class RolesController extends HCBaseController
      *
      * @return array
      */
-    public function getAdminListHeader ()
+    public function getAdminListHeader()
     {
         return [
             'name' => [
                 "type"  => "text",
-                "label" => trans ('HCACL::acl_roles.name'),
+                "label" => trans('HCACL::acl_roles.name'),
             ],
             'slug' => [
                 "type"  => "text",
-                "label" => trans ('HCACL::acl_roles.slug'),
+                "label" => trans('HCACL::acl_roles.slug'),
             ],
         ];
     }
@@ -66,14 +66,14 @@ class RolesController extends HCBaseController
      * @param null $data
      * @return mixed
      */
-    protected function __create (array $data = null)
+    protected function __create(array $data = null)
     {
-        if (is_null ($data))
-            $data = $this->getInputData ();
+        if (is_null($data))
+            $data = $this->getInputData();
 
-        $record = Roles::create (array_get ($data, 'record'));
+        $record = Roles::create(array_get($data, 'record'));
 
-        return $this->getSingleRecord ($record->id);
+        return $this->getSingleRecord($record->id);
     }
 
     /**
@@ -82,16 +82,16 @@ class RolesController extends HCBaseController
      * @param $id
      * @return mixed
      */
-    protected function __update (string $id)
+    protected function __update(string $id)
     {
-        $record = Roles::findOrFail ($id);
+        $record = Roles::findOrFail($id);
 
         //TODO read request parameters only once fo getting data and validating it
-        $data = $this->getInputData ();
+        $data = $this->getInputData();
 
-        $record->update (array_get ($data, 'record'));
+        $record->update(array_get($data, 'record'));
 
-        return $this->getSingleRecord ($record->id);
+        return $this->getSingleRecord($record->id);
     }
 
     /**
@@ -100,9 +100,9 @@ class RolesController extends HCBaseController
      * @param $list
      * @return mixed|void
      */
-    protected function __delete (array $list)
+    protected function __delete(array $list)
     {
-        Roles::destroy ($list);
+        Roles::destroy($list);
     }
 
     /**
@@ -111,9 +111,9 @@ class RolesController extends HCBaseController
      * @param $list
      * @return mixed|void
      */
-    protected function __forceDelete (array $list)
+    protected function __forceDelete(array $list)
     {
-        Roles::onlyTrashed ()->whereIn ('id', $list)->forceDelete ();
+        Roles::onlyTrashed()->whereIn('id', $list)->forceDelete();
     }
 
     /**
@@ -122,9 +122,9 @@ class RolesController extends HCBaseController
      * @param $list
      * @return mixed|void
      */
-    protected function __restore (array $list)
+    protected function __restore(array $list)
     {
-        Roles::whereIn ('id', $list)->restore ();
+        Roles::whereIn('id', $list)->restore();
     }
 
     /**
@@ -162,7 +162,7 @@ class RolesController extends HCBaseController
      * Creating data list
      * @return mixed
      */
-    public function listData()
+    public function pageData()
     {
         return $this->createQuery()->paginate($this->recordsPerPage);
     }
@@ -178,6 +178,15 @@ class RolesController extends HCBaseController
 
         //TODO set limit to start search
 
+        return $this->list();
+    }
+
+    /**
+     * Creating data list
+     * @return mixed
+     */
+    public function list()
+    {
         return $this->createQuery()->get();
     }
 
@@ -186,14 +195,14 @@ class RolesController extends HCBaseController
      * @param $list
      * @return mixed
      */
-    protected function listSearch (Builder $list)
+    protected function listSearch(Builder $list)
     {
-        if (request ()->has ('q')) {
-            $parameter = request ()->input ('q');
+        if (request()->has('q')) {
+            $parameter = request()->input('q');
 
-            $list = $list->where (function ($query) use ($parameter) {
-                $query->where ('name', 'LIKE', '%' . $parameter . '%')
-                    ->orWhere ('slug', 'LIKE', '%' . $parameter . '%');
+            $list = $list->where(function ($query) use ($parameter) {
+                $query->where('name', 'LIKE', '%' . $parameter . '%')
+                    ->orWhere('slug', 'LIKE', '%' . $parameter . '%');
             });
         }
 
@@ -205,15 +214,15 @@ class RolesController extends HCBaseController
      *
      * @return mixed
      */
-    protected function getInputData ()
+    protected function getInputData()
     {
-        (new RolesValidator())->validateForm ();
+        (new RolesValidator())->validateForm();
 
-        $_data = request ()->all ();
+        $_data = request()->all();
 
         $data = [];
-        array_set ($data, 'record.name', array_get ($_data, 'name'));
-        array_set ($data, 'record.slug', array_get ($_data, 'slug'));
+        array_set($data, 'record.name', array_get($_data, 'name'));
+        array_set($data, 'record.slug', array_get($_data, 'slug'));
 
         return $data;
     }
@@ -224,16 +233,16 @@ class RolesController extends HCBaseController
      * @param $id
      * @return mixed
      */
-    public function getSingleRecord (string $id)
+    public function getSingleRecord(string $id)
     {
         $with = [];
 
-        $select = Roles::getFillableFields ();
+        $select = Roles::getFillableFields();
 
-        $record = Roles::with ($with)
-            ->select ($select)
-            ->where ('id', $id)
-            ->firstOrFail ();
+        $record = Roles::with($with)
+            ->select($select)
+            ->where('id', $id)
+            ->firstOrFail();
 
         return $record;
     }
