@@ -62,7 +62,7 @@ class HCACLServiceProvider extends ServiceProvider
      */
     private function registerHelpers ()
     {
-        $filePath = __DIR__ . '/../Http/helpers.php';
+        $filePath = __DIR__ . '/../http/helpers.php';
 
         if (\File::isFile ($filePath)) {
             require_once $filePath;
