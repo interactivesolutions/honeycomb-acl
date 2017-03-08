@@ -1,9 +1,15 @@
 {
     "name": "interactivesolutions/honeycomb-acl",
-    "description": "",
-    "keywords": [],
-    "licence": "",
-    "authors": [],
+    "description": "HoneyComb access control list (ACL) package for users permissions and authentication.",
+    "keywords": ["honeycomb", "laravel", "package", "acl", "access", "control", "control list", "users", "permissions", "authentication"],
+    "homepage": "https://github.com/interactivesolutions/honeycomb-acl/",
+    "licence": "MIT",
+    "authors": [
+        {
+            "name": "Jevgenij Dmitrijev",
+            "email": "jd@interactivesolutions.lt"
+        }
+    ],
     "repositories": [],
     "require": {
         "php": ">=7.0.0",
@@ -13,6 +19,5 @@
         "psr-4": {
             "interactivesolutions\\honeycombacl\\": "src/"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
