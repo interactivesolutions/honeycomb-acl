@@ -1,6 +1,6 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\models;
+namespace interactivesolutions\honeycombacl\app\models;
 
 use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use interactivesolutions\honeycombacl\models\traits\UserRoles;
+use interactivesolutions\honeycombacl\app\models\traits\UserRoles;
 use interactivesolutions\honeycombcore\models\HCUuidModel;
 
 class HCUsers extends HCUuidModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
@@ -42,7 +42,7 @@ class HCUsers extends HCUuidModel implements AuthenticatableContract, Authorizab
      *
      * @param null $time
      */
-    public function updateLastLogin($time = null)
+    public function updateLastLogin( string $time = null)
     {
         $this->last_login = $time ? $time : $this->freshTimestamp();
         $this->save();
@@ -55,7 +55,7 @@ class HCUsers extends HCUuidModel implements AuthenticatableContract, Authorizab
      *
      * @param null $time
      */
-    public function updateLastActivity($time = null)
+    public function updateLastActivity( string $time = null)
     {
         $this->last_activity = $time ? $time : $this->freshTimestamp();
         $this->save();

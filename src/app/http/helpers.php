@@ -10,7 +10,7 @@ if (!function_exists ('getHCPermissions')) {
      * @param bool $forceReCache
      * @internal param bool $force
      */
-    function getHCPermissions ($forceReCache = false)
+    function getHCPermissions (bool $forceReCache = false)
     {
         if ($forceReCache || !Cache::has('hc-permissions'))
         {

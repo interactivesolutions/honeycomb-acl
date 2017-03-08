@@ -1,6 +1,6 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\forms;
+namespace interactivesolutions\honeycombacl\app\forms;
 
 class HCUsersForm
 {
@@ -16,7 +16,7 @@ class HCUsersForm
      * @param bool $edit
      * @return array
      */
-    public function createForm ($edit = false)
+    public function createForm (bool $edit = false)
     {
         $form = [
             'storageURL' => route ('admin.api.users'),

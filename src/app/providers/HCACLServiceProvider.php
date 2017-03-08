@@ -1,17 +1,17 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\providers;
+namespace interactivesolutions\honeycombacl\app\providers;
 
 use Cache;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
-use interactivesolutions\honeycombacl\console\commands\HCForms;
-use interactivesolutions\honeycombacl\console\commands\HCPermissions;
-use interactivesolutions\honeycombacl\console\commands\HCAdminMenu;
-use interactivesolutions\honeycombacl\http\middleware\HCACLAdminMenu;
-use interactivesolutions\honeycombacl\http\middleware\HCACLAuthenticate;
-use interactivesolutions\honeycombacl\http\middleware\HCACLPermissionsMiddleware;
+use interactivesolutions\honeycombacl\app\console\commands\HCForms;
+use interactivesolutions\honeycombacl\app\console\commands\HCPermissions;
+use interactivesolutions\honeycombacl\app\console\commands\HCAdminMenu;
+use interactivesolutions\honeycombacl\app\http\middleware\HCACLAdminMenu;
+use interactivesolutions\honeycombacl\app\http\middleware\HCACLAuthenticate;
+use interactivesolutions\honeycombacl\app\http\middleware\HCACLPermissionsMiddleware;
 
 class HCACLServiceProvider extends ServiceProvider
 {
@@ -26,7 +26,7 @@ class HCACLServiceProvider extends ServiceProvider
         HCForms::class,
     ];
 
-    protected $namespace = 'interactivesolutions\honeycombacl\http\controllers';
+    protected $namespace = 'interactivesolutions\honeycombacl\app\http\controllers';
 
     /**
      * Bootstrap the application services.
@@ -62,7 +62,7 @@ class HCACLServiceProvider extends ServiceProvider
      */
     private function registerHelpers ()
     {
-        $filePath = __DIR__ . '/../Http/helpers.php';
+        $filePath = __DIR__ . '/../http/helpers.php';
 
         if (\File::isFile ($filePath)) {
             require_once $filePath;
@@ -99,7 +99,7 @@ class HCACLServiceProvider extends ServiceProvider
      * @param $gate
      * @param $router
      */
-    private function registerMiddleware ($gate, $router)
+    private function registerMiddleware (GateContract $gate, Router $router)
     {
         $this->registerACLPermissions($gate);
         $router->middleware ('acl', HCACLPermissionsMiddleware::class);

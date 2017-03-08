@@ -1,9 +1,10 @@
-<?php namespace interactivesolutions\honeycombacl\http\controllers;
+<?php namespace interactivesolutions\honeycombacl\app\http\controllers;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
-use interactivesolutions\honeycombacl\validators\HCUsersValidator;
+use interactivesolutions\honeycombacl\app\validators\HCUsersValidator;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
-use interactivesolutions\honeycombacl\models\HCUsers;
+use interactivesolutions\honeycombacl\app\models\HCUsers;
 
 class HCUsersController extends HCBaseController
 {
@@ -70,10 +71,10 @@ class HCUsersController extends HCBaseController
     /**
      * Create item
      *
-     * @param null $data
+     * @param array|null $data
      * @return mixed
      */
-    protected function __create ($data = null)
+    protected function __create (array $data = null)
     {
         if (is_null ($data))
             $data = $this->getInputData ();
@@ -94,7 +95,7 @@ class HCUsersController extends HCBaseController
      * @param $id
      * @return mixed
      */
-    protected function __update ($id)
+    protected function __update (string $id)
     {
         $record = HCUsers::findOrFail ($id);
 
@@ -141,28 +142,66 @@ class HCUsersController extends HCBaseController
     }
 
     /**
+     * Creating data query
+     *
+     * @param array $select
      * @return mixed
      */
-    public function listData ()
+    public function createQuery(array $select = null)
     {
         $with = [];
-        $select = HCUsers::getFillableFields ();
 
-        $list = HCUsers::with ($with)->select ($select)
+        if ($select == null)
+            $select = HCUsers::getFillableFields();
+
+        $list = HCUsers::with($with)->select($select)
             // add filters
-            ->where (function ($query) use ($select) {
-                $query = $this->getRequestParameters ($query, $select);
+            ->where(function ($query) use ($select) {
+                $query = $this->getRequestParameters($query, $select);
             });
 
-        $list = $this->checkForDeleted ($list);
+        // enabling check for deleted
+        $list = $this->checkForDeleted($list);
 
         // add search items
-        $list = $this->listSearch ($list);
+        $list = $this->listSearch($list);
 
         // ordering data
         $list = $this->orderData($list, $select);
 
-        return $list->paginate ($this->recordsPerPage)->toArray ();
+        return $list;
+    }
+
+    /**
+     * Creating data list
+     * @return mixed
+     */
+    public function pageData()
+    {
+        return $this->createQuery()->paginate($this->recordsPerPage);
+    }
+
+    /**
+     * Creating data list based on search
+     * @return mixed
+     */
+    public function search()
+    {
+        if (!request('q'))
+            return [];
+
+        //TODO set limit to start search
+
+        return $this->list();
+    }
+
+    /**
+     * Creating data list
+     * @return mixed
+     */
+    public function list()
+    {
+        return $this->createQuery()->get();
     }
 
     /**
@@ -170,7 +209,7 @@ class HCUsersController extends HCBaseController
      * @param $list
      * @return mixed
      */
-    protected function listSearch ($list)
+    protected function listSearch (Builder $list)
     {
         if (request ()->has ('q')) {
             $parameter = request ()->input ('q');
@@ -208,7 +247,7 @@ class HCUsersController extends HCBaseController
      * @param $id
      * @return mixed
      */
-    public function getSingleRecord ($id)
+    public function getSingleRecord (string $id)
     {
         $with = [];
 

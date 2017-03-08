@@ -1,6 +1,6 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\models\acl;
+namespace interactivesolutions\honeycombacl\app\models\acl;
 
 use interactivesolutions\honeycombcore\models\HCUuidModel;
 
@@ -25,7 +25,7 @@ class Permissions extends HCUuidModel
      *
      * @param $action
      */
-    public static function deletePermission($action)
+    public static function deletePermission(array $action)
     {
         $permission = Permissions::where('action', $action)->first();
         RolesPermissionsConnections::where('permission_id', $permission->id)->forceDelete();

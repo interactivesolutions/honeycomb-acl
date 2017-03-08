@@ -1,8 +1,10 @@
-<?php namespace interactivesolutions\honeycombacl\http\controllers\acl;
+<?php
 
+namespace interactivesolutions\honeycombacl\app\http\controllers\acl;
+
+use Illuminate\Database\Eloquent\Builder;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
-use interactivesolutions\honeycombacl\models\acl\Permissions;
-use interactivesolutions\honeycombacl\validators\acl\PermissionsValidator;
+use interactivesolutions\honeycombacl\app\models\acl\Permissions;
 
 class PermissionsController extends HCBaseController
 {
@@ -15,9 +17,9 @@ class PermissionsController extends HCBaseController
     public function adminView()
     {
         $config = [
-            'title'       => trans('HCACL::acl_permissions.page_title'),
-            'listURL'     => route('admin.api.acl.permissions'),
-            'headers'     => $this->getAdminListHeader(),
+            'title'   => trans('HCACL::acl_permissions.page_title'),
+            'listURL' => route('admin.api.acl.permissions'),
+            'headers' => $this->getAdminListHeader(),
         ];
 
         if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_search'))
@@ -34,11 +36,11 @@ class PermissionsController extends HCBaseController
     public function getAdminListHeader()
     {
         return [
-            'name'     => [
+            'name'       => [
                 "type"  => "text",
                 "label" => trans('HCACL::acl_permissions.name'),
-                ],
-            'controller'     => [
+            ],
+            'controller' => [
                 "type"  => "text",
                 "label" => trans('HCACL::acl_permissions.controller'),
             ],
@@ -50,46 +52,82 @@ class PermissionsController extends HCBaseController
     }
 
     /**
-    * @return mixed
-    */
-    public function listData()
+     * Creating data query
+     *
+     * @param array $select
+     * @return mixed
+     */
+    public function createQuery(array $select = null)
     {
         $with = [];
-        $select = Permissions::getFillableFields();
+
+        if ($select == null)
+            $select = Permissions::getFillableFields();
 
         $list = Permissions::with($with)->select($select)
-        // add filters
-        ->where(function ($query) use ($select) {
-            $query = $this->getRequestParameters($query, $select);
-        });
+            // add filters
+            ->where(function ($query) use ($select) {
+                $query = $this->getRequestParameters($query, $select);
+            });
 
+        // enabling check for deleted
         $list = $this->checkForDeleted($list);
 
         // add search items
         $list = $this->listSearch($list);
 
+        // ordering data
         $list = $this->orderData($list, $select);
 
-        return $list->paginate($this->recordsPerPage)->toArray();
+        return $list;
     }
 
     /**
-    * List search elements
-
-    * @param $list
-    * @return mixed
-    */
-    protected function listSearch($list)
+     * Creating data list
+     * @return mixed
+     */
+    public function pageData()
     {
-        if(request()->has('q'))
-        {
+        return $this->createQuery()->paginate($this->recordsPerPage);
+    }
+
+    /**
+     * Creating data list based on search
+     * @return mixed
+     */
+    public function search()
+    {
+        if (!request('q'))
+            return [];
+
+        //TODO set limit to start search
+
+        return $this->list();
+    }
+
+    /**
+     * Creating data list
+     * @return mixed
+     */
+    public function list()
+    {
+        return $this->createQuery()->get();
+    }
+
+    /**
+     * List search elements
+     * @param $list
+     * @return mixed
+     */
+    protected function listSearch(Builder $list)
+    {
+        if (request()->has('q')) {
             $parameter = request()->input('q');
 
-            $list = $list->where(function ($query) use ($parameter)
-            {
+            $list = $list->where(function ($query) use ($parameter) {
                 $query->where('name', 'LIKE', '%' . $parameter . '%')
-                      ->orWhere('controller', 'LIKE', '%' . $parameter . '%')
-                      ->orWhere('action', 'LIKE', '%' . $parameter . '%');
+                    ->orWhere('controller', 'LIKE', '%' . $parameter . '%')
+                    ->orWhere('action', 'LIKE', '%' . $parameter . '%');
             });
         }
 

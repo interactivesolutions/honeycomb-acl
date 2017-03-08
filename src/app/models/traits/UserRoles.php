@@ -1,10 +1,10 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\models\traits;
+namespace interactivesolutions\honeycombacl\app\models\traits;
 
-use interactivesolutions\honeycombacl\models\acl\Permissions;
-use interactivesolutions\honeycombacl\models\acl\Roles;
-use interactivesolutions\honeycombacl\models\acl\RolesUsersConnections;
+use interactivesolutions\honeycombacl\app\models\acl\Permissions;
+use interactivesolutions\honeycombacl\app\models\acl\Roles;
+use interactivesolutions\honeycombacl\app\models\acl\RolesUsersConnections;
 
 trait UserRoles
 {
@@ -24,7 +24,7 @@ trait UserRoles
      * @param  string $role
      * @return mixed
      */
-    public function assignRole($role)
+    public function assignRole(string $role)
     {
         return $this->roles()->save(
             Roles::whereSlug($role)->firstOrFail()
@@ -37,7 +37,7 @@ trait UserRoles
      * @param  mixed $role
      * @return boolean
      */
-    public function hasRole($role)
+    public function hasRole(string $role)
     {
         if( is_string($role) ) {
             return $this->roles->contains('slug', $role);

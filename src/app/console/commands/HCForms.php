@@ -1,6 +1,6 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\console\commands;
+namespace interactivesolutions\honeycombacl\app\console\commands;
 
 use Cache;
 use Carbon\Carbon;

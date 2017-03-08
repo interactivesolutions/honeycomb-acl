@@ -1,10 +1,10 @@
-<?php namespace interactivesolutions\honeycombacl\console\commands;
+<?php namespace interactivesolutions\honeycombacl\app\console\commands;
 
 use Cache;
 use Illuminate\Filesystem\Filesystem;
-use interactivesolutions\honeycombacl\models\acl\Permissions;
-use interactivesolutions\honeycombacl\models\acl\Roles;
-use interactivesolutions\honeycombacl\models\acl\RolesPermissionsConnections;
+use interactivesolutions\honeycombacl\app\models\acl\Permissions;
+use interactivesolutions\honeycombacl\app\models\acl\Roles;
+use interactivesolutions\honeycombacl\app\models\acl\RolesPermissionsConnections;
 use interactivesolutions\honeycombcore\commands\HCCommand;
 
 class HCPermissions extends HCCommand
@@ -102,7 +102,7 @@ class HCPermissions extends HCCommand
      *
      * @param $aclData
      */
-    private function createPermissions ($aclData)
+    private function createPermissions (array $aclData)
     {
         if (array_key_exists ('permissions', $aclData)) {
             foreach ($aclData['permissions'] as $permission) {
@@ -126,7 +126,7 @@ class HCPermissions extends HCCommand
      *
      * @param $permission
      */
-    private function removeDeletedPermissions ($permission)
+    private function removeDeletedPermissions (array $permission)
     {
         $configActions = collect ($permission['actions']);
 
@@ -145,7 +145,7 @@ class HCPermissions extends HCCommand
      * @param $aclData
      * @internal param $acl
      */
-    private function createRolesPermissions ($aclData)
+    private function createRolesPermissions (array $aclData)
     {
         //TODO extend DB with "manual" option which stands if user has created this role action connection
         //TODO gather all actions

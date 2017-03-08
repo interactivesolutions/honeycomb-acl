@@ -1,10 +1,10 @@
 <?php
 
-namespace interactivesolutions\honeycombacl\http\middleware;
+namespace interactivesolutions\honeycombacl\app\http\middleware;
 
 use Closure;
 use HCLog;
-
+use Illuminate\Http\Request;
 class HCACLPermissionsMiddleware
 {
     /**
@@ -15,7 +15,7 @@ class HCACLPermissionsMiddleware
      * @param null $permission
      * @return mixed
      */
-    public function handle ($request, Closure $next, $permission = null)
+    public function handle (Request $request, Closure $next,  $permission = null)
     {
         if (count ($request->segments ()) == 1 && $request->segment (1) == 'admin')
             $access = true;
