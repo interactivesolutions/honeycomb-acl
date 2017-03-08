@@ -3,7 +3,7 @@
     "description": "HoneyComb access control list (ACL) package for users permissions and authentication.",
     "keywords": ["honeycomb", "laravel", "package", "acl", "access", "control", "control list", "users", "permissions", "authentication"],
     "homepage": "https://github.com/interactivesolutions/honeycomb-acl/",
-    "licence": "MIT",
+    "license": "MIT",
     "authors": [
         {
             "name": "Jevgenij Dmitrijev",
