@@ -25,7 +25,7 @@ class Permissions extends HCUuidModel
      *
      * @param $action
      */
-    public static function deletePermission(array $action)
+    public static function deletePermission(string $action)
     {
         $permission = Permissions::where('action', $action)->first();
         RolesPermissionsConnections::where('permission_id', $permission->id)->forceDelete();
