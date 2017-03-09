@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Builder;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use interactivesolutions\honeycombacl\app\models\acl\Roles;
-use interactivesolutions\honeycombacl\validators\acl\RolesValidator;
+use interactivesolutions\honeycombacl\app\validators\acl\RolesValidator;
 
 class RolesController extends HCBaseController
 {

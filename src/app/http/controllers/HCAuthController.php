@@ -3,7 +3,7 @@
 namespace interactivesolutions\honeycombacl\app\http\controllers;
 
 use DB;
-use interaktyvussprendimai\ocv3users\http\controllers\traits\HCUsersThrottle;
+use interactivesolutions\honeycombacl\app\http\controllers\traits\HCUsersThrottle;
 use HCLog;
 use Request;
 use Validator;
