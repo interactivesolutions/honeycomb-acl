@@ -1,6 +1,6 @@
 <?php
 
-namespace interaktyvussprendimai\ocv3users\http\controllers\traits;
+namespace interactivesolutions\honeycombacl\app\http\controllers\traits;
 
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -20,6 +20,8 @@ trait HCUsersThrottle
      */
     protected function sendLockoutResponse (Request $request)
     {
+
+
         $seconds = app (RateLimiter::class)->availableIn (
             $this->getThrottleKey ($request)
         );
