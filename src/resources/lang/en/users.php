@@ -6,6 +6,7 @@ return [
     'updated_at'     => 'Updated at',
     'deleted_at'     => 'Deleted at',
     'activated_at'   => 'Activated at',
+    'active'         => 'Active',
     'remember_token' => 'Remember token',
     'last_login'     => 'Last login',
     'last_visited'   => 'Last visited',
@@ -18,8 +19,8 @@ return [
     'page_title'     => 'Users',
 
     'errors' =>
-    [
-        'not_activated' => 'USER IS NOT ACTIVATED'
-    ]
+        [
+            'not_activated' => 'USER IS NOT ACTIVATED'
+        ]
 
 ];

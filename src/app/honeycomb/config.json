@@ -3,7 +3,7 @@
         "serviceProviderNameSpace": "HCACL"
     },
     "formData": {
-        "users": "interactivesolutions\\honeycombacl\\forms\\HCUsersForm"
+        "users": "interactivesolutions\\honeycombacl\\app\\forms\\HCUsersForm"
     },
     "adminMenu": [
         {

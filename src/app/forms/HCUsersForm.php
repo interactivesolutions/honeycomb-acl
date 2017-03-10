@@ -40,7 +40,9 @@ class HCUsersForm
                     "label"           => trans ("HCACL::users.password"),
                     "required"        => 1,
                     "requiredVisible" => 1,
-                ]
+                ],
+                //TODO create active field for user
+                //formManagerYesNo('active', trans ("HCACL::users.active"))
             ],
         ];
 
