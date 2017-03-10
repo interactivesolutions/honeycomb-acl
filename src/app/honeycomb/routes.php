@@ -1,6 +1,7 @@
 <?php
 
-//packages/interactivesolutions/honeycomb-acl/src/app/routes/01_routes.acl.permissions.php
+//interactivesolutions/honeycomb-acl/src/app/routes/01_routes.acl.permissions.php
+
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function ()
 {
@@ -15,7 +16,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function ()
 });
 
 
-//packages/interactivesolutions/honeycomb-acl/src/app/routes/02_routes.acl.roles.php
+//interactivesolutions/honeycomb-acl/src/app/routes/02_routes.acl.roles.php
+
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function ()
 {
@@ -40,7 +42,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function ()
 });
 
 
-//packages/interactivesolutions/honeycomb-acl/src/app/routes/03_routes.auth.php
+//interactivesolutions/honeycomb-acl/src/app/routes/03_routes.auth.php
+
 
 // login routes
 Route::group (['prefix' => 'auth', 'middleware' => ['web']], function () {
@@ -53,7 +56,8 @@ Route::group (['prefix' => 'auth', 'middleware' => ['web']], function () {
     Route::get ('logout', ['as' => 'auth.logout', 'middleware' => 'auth', 'uses' => 'HCAuthController@logout']);
 });
 
-//packages/interactivesolutions/honeycomb-acl/src/app/routes/04_routes.users.php
+//interactivesolutions/honeycomb-acl/src/app/routes/04_routes.users.php
+
 
 Route::group (['prefix' => 'admin', 'middleware' => ['web', 'auth']], function () {
     Route::get ('users', ['as' => 'admin.users', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@adminView']);
