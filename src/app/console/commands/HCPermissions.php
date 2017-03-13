@@ -1,7 +1,5 @@
 <?php namespace interactivesolutions\honeycombacl\app\console\commands;
 
-use Cache;
-use Illuminate\Filesystem\Filesystem;
 use interactivesolutions\honeycombacl\app\models\acl\Permissions;
 use interactivesolutions\honeycombacl\app\models\acl\Roles;
 use interactivesolutions\honeycombacl\app\models\acl\RolesPermissionsConnections;
@@ -48,8 +46,6 @@ class HCPermissions extends HCCommand
 
         $this->scanRolesAndPermissions ();
         $this->generateRolesAndPermissions ();
-
-        Cache::forget ('permissions');
 
         $this->comment ('-');
     }
