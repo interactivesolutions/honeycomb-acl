@@ -3,8 +3,8 @@
 namespace interactivesolutions\honeycombacl\app\http\middleware;
 
 use Closure;
-use HCLog;
 use Illuminate\Http\Request;
+
 class HCACLPermissionsMiddleware
 {
     /**
