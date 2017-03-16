@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
-use interactivesolutions\honeycombacl\models\acl\Permissions;
+use interactivesolutions\honeycombacl\app\models\acl\Permissions;
 
 if (!function_exists ('getHCPermissions')) {
     /**
