@@ -16,11 +16,8 @@ use interactivesolutions\honeycombcore\providers\HCBaseServiceProvider;
 
 class HCACLServiceProvider extends HCBaseServiceProvider
 {
-    /**
-     * Register commands
-     *
-     * @var array
-     */
+    protected $homeDirectory = __DIR__;
+
     protected $commands = [
         HCPermissions::class,
         HCAdminMenu::class,
