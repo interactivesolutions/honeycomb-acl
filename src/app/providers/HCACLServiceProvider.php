@@ -25,6 +25,7 @@ class HCACLServiceProvider extends HCBaseServiceProvider
     ];
 
     protected $namespace = 'interactivesolutions\honeycombacl\app\http\controllers';
+    public $serviceProviderNameSpace = 'HCACL';
 
     /**
      * @param Router $router
