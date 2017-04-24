@@ -23,5 +23,3 @@ Route::group (['prefix' => 'api', 'middleware' => ['web', 'auth-apps']], functio
         Route::delete ('force', ['as' => 'api.v1.api.users.force.multi', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_force_delete'], 'uses' => 'HCUsersController@forceDelete']);
     });
 });
-
-Route::get ('api', ['as' => 'api.v1.index', 'middleware' => ['web', 'auth'], 'uses' => 'HCAuthController@showLogin']);
