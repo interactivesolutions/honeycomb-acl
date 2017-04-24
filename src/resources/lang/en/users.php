@@ -17,10 +17,14 @@ return [
     'password'       => 'Password',
     'phone'          => 'Phone',
     'page_title'     => 'Users',
+    'login'          => [
+        'title'    => 'Login',
+        'register' => 'Register',
+    ],
 
     'errors' =>
         [
-            'not_activated' => 'USER IS NOT ACTIVATED'
-        ]
+            'not_activated' => 'USER IS NOT ACTIVATED',
+        ],
 
 ];
