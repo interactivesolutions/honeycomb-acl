@@ -41,7 +41,9 @@ class HCAuthController extends HCBaseController
      */
     public function showLogin()
     {
-        return view('HCACL::auth.login');
+        $config = [];
+
+        return view('HCACL::auth.login', $config);
     }
 
     /**
