@@ -13,7 +13,8 @@
     "repositories": [],
     "require": {
         "php": ">=7.0.0",
-        "laravel\/framework": "5.3.*"
+        "laravel\/framework": "5.3.*",
+        "interactivesolutions/honeycomb-core-ui/": "~0.2.3"
     },
     "autoload": {
         "psr-4": {
