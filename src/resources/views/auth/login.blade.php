@@ -1,17 +1,45 @@
-<!DOCTYPE html>
-<html>
-<body>
+@extends('HCACL::auth.layout')
 
-<form action="{{ route('auth.login') }}" method="post">
-    Email:<br>
-    <input type="text" name="email" value="admin@interactivesolutions.lt">
-    <br>
-    Password:<br>
-    <input type="text" name="password" value="labas">
-    <br><br>
-    {{ csrf_field() }}
-    <input type="submit" value="Submit">
-</form>
+@section('content')
 
-</body>
-</html>
+    <div class="login-page" style="position: fixed; top:0; left: 0; bottom: 0; right: 0;">
+
+        <div class="login-box">
+            <div class="login-logo">
+                <b>HoneyComb</b>
+            </div>
+
+            <!-- /.login-logo -->
+            <div class="login-box-body">
+                <p class="login-box-msg">{{ trans('HCACL::users.login.title') }}</p>
+
+                <div id="login-form"></div>
+
+                <div class="social-auth-links text-center">
+
+                </div>
+
+                {{--<a href="{{ route('users.password.remind')}}">{{ trans('users::users.passwords.forgot_password') }}</a><br>--}}
+
+                @if( isset($config['registration_enabled']))
+                    <a href="{{ route('auth.register') }}" class="text-center">{{ trans('users::users.register.title') }}</a>
+                @endif
+
+            </div>
+        </div>
+
+    </div>
+
+@stop
+
+@section('scripts')
+    <script>
+        $(document).ready(function () {
+            HCService.FormManager.initialize();
+            var form = HCService.FormManager.createForm({
+                'structureURL': '{{  route('public.api.form-manager', 'users-login-new')}}',
+                'divID': '#login-form'
+            });
+        });
+    </script>
+@endsection
