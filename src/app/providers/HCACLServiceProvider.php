@@ -5,6 +5,7 @@ namespace interactivesolutions\honeycombacl\app\providers;
 use Cache;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Routing\Router;
+use interactivesolutions\honeycombacl\app\console\commands\HCAdminURL;
 use interactivesolutions\honeycombacl\app\console\commands\HCForms;
 use interactivesolutions\honeycombacl\app\console\commands\HCPermissions;
 use interactivesolutions\honeycombacl\app\console\commands\HCAdminMenu;
@@ -22,6 +23,7 @@ class HCACLServiceProvider extends HCBaseServiceProvider
         HCPermissions::class,
         HCAdminMenu::class,
         HCForms::class,
+        HCAdminURL::class,
     ];
 
     protected $namespace = 'interactivesolutions\honeycombacl\app\http\controllers';

@@ -14,11 +14,16 @@
     "require": {
         "php": ">=7.0.0",
         "laravel\/framework": "5.3.*",
-        "interactivesolutions/honeycomb-core-ui/": "~0.2.3"
+        "interactivesolutions/honeycomb-core-ui/": "~0.2.3",
+        "interactivesolutions/honeycomb-scripts/": "~0.1.7"
     },
     "autoload": {
         "psr-4": {
             "interactivesolutions\\honeycombacl\\": "src/"
         }
+    },
+    "scripts":
+    {
+        "post-install-cmd":["php artisan hc:admin-url"]
     }
 }
