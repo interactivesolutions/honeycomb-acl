@@ -21,9 +21,5 @@
         "psr-4": {
             "interactivesolutions\\honeycombacl\\": "src/"
         }
-    },
-    "scripts":
-    {
-        "post-package-install":["php artisan hc:admin-url"]
     }
 }
