@@ -1,6 +1,6 @@
 <?php
 
-Route::group (['prefix' => 'admin', 'middleware' => ['web', 'auth']], function () {
+Route::group (['prefix' => env('HC_ADMIN_URL'), 'middleware' => ['web', 'auth']], function () {
     Route::get ('users', ['as' => 'admin.users', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@adminView']);
 
     Route::group (['prefix' => 'api/users'], function () {
@@ -24,4 +24,4 @@ Route::group (['prefix' => 'admin', 'middleware' => ['web', 'auth']], function (
     });
 });
 
-Route::get ('admin', ['as' => 'admin.index', 'middleware' => ['web', 'auth'], 'uses' => 'HCAuthController@showLogin']);
+Route::get (env('HC_ADMIN_URL'), ['as' => 'admin.index', 'middleware' => ['web', 'auth'], 'uses' => 'HCAuthController@showLogin']);

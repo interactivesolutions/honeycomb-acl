@@ -18,7 +18,7 @@ class HCACLAdminMenu
     public function handle ( Request $request, Closure $next)
     {
         if (auth ()->check ()) {
-            if ($request->segment (1) == 'admin') {
+            if ($request->segment (1) == env('HC_ADMIN_URL')) {
                 if (!Cache::has ('hc-admin-menu'))
                     Artisan::call ('hc:admin-menu');
 

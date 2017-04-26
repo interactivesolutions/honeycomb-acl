@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => 'admin', 'middleware' => ['web', 'auth']], function ()
+Route::group(['prefix' => env('APP_ADMIN_KEY'), 'middleware' => ['web', 'auth']], function ()
 {
     Route::get('users/permissions', ['as' => 'admin.acl.permissions', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_acl_permissions_list'], 'uses' => 'acl\\PermissionsController@adminView']);
 
