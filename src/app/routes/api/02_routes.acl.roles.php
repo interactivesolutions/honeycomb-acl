@@ -23,7 +23,8 @@ Route::group(['prefix' => 'api', 'middleware' => ['auth-apps']], function ()
             Route::put('/', ['middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_acl_roles_update'], 'uses' => 'acl\\RolesController@apiUpdate']);
             Route::delete('/', ['middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_acl_roles_delete'], 'uses' => 'acl\\RolesController@apiDestroy']);
 
-            Route::post('duplicate', ['as' => 'api.v1.acl.roles.duplicate', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_acl_roles_update'], 'uses' => 'acl\\RolesController@apiDuplicate']);
+            Route::put('strict', ['as' => 'api.v1.acl.roles.update.strict', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_acl_roles_update'], 'uses' => 'acl\\RolesController@apiUpdateStrict']);
+            Route::post('duplicate', ['as' => 'api.v1.acl.roles.duplicate', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_acl_roles_create'], 'uses' => 'acl\\RolesController@apiDuplicate']);
             Route::delete('force', ['as' => 'api.v1.acl.roles.force', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_acl_roles_force_delete'], 'uses' => 'acl\\RolesController@apiForceDelete']);
         });
 

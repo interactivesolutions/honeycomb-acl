@@ -19,6 +19,7 @@ Route::group (['prefix' => env('HC_ADMIN_URL'), 'middleware' => ['web', 'auth']]
             Route::put ('/', ['middleware' => ['acl:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@apiUpdate']);
             Route::delete ('/', ['middleware' => ['acl:interactivesolutions_honeycomb_acl_users_delete'], 'uses' => 'HCUsersController@apiDestroy']);
 
+            Route::put('strict', ['as' => 'admin.api.users.update.strict', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@apiUpdateStrict']);
             Route::post ('duplicate', ['as' => 'admin.api.users.duplicate', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_create'], 'uses' => 'HCUsersController@apiDuplicate']);
             Route::delete ('force', ['as' => 'admin.api.users.force', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_force_delete'], 'uses' => 'HCUsersController@apiForceDelete']);
         });
