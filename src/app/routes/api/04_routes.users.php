@@ -1,25 +1,31 @@
 <?php
 
-Route::group (['prefix' => 'api', 'middleware' => ['auth-apps']], function () {
-    Route::get ('users', ['as' => 'api.v1.users', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@adminView']);
+Route::group (['prefix' => 'api', 'middleware' => ['auth-apps']], function ()
+{
+    Route::group (['prefix' => 'v1/users'], function ()
+    {
+        Route::get ('/', ['as' => 'api.v1.users', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@apiIndexPaginate']);
+        Route::post ('/', ['middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_create'], 'uses' => 'HCUsersController@apiStore']);
+        Route::delete ('/', ['middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_delete'], 'uses' => 'HCUsersController@apiDestroy']);
 
-    Route::group (['prefix' => 'v1/users'], function () {
-        Route::get ('/', ['as' => 'api.v1.api.users', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@listPage']);
-        Route::get ('list', ['as' => 'api.v1.api.users.list', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@list']);
-        Route::get ('list/{timestamp}', ['as' => 'api.v1.api.users.list.update', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@listUpdate']);
-        Route::get ('search', ['as' => 'api.v1.api.users.search', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@listSearch']);
-        Route::get ('{id}', ['as' => 'api.v1.api.users.single', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@getSingleRecord']);
 
-        Route::post ('{id}/duplicate', ['as' => 'api.v1.api.users.duplicate', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@duplicate']);
-        Route::post ('restore', ['as' => 'api.v1.api.users.restore', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@restore']);
-        Route::post ('merge', ['as' => 'api.v1.api.users.merge', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@merge']);
-        Route::post ('/', ['middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_create'], 'uses' => 'HCUsersController@create']);
+        Route::group(['prefix' => 'list'], function ()
+        {
+            Route::get('/', ['as' => 'api.v1.users.list', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@apiIndex']);
+            Route::get('{timestamp}', ['as' => 'api.v1.users.list.update', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@apiIndexSync']);
+        });
 
-        Route::put ('{id}', ['middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@update']);
+        Route::post ('restore', ['as' => 'api.v1.users.restore', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@apiRestore']);
+        Route::post ('merge', ['as' => 'api.v1.users.merge', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_create', 'acl-apps:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@apiMerge']);
+        Route::delete ('force', ['as' => 'api.v1.users.force.multi', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_force_delete'], 'uses' => 'HCUsersController@apiForceDelete']);
 
-        Route::delete ('{id}', ['middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_delete'], 'uses' => 'HCUsersController@delete']);
-        Route::delete ('/', ['middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_delete'], 'uses' => 'HCUsersController@delete']);
-        Route::delete ('{id}/force', ['as' => 'api.v1.api.users.force', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_force_delete'], 'uses' => 'HCUsersController@forceDelete']);
-        Route::delete ('force', ['as' => 'api.v1.api.users.force.multi', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_force_delete'], 'uses' => 'HCUsersController@forceDelete']);
+        Route::group(['prefix' => '{id}'], function ()
+        {
+            Route::get ('/', ['as' => 'api.v1.users.single', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@apiShow']);
+            Route::put ('/', ['middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@apiUpdate']);
+            Route::delete ('/', ['middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_delete'], 'uses' => 'HCUsersController@apiDestroy']);
+            Route::post ('duplicate', ['as' => 'api.v1.users.duplicate', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@apiDuplicate']);
+            Route::delete ('force', ['as' => 'api.v1.users.force', 'middleware' => ['acl-apps:interactivesolutions_honeycomb_acl_users_force_delete'], 'uses' => 'HCUsersController@apiForceDelete']);
+        });
     });
 });

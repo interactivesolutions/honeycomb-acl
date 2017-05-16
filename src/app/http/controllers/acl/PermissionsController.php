@@ -14,7 +14,7 @@ class PermissionsController extends HCBaseController
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function adminView()
+    public function adminIndex()
     {
         $config = [
             'title'   => trans('HCACL::acl_permissions.page_title'),
@@ -22,7 +22,7 @@ class PermissionsController extends HCBaseController
             'headers' => $this->getAdminListHeader(),
         ];
 
-        if ($this->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_search'))
+        if (auth()->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_search'))
             $config['actions'][] = 'search';
 
         return view('HCCoreUI::admin.content.list', ['config' => $config]);
@@ -57,7 +57,7 @@ class PermissionsController extends HCBaseController
      * @param array $select
      * @return mixed
      */
-    public function createQuery(array $select = null)
+    protected function createQuery(array $select = null)
     {
         $with = [];
 
@@ -74,7 +74,7 @@ class PermissionsController extends HCBaseController
         $list = $this->checkForDeleted($list);
 
         // add search items
-        $list = $this->listSearch($list);
+        $list = $this->search($list);
 
         // ordering data
         $list = $this->orderData($list, $select);

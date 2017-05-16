@@ -3,7 +3,6 @@
 namespace interactivesolutions\honeycombacl\app\http\controllers;
 
 use DB;
-use interactivesolutions\honeycombacl\app\http\controllers\traits\HCUsersThrottle;
 use HCLog;
 use Request;
 use Validator;
@@ -33,7 +32,6 @@ class HCAuthController extends HCBaseController
      */
     protected $redirectUrl;
 
-
     /**
      * Displays users login form
      *
@@ -62,14 +60,14 @@ class HCAuthController extends HCBaseController
         if (!auth()->guard('web')->attempt($data))
             return response(['success' => false, 'message' => 'AUTH-002 - ' . trans('HCACL::users.errors.login')]);
 
-        if (!$this->user()['activated_at']) {
+        if (!auth()->user()['activated_at']) {
             $this->logout();
             return response(['success' => false, 'message' => 'AUTH-004 - ' . trans('HCACL::users.errors.not_activated')]);
         }
 
         //TODO update providers?
 
-        auth()->user()->updateLastLogin();
+        $this->user()->updateLastLogin();
 
         //redirect to intended url
         return response(['success' => true, 'redirectURL' => session('url.intended', url('/'))]);
@@ -103,7 +101,7 @@ class HCAuthController extends HCBaseController
         DB::beginTransaction();
 
         try {
-            $response = $userController->create();
+            $response = $userController->apiStore();
 
             if (get_class($response) == 'Illuminate\Http\JsonResponse')
                 return $response;
