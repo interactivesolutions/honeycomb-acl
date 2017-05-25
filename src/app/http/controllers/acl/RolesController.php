@@ -35,8 +35,7 @@ class RolesController extends HCBaseController
         if (auth()->user()->can('interactivesolutions_honeycomb_acl_acl_roles_delete'))
             $config['actions'][] = 'delete';
 
-        if (auth()->user()->can('interactivesolutions_honeycomb_acl_acl_roles_search'))
-            $config['actions'][] = 'search';
+        $config['actions'][] = 'search';
 
         return view('HCCoreUI::admin.content.list', ['config' => $config]);
     }
@@ -160,21 +159,16 @@ class RolesController extends HCBaseController
 
     /**
      * List search elements
-     * @param $list
-     * @return mixed
+     * @param Builder $query
+     * @param string $phrase
+     * @return Builder
      */
-    protected function listSearch(Builder $list)
+    protected function searchQuery(Builder $query, string $phrase)
     {
-        if (request()->has('q')) {
-            $parameter = request()->input('q');
-
-            $list = $list->where(function ($query) use ($parameter) {
-                $query->where('name', 'LIKE', '%' . $parameter . '%')
-                    ->orWhere('slug', 'LIKE', '%' . $parameter . '%');
-            });
-        }
-
-        return $list;
+        return $query->where(function (Builder $query) use ($phrase) {
+            $query->where('name', 'LIKE', '%' . $phrase . '%')
+                ->orWhere('slug', 'LIKE', '%' . $phrase . '%');
+        });
     }
 
     /**
