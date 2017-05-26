@@ -2,7 +2,7 @@
 
 Route::group (['prefix' => env('HC_ADMIN_URL'), 'middleware' => ['web', 'auth']], function ()
 {
-    Route::get ('users', ['as' => 'admin.users', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@adminIndex']);
+    Route::get ('users', ['as' => 'admin.users.index', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@adminIndex']);
 
     Route::group (['prefix' => 'api/users'], function () {
         Route::get ('/', ['as' => 'admin.api.users', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@apiIndexPaginate']);
