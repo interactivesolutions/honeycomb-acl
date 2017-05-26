@@ -22,8 +22,7 @@ class PermissionsController extends HCBaseController
             'headers' => $this->getAdminListHeader(),
         ];
 
-        if (auth()->user()->can('interactivesolutions_honeycomb_acl_acl_permissions_search'))
-            $config['actions'][] = 'search';
+        $config['actions'][] = 'search';
 
         return view('HCCoreUI::admin.content.list', ['config' => $config]);
     }
@@ -84,21 +83,16 @@ class PermissionsController extends HCBaseController
 
     /**
      * List search elements
-     * @param $list
-     * @return mixed
+     * @param Builder $query
+     * @param string $phrase
+     * @return Builder
      */
-    protected function listSearch(Builder $list)
+    protected function searchQuery(Builder $query, string $phrase)
     {
-        if (request()->has('q')) {
-            $parameter = request()->input('q');
-
-            $list = $list->where(function ($query) use ($parameter) {
-                $query->where('name', 'LIKE', '%' . $parameter . '%')
-                    ->orWhere('controller', 'LIKE', '%' . $parameter . '%')
-                    ->orWhere('action', 'LIKE', '%' . $parameter . '%');
+        return $query->where(function (Builder $query) use ($phrase) {
+                $query->where('name', 'LIKE', '%' . $phrase . '%')
+                    ->orWhere('controller', 'LIKE', '%' . $phrase . '%')
+                    ->orWhere('action', 'LIKE', '%' . $phrase . '%');
             });
-        }
-
-        return $list;
     }
 }

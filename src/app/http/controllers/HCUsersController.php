@@ -173,24 +173,19 @@ class HCUsersController extends HCBaseController
 
     /**
      * List search elements
-     * @param $list
-     * @return mixed
+     * @param Builder $query
+     * @param string $phrase
+     * @return Builder
      */
-    protected function searchQuery (Builder $list)
+    protected function searchQuery(Builder $query, string $phrase)
     {
-        if (request ()->has ('q')) {
-            $parameter = request ()->input ('q');
-
-            $list = $list->where (function ($query) use ($parameter) {
-                $query->where ('activated_at', 'LIKE', '%' . $parameter . '%')
-                    ->orWhere ('remember_token', 'LIKE', '%' . $parameter . '%')
-                    ->orWhere ('last_login', 'LIKE', '%' . $parameter . '%')
-                    ->orWhere ('last_visited', 'LIKE', '%' . $parameter . '%')
-                    ->orWhere ('last_activity', 'LIKE', '%' . $parameter . '%');
+        return $query->where(function (Builder $query) use ($phrase) {
+                $query->where ('activated_at', 'LIKE', '%' . $phrase . '%')
+                    ->orWhere ('remember_token', 'LIKE', '%' . $phrase . '%')
+                    ->orWhere ('last_login', 'LIKE', '%' . $phrase . '%')
+                    ->orWhere ('last_visited', 'LIKE', '%' . $phrase . '%')
+                    ->orWhere ('last_activity', 'LIKE', '%' . $phrase . '%');
             });
-        }
-
-        return $list;
     }
 
     /**
