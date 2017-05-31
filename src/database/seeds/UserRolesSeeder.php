@@ -2,15 +2,24 @@
 
 namespace interactivesolutions\honeycombacl\database\seeds;
 
-use HCLog;
 use DB;
 use Exception;
-
+use HCLog;
 use Illuminate\Database\Seeder;
 use interactivesolutions\honeycombacl\app\models\acl\Roles;
 
 class UserRolesSeeder extends Seeder
 {
+    const ROLE_SA = 'super-admin';
+    const ROLE_PA = 'project-admin';
+    const ROLE_E  = 'editor';
+    const ROLE_A  = 'author';
+    const ROLE_C  = 'contributor';
+    const ROLE_M  = 'moderator';
+    const ROLE_ME = 'member';
+    const ROLE_S  = 'subscriber';
+    const ROLE_U  = 'user';
+
     /**
      * Run the database seeds.
      * @return void
