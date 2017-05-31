@@ -1,5 +1,6 @@
 <?php namespace interactivesolutions\honeycombacl\app\http\controllers;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 use interactivesolutions\honeycombacl\app\validators\HCUsersValidator;
@@ -219,6 +220,31 @@ class HCUsersController extends HCBaseController
             ->select ($select)
             ->where ('id', $id)
             ->firstOrFail ();
+
+        return $record;
+    }
+
+    /**
+     * Function to create new user from within application
+     *
+     * @param string $email
+     * @param string $role
+     * @param bool $active
+     * @param string|null $password
+     * @return HCUsers
+     */
+    public function createNewUser(string $email, string $role, bool $active = true, string $password = null)
+    {
+        if (!$password)
+            $password = random_str(10);
+
+        if ($active)
+            $activated_at = Carbon::now();
+        else
+            $activated_at = null;
+
+        $record = HCUsers::create (["email" => $email, "password" => bcrypt($password), "activated_at" => $activated_at]);
+        $record->assignRole($role);
 
         return $record;
     }
