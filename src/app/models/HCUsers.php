@@ -61,4 +61,34 @@ class HCUsers extends HCUuidModel implements AuthenticatableContract, Authorizab
         $this->save();
     }
 
+    /**
+     * Check if user is activated
+     *
+     * @return bool
+     */
+    public function isActivated()
+    {
+        return ! ! $this->activated_at;
+    }
+
+
+    /**
+     * Check if user is not activated
+     *
+     * @return bool
+     */
+    public function isNotActivated()
+    {
+        return ! $this->isActivated();
+    }
+
+    /**
+     * Activate account
+     */
+    public function activate()
+    {
+        $this->activated_at = $this->freshTimestamp();
+        $this->save();
+    }
+
 }

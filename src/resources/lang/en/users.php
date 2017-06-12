@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    'page_title'    => 'Users',
     'title'         => 'Users',
     'name'          => 'Users',
     'email'         => 'E-mail',
@@ -82,7 +82,7 @@ return [
 
     'connect_with_fb' => 'Connect with <strong>Facebook</strong>',
 
-    'facebook'        => [
+    'facebook' => [
         'title'  => 'Facebook',
         'errors' => [
             'email'        => 'Email option is required!',

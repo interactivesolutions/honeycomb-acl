@@ -33,6 +33,21 @@ class HCAuthController extends HCBaseController
     protected $redirectUrl;
 
     /**
+     * @var UserActivation
+     */
+    private $activation;
+
+    /**
+     * AuthController constructor.
+     * @param UserActivation $activation
+     */
+    public function __construct(UserActivation $activation)
+    {
+        $this->activation = $activation;
+    }
+
+
+    /**
      * Displays users login form
      *
      * @return mixed
@@ -57,17 +72,24 @@ class HCAuthController extends HCBaseController
         //TODO validate form
         //TODO user throttles
 
-        if (!auth()->guard('web')->attempt($data))
-            return response(['success' => false, 'message' => 'AUTH-002 - ' . trans('HCACL::users.errors.login')]);
+        $auth = auth()->guard('web');
 
-        if (!auth()->user()['activated_at']) {
+        if( ! $auth->attempt($data) ) {
+            return response(['success' => false, 'message' => 'AUTH-002 - ' . trans('HCACL::users.errors.login')]);
+        }
+
+        // check if user is not activated
+        if( auth()->user()->isNotActivated() ) {
+            $response = $this->activation->sendActivationMail(auth()->user());
+
             $this->logout();
-            return response(['success' => false, 'message' => 'AUTH-004 - ' . trans('HCACL::users.errors.not_activated')]);
+
+            return HCLog::info('AUTH-003', $response);
         }
 
         //TODO update providers?
 
-        $this->user()->updateLastLogin();
+        auth()->user()->updateLastLogin();
 
         //redirect to intended url
         return response(['success' => true, 'redirectURL' => session('url.intended', url('/'))]);
@@ -116,7 +138,7 @@ class HCAuthController extends HCBaseController
 
         session(['activation_message' => trans('HCACL::users.activation.activate_account')]);
 
-        if ($this->redirectUrl)
+        if( $this->redirectUrl )
             return response(['success' => true, 'redirectURL' => $this->redirectUrl]);
         else
             return response(['success' => true, 'redirectURL' => route('auth.login')]);
@@ -235,9 +257,9 @@ class HCAuthController extends HCBaseController
      */
     public function showActivation(string $token)
     {
-        /*$message = null;
+        $message = null;
 
-        $tokenRecord = DB::table ('oc_users_activations')->where ('token', $token)->first ();
+        $tokenRecord = DB::table ('hc_users_activations')->where ('token', $token)->first ();
 
         if (is_null ($tokenRecord)) {
             $message = trans ('HCACL::users.activation.token_not_exists');
@@ -246,7 +268,7 @@ class HCAuthController extends HCBaseController
                 $message = trans ('HCACL::users.activation.token_expired');
         }
 
-        return view ('HCACL::auth.activation', ['token' => $token, 'message' => $message]);*/
+        return view ('HCACL::auth.activation', ['token' => $token, 'message' => $message]);
     }
 
     /**
@@ -256,7 +278,7 @@ class HCAuthController extends HCBaseController
      */
     public function activate()
     {
-        /*DB::beginTransaction ();
+        DB::beginTransaction ();
 
         try {
             $this->activation->activateUser (
@@ -270,7 +292,7 @@ class HCAuthController extends HCBaseController
 
         DB::commit ();
 
-        return redirect ()->intended ();*/
+        return redirect ()->intended ();
     }
 
 }

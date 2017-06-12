@@ -1,4 +1,6 @@
-<?php namespace interactivesolutions\honeycombacl\app\http\controllers;
+<?php
+
+namespace interactivesolutions\honeycombacl\app\http\controllers;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,6 +11,13 @@ use interactivesolutions\honeycombacl\app\models\HCUsers;
 
 class HCUsersController extends HCBaseController
 {
+    /**
+     * Custom message for user activation
+     *
+     * @var
+     */
+    public $customMessageText;
+
     /**
      * Returning configured admin view
      *
@@ -76,17 +85,23 @@ class HCUsersController extends HCBaseController
      */
     protected function __apiStore (array $data = null)
     {
-        if (is_null ($data))
-            $data = $this->getInputData ();
+        if( is_null($data) ) {
+            $data = $this->getInputData();
+        }
 
-        (new HCUsersValidator())->validateForm ();
+        (new HCUsersValidator())->validateForm();
 
-        $record = HCUsers::create (array_get ($data, 'record'));
+        $record = HCUsers::create(array_get($data, 'record'));
 
         //TODO roleUser only
         $record->roleSuperAdmin();
 
-        return $this->apiShow ($record->id);
+        // create activation
+        if( is_null($record->activated_at) ) {
+            $this->createTokenAndSendActivationCode($record);
+        }
+
+        return $this->apiShow($record->id);
     }
 
     /**
@@ -247,5 +262,25 @@ class HCUsersController extends HCBaseController
         $record->assignRole($role);
 
         return $record;
+    }
+
+    /**
+     * Create and send user activation
+     *
+     * @param $user
+     */
+    protected function createTokenAndSendActivationCode($user)
+    {
+        $activation = new UserActivation();
+        $activation->setMailMessage($this->customMessageText);
+        $activation->sendActivationMail($user);
+    }
+
+    /**
+     * @param mixed $customMessageText
+     */
+    public function setCustomMessageText($customMessageText)
+    {
+        $this->customMessageText = $customMessageText;
     }
 }
