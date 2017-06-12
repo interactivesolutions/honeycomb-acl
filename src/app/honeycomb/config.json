@@ -5,7 +5,9 @@
     "formData": {
         "users": "interactivesolutions\\honeycombacl\\app\\forms\\HCUsersForm",
         "users-login": "interactivesolutions\\honeycombacl\\app\\forms\\HCUsersLoginForm",
-        "users-register": "interactivesolutions\\honeycombacl\\app\\forms\\HCUsersRegisterForm"
+        "users-register": "interactivesolutions\\honeycombacl\\app\\forms\\HCUsersRegisterForm",
+        "password-remind": "interactivesolutions\\honeycombacl\\app\\forms\\HCPasswordRemindForm",
+        "password-reset": "interactivesolutions\\honeycombacl\\app\\forms\\HCPasswordResetForm"
     },
     "adminMenu": [
         {
