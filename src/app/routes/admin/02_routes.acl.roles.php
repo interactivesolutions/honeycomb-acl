@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => env('HC_ADMIN_URL'), 'middleware' => ['web', 'auth']], function ()
+Route::group(['prefix' => config('hc.admin_url'), 'middleware' => ['web', 'auth']], function ()
 {
     Route::get('users/roles', ['as' => 'admin.acl.roles.index', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_acl_roles_list'], 'uses' => 'acl\\RolesController@adminIndex']);
 

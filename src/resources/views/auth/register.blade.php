@@ -11,7 +11,7 @@
 
             <!-- /.login-logo -->
             <div class="login-box-body">
-                <p class="login-box-msg">{{ trans('HCACL::users.login.register') }}</p>
+                <p class="login-box-msg">{{ trans('HCACL::users.register.title') }}</p>
 
                 <div id="register-form"></div>
 

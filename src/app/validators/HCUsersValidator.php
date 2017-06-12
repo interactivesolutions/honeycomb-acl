@@ -1,4 +1,6 @@
-<?php namespace interactivesolutions\honeycombacl\app\validators;
+<?php
+
+namespace interactivesolutions\honeycombacl\app\validators;
 
 use interactivesolutions\honeycombcore\http\controllers\HCCoreFormValidator;
 
@@ -9,7 +11,7 @@ class HCUsersValidator extends HCCoreFormValidator
      *
      * @return array`
      */
-    protected function rules ()
+    protected function rules()
     {
         return [
             'email'    => 'required',

@@ -114,7 +114,7 @@ class HCAuthController extends HCBaseController
 
         DB::commit();
 
-        session(['activation_message' => trans('users::users.activation.activate_account')]);
+        session(['activation_message' => trans('HCACL::users.activation.activate_account')]);
 
         if ($this->redirectUrl)
             return response(['success' => true, 'redirectURL' => $this->redirectUrl]);
@@ -150,7 +150,7 @@ class HCAuthController extends HCBaseController
 
         DB::commit ();
 
-        session (['activation_message' => trans ('users::users.activation.activate_account')]);
+        session (['activation_message' => trans ('HCACL::users.activation.activate_account')]);
 
         if ($this->redirectUrl)
             return response (['success' => true, 'redirectURL' => $this->redirectUrl]);
@@ -189,7 +189,7 @@ class HCAuthController extends HCBaseController
         auth()->logout();
 
         return redirect('/')
-            ->with('flash_notice', trans('users::users.success.logout'));
+            ->with('flash_notice', trans('HCACL::users.success.logout'));
     }
 
     /**
@@ -240,13 +240,13 @@ class HCAuthController extends HCBaseController
         $tokenRecord = DB::table ('oc_users_activations')->where ('token', $token)->first ();
 
         if (is_null ($tokenRecord)) {
-            $message = trans ('users::users.activation.token_not_exists');
+            $message = trans ('HCACL::users.activation.token_not_exists');
         } else {
             if (strtotime ($tokenRecord->created_at) + 60 * 60 * 24 < time ())
-                $message = trans ('users::users.activation.token_expired');
+                $message = trans ('HCACL::users.activation.token_expired');
         }
 
-        return view ('users::auth.activation', ['token' => $token, 'message' => $message]);*/
+        return view ('HCACL::auth.activation', ['token' => $token, 'message' => $message]);*/
     }
 
     /**

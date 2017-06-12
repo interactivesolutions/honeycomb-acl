@@ -23,7 +23,7 @@ class HCUsersLoginForm
             'buttons'    => [
                 [
                     "class" => "col-centered btn btn-primary",
-                    "label" => trans ('HCCoreUI::core.button.login'),
+                    "label" => trans ('HCTranslations::core.buttons.login'),
                     "type"  => "submit",
                 ],
             ],
@@ -31,12 +31,12 @@ class HCUsersLoginForm
                 [
                     "type"            => "singleLine",
                     "fieldID"         => "email",
-                    "label"           => trans ("HCACL::users.email"),
+                    "label"           => trans ("HCACL::users.login.email"),
                     "required"        => 1,
                 ], [
                     "type"            => "password",
                     "fieldID"         => "password",
-                    "label"           => trans ("HCACL::users.password"),
+                    "label"           => trans ("HCACL::users.login.password"),
                     "required"        => 1,
                 ],
             ],

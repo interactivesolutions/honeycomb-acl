@@ -6,7 +6,7 @@
 
         <div class="login-box">
             <div class="login-logo">
-                <b>HoneyComb</b>
+                <b>{{ settings('project_name') }}</b>
             </div>
 
             <!-- /.login-logo -->
@@ -15,14 +15,12 @@
 
                 <div id="login-form"></div>
 
-                <div class="social-auth-links text-center">
+                {{--<div class="social-auth-links text-center"></div>--}}
 
-                </div>
-
-                {{--<a href="{{ route('users.password.remind')}}">{{ trans('users::users.passwords.forgot_password') }}</a><br>--}}
+                <a href="{{ route('users.password.remind')}}">{{ trans('HCACL::users.passwords.forgot_password') }}</a><br>
 
                 @if( isset($config['registration_enabled']))
-                    <a href="{{ route('auth.register') }}" class="text-center">{{ trans('users::users.register.title') }}</a>
+                    <a href="{{ route('auth.register') }}" class="text-center">{{ trans('HCACL::users.register.title') }}</a>
                 @endif
 
             </div>

@@ -17,7 +17,7 @@ class HCACLPermissionsMiddleware
      */
     public function handle (Request $request, Closure $next,  $permission = null)
     {
-        if (count ($request->segments ()) == 1 && $request->segment (1) == env('HC_ADMIN_URL'))
+        if (count ($request->segments ()) == 1 && $request->segment (1) == config('hc.admin_url'))
             $access = true;
         else
             $access = $request->user ()->can ($permission);

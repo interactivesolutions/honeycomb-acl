@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['prefix' => env('HC_ADMIN_URL'), 'middleware' => ['web', 'auth']], function ()
+Route::group(['prefix' => config('hc.admin_url'), 'middleware' => ['web', 'auth']], function ()
 {
     Route::get('users/permissions', ['as' => 'admin.acl.permissions.index', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_acl_permissions_list'], 'uses' => 'acl\\PermissionsController@adminIndex']);
 

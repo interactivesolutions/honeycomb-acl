@@ -26,7 +26,7 @@ trait HCUsersThrottle
             $this->getThrottleKey ($request)
         );
 
-        return OCLog::error ('AUTH-003', trans ('users::users.errors.to_many_attempts', ['seconds' => $seconds]));
+        return OCLog::error ('AUTH-003', trans ('HCACL::users.errors.to_many_attempts', ['seconds' => $seconds]));
     }
 
     /**

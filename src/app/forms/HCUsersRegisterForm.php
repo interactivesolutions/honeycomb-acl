@@ -23,7 +23,7 @@ class HCUsersRegisterForm
             'buttons'    => [
                 [
                     "class" => "col-centered",
-                    "label" => trans ('HCCoreUI::core.button.register'),
+                    "label" => trans ('HCTranslations::core.buttons.register'),
                     "type"  => "submit",
                 ],
             ],
@@ -37,7 +37,7 @@ class HCUsersRegisterForm
                 ], [
                     "type"            => "password",
                     "fieldID"         => "password",
-                    "label"           => trans ("HCACL::users.password"),
+                    "label"           => trans ("HCACL::users.register.password"),
                     "required"        => 1,
                     "requiredVisible" => 1,
                 ],
