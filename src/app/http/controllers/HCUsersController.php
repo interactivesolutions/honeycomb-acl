@@ -2,6 +2,7 @@
 
 namespace interactivesolutions\honeycombacl\app\http\controllers;
 
+use DB;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
@@ -243,12 +244,13 @@ class HCUsersController extends HCBaseController
      * Function to create new user from within application
      *
      * @param string $email
-     * @param string $role
+     * @param array $roles
      * @param bool $active
      * @param string|null $password
      * @return HCUsers
+     * @throws \Exception
      */
-    public function createNewUser(string $email, string $role, bool $active = true, string $password = null)
+    public function createNewUser(string $email, array $roles, bool $active = true, string $password = null)
     {
         if (!$password)
             $password = random_str(10);
@@ -258,8 +260,22 @@ class HCUsersController extends HCBaseController
         else
             $activated_at = null;
 
-        $record = HCUsers::create (["email" => $email, "password" => bcrypt($password), "activated_at" => $activated_at]);
-        $record->assignRole($role);
+        DB::beginTransaction ();
+
+        try {
+            $record = HCUsers::create (["email" => $email, "password" => bcrypt($password), "activated_at" => $activated_at]);
+
+            foreach ($roles as $role)
+                $record->assignRole($role);
+
+        } catch (\Exception $e)
+        {
+            DB::rollBack();
+
+            throw new \Exception($e);
+        }
+
+        DB::commit();
 
         return $record;
     }
