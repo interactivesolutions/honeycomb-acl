@@ -13,13 +13,6 @@ use interactivesolutions\honeycombacl\app\models\HCUsers;
 class HCUsersController extends HCBaseController
 {
     /**
-     * Custom message for user activation
-     *
-     * @var
-     */
-    public $customMessageText;
-
-    /**
      * Returning configured admin view
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -99,7 +92,7 @@ class HCUsersController extends HCBaseController
 
         // create activation
         if( is_null($record->activated_at) ) {
-            $this->createTokenAndSendActivationCode($record);
+            $record->createTokenAndSendActivationCode();
         }
 
         return $this->apiShow($record->id);
@@ -278,25 +271,5 @@ class HCUsersController extends HCBaseController
         DB::commit();
 
         return $record;
-    }
-
-    /**
-     * Create and send user activation
-     *
-     * @param $user
-     */
-    protected function createTokenAndSendActivationCode($user)
-    {
-        $activation = new UserActivation();
-        $activation->setMailMessage($this->customMessageText);
-        $activation->sendActivationMail($user);
-    }
-
-    /**
-     * @param mixed $customMessageText
-     */
-    public function setCustomMessageText($customMessageText)
-    {
-        $this->customMessageText = $customMessageText;
     }
 }

@@ -35,6 +35,7 @@ class UserActivation
      *
      * @param $user
      * @return array
+     * @throws \Exception
      */
     public function sendActivationMail($user)
     {
@@ -42,9 +43,19 @@ class UserActivation
             return trans('HCACL::users.activation.check_email');
         }
 
-        $token = $this->createActivation($user);
+        \DB::beginTransaction();
 
-        $this->sendMail($user, $token);
+        try {
+            $token = $this->createActivation($user);
+
+            $user->sendActivationLinkNotification($token);
+        } catch ( \Exception $e ) {
+            \DB::rollback();
+
+            throw new \Exception('Activation code or mail sending failed');
+        }
+
+        \DB::commit();
 
         return trans('HCACL::users.activation.resent_activation');
     }
@@ -64,7 +75,7 @@ class UserActivation
             throw new \Exception(trans('HCACL::users.activation.bad_token'));
         }
 
-        $user = HCUsers::findOrFail($activation->user_id);
+        $user = $this->getUser($activation);
 
         if( is_null($user) )
             throw new \Exception(trans('HCACL::users.activation.user_not_found'));
@@ -189,30 +200,13 @@ class UserActivation
     }
 
     /**
-     * @param $user
-     * @param $token
+     * Get user by activate
+     *
+     * @param $activation
+     * @return mixed
      */
-    protected function sendMail($user, $token)
+    private function getUser($activation)
     {
-        $message = [
-            'ocEmail' => $user->email,
-            'link'    => route('auth.activation', $token),
-        ];
-
-        if( $this->mailMessage )
-            $message['custom'] = $this->mailMessage;
-
-        \Mail::send('HCACL::emails.activation', $message, function ($mail) use ($user) {
-            $mail->from('admin@interactivesolutions.lt', trans('HCACL::users.activation.mail.from'));
-            $mail->to($user->email)->subject(trans('HCACL::users.activation.mail.subject'));
-        });
-    }
-
-    /**
-     * @param mixed $mailMessage
-     */
-    public function setMailMessage($mailMessage)
-    {
-        $this->mailMessage = $mailMessage;
+        return HCUsers::findOrFail($activation->user_id);
     }
 }
