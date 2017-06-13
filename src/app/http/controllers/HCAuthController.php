@@ -4,13 +4,14 @@ namespace interactivesolutions\honeycombacl\app\http\controllers;
 
 use DB;
 use HCLog;
-use Request;
-use Validator;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
-use Illuminate\Http\Request as HCRequest;
+use Illuminate\Http\Request;
 
 class HCAuthController extends HCBaseController
 {
+    use AuthenticatesUsers;
+
     /**
      * Max login attempts
      *
@@ -19,11 +20,11 @@ class HCAuthController extends HCBaseController
     protected $maxLoginAttempts = 5;
 
     /**
-     * The number of seconds to delay further login attempts.
+     * The number of minutes to delay further login attempts.
      *
      * @var int
      */
-    protected $lockoutTime = 60;
+    protected $lockoutTime = 1;
 
     /**
      * Redirect url
@@ -52,7 +53,7 @@ class HCAuthController extends HCBaseController
      *
      * @return mixed
      */
-    public function showLogin()
+    public function showLoginForm()
     {
         $config = [];
 
@@ -62,31 +63,42 @@ class HCAuthController extends HCBaseController
     /**
      * Function which login users
      *
-     * @param HCRequest $request
+     * @param Request $request
      * @return string
      */
-    public function login(HCRequest $request)
+    public function login(Request $request)
     {
-        $data = request()->only('email', 'password');
+        $this->validateLogin($request);
 
-        //TODO validate form
-        //TODO user throttles
+        // If the class is using the ThrottlesLogins trait, we can automatically throttle
+        // the login attempts for this application. We'll key this by the username and
+        // the IP address of the client making these requests into this application.
+        if( $this->hasTooManyLoginAttempts($request) ) {
+            $this->fireLockoutEvent($request);
 
-        $auth = auth()->guard('web');
-
-        if( ! $auth->attempt($data) ) {
-            return  HCLog::info('AUTH-002', trans('HCACL::users.errors.login'));
+            return $this->sendLockoutResponse($request);
         }
+
+        // If the login attempt was unsuccessful we will increment the number of attempts
+        // to login and redirect the user back to the login form. Of course, when this
+        // user surpasses their maximum number of attempts they will get locked out.
+        $this->incrementLoginAttempts($request);
+
+        if( ! $this->attemptLogin($request) ) {
+            return HCLog::info('AUTH-002', trans('HCACL::users.errors.login'));
+        }
+
+        $this->sendLoginResponse($request);
 
         // check if user is not activated
         if( auth()->user()->isNotActivated() ) {
             $user = auth()->user();
 
-            $this->logout();
+            $this->logout($request);
 
             $response = $this->activation->sendActivationMail($user);
 
-            return HCLog::success('AUTH-003', $response);
+            return HCLog::info('AUTH-003', $response);
         }
 
         //TODO update providers?
@@ -127,59 +139,24 @@ class HCAuthController extends HCBaseController
         try {
             $response = $userController->apiStore();
 
-            if (get_class($response) == 'Illuminate\Http\JsonResponse')
+            if( get_class($response) == 'Illuminate\Http\JsonResponse' )
                 return $response;
 
-        } catch (\Exception $e) {
+        } catch ( \Exception $e ) {
             DB::rollback();
 
-            return response(['success' => false, 'message' => 'AUTH-003 - ' . $e->getMessage()]);
+            return response(['success' => false, 'message' => 'AUTH-004 - ' . $e->getMessage()]);
         }
 
         DB::commit();
 
         session(['activation_message' => trans('HCACL::users.activation.activate_account')]);
 
-        if( $this->redirectUrl )
+        if( $this->redirectUrl ) {
             return response(['success' => true, 'redirectURL' => $this->redirectUrl]);
-        else
+        } else {
             return response(['success' => true, 'redirectURL' => route('auth.login')]);
-
-        /*if (settings ('registration_enabled') !== 'true')
-            return redirect ()->back ();
-
-        try {
-            (new RegisterForm())->validateForm ();
-        } catch (\Exception $e) {
-            return OCLog::info ('AUTH-002', $e->getMessage ());
         }
-
-        $usersController = new OCUsersController();
-
-        $data = $this->getData ($usersController->getInputData ());
-
-        DB::beginTransaction ();
-
-        try {
-            $response = $usersController->create ($data);
-
-            if (get_class ($response) == 'Illuminate\Http\JsonResponse')
-                return $response;
-
-        } catch (\Exception $e) {
-            DB::rollback ();
-
-            return OCLog::info ('AUTH-003', $e->getMessage ());
-        }
-
-        DB::commit ();
-
-        session (['activation_message' => trans ('HCACL::users.activation.activate_account')]);
-
-        if ($this->redirectUrl)
-            return response (['success' => true, 'redirectURL' => $this->redirectUrl]);
-        else
-            return response (['success' => true, 'redirectURL' => route ('auth.login')]);*/
     }
 
     /**
@@ -204,13 +181,17 @@ class HCAuthController extends HCBaseController
 
     /**
      * Logout function
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function logout()
+    public function logout(Request $request)
     {
-        // clear the session
-        \Session::flush();
+        $this->guard()->logout();
 
-        auth()->logout();
+        $request->session()->flush();
+
+        $request->session()->regenerate();
 
         return redirect('/')
             ->with('flash_notice', trans('HCACL::users.success.logout'));
@@ -231,27 +212,6 @@ class HCAuthController extends HCBaseController
     }
 
     /**
-     * Validator error messages with lithuanian translations messages
-     *
-     * @return array
-     */
-    protected function messages()
-    {
-        return [
-            'nickname.required'  => trans('HCACL::validator.nickname.required'),
-            'nickname.unique'    => trans('HCACL::validator.nickname.unique'),
-            'nickname.min'       => trans('HCACL::validator.nickname.min', ['count' => 3]),
-            'email.required'     => trans('HCACL::validator.email.required'),
-            'email.unique'       => trans('HCACL::validator.email.unique'),
-            'email.min'          => trans('HCACL::validator.email.min', ['count' => 5]),
-            'password.required'  => trans('HCACL::validator.password.required'),
-            'password.min'       => trans('HCACL::validator.password.min', ['count' => 5]),
-            'password.confirmed' => trans('HCACL::validator.password.confirmed'),
-            'roles.required'     => trans('HCACL::validator.roles.required'),
-        ];
-    }
-
-    /**
      * Show activation page
      *
      * @param $token
@@ -261,16 +221,17 @@ class HCAuthController extends HCBaseController
     {
         $message = null;
 
-        $tokenRecord = DB::table ('hc_users_activations')->where ('token', $token)->first ();
+        $tokenRecord = DB::table('hc_users_activations')->where('token', $token)->first();
 
-        if (is_null ($tokenRecord)) {
-            $message = trans ('HCACL::users.activation.token_not_exists');
+        if( is_null($tokenRecord) ) {
+            $message = trans('HCACL::users.activation.token_not_exists');
         } else {
-            if (strtotime ($tokenRecord->created_at) + 60 * 60 * 24 < time ())
-                $message = trans ('HCACL::users.activation.token_expired');
+            if( strtotime($tokenRecord->created_at) + 60 * 60 * 24 < time() ) {
+                $message = trans('HCACL::users.activation.token_expired');
+            }
         }
 
-        return view ('HCACL::auth.activation', ['token' => $token, 'message' => $message]);
+        return view('HCACL::auth.activation', ['token' => $token, 'message' => $message]);
     }
 
     /**
@@ -280,21 +241,49 @@ class HCAuthController extends HCBaseController
      */
     public function activate()
     {
-        DB::beginTransaction ();
+        DB::beginTransaction();
 
         try {
-            $this->activation->activateUser (
-                request ()->input ('token')
+            $this->activation->activateUser(
+                request()->input('token')
             );
-        } catch (\Exception $e) {
-            DB::rollback ();
+        } catch ( \Exception $e ) {
+            DB::rollback();
 
-            return redirect ()->back ()->withErrors ($e->getMessage ());
+            return redirect()->back()->withErrors($e->getMessage());
         }
 
-        DB::commit ();
+        DB::commit();
 
-        return redirect ()->intended ();
+        return redirect()->intended();
     }
 
+    /**
+     * Determine if the user has too many failed login attempts.
+     *
+     * @param Request|Request $request
+     * @return bool
+     */
+    protected function hasTooManyLoginAttempts(Request $request)
+    {
+        return $this->limiter()->tooManyAttempts(
+            $this->throttleKey($request), $this->maxLoginAttempts, $this->lockoutTime
+        );
+    }
+
+
+    /**
+     * Redirect the user after determining they are locked out.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendLockoutResponse(Request $request)
+    {
+        $seconds = $this->limiter()->availableIn(
+            $this->throttleKey($request)
+        );
+
+        return HCLog::info('AUTH-005', trans('auth.throttle', ['seconds' => $seconds]));
+    }
 }
