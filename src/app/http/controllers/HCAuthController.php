@@ -75,16 +75,18 @@ class HCAuthController extends HCBaseController
         $auth = auth()->guard('web');
 
         if( ! $auth->attempt($data) ) {
-            return response(['success' => false, 'message' => 'AUTH-002 - ' . trans('HCACL::users.errors.login')]);
+            return  HCLog::info('AUTH-002', trans('HCACL::users.errors.login'));
         }
 
         // check if user is not activated
         if( auth()->user()->isNotActivated() ) {
-            $response = $this->activation->sendActivationMail(auth()->user());
+            $user = auth()->user();
 
             $this->logout();
 
-            return HCLog::info('AUTH-003', $response);
+            $response = $this->activation->sendActivationMail($user);
+
+            return HCLog::success('AUTH-003', $response);
         }
 
         //TODO update providers?
