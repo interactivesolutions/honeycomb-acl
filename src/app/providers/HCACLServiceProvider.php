@@ -9,6 +9,7 @@ use interactivesolutions\honeycombacl\app\console\commands\HCAdminURL;
 use interactivesolutions\honeycombacl\app\console\commands\HCForms;
 use interactivesolutions\honeycombacl\app\console\commands\HCPermissions;
 use interactivesolutions\honeycombacl\app\console\commands\HCAdminMenu;
+use interactivesolutions\honeycombacl\app\console\commands\HCSuperAdmin;
 use interactivesolutions\honeycombacl\app\http\middleware\HCACLAdminMenu;
 use interactivesolutions\honeycombacl\app\http\middleware\HCACLAuthenticate;
 use interactivesolutions\honeycombacl\app\http\middleware\HCACLPermissionsMiddleware;
@@ -19,14 +20,31 @@ class HCACLServiceProvider extends HCBaseServiceProvider
 {
     protected $homeDirectory = __DIR__;
 
+    /**
+     * Console commands
+     *
+     * @var array
+     */
     protected $commands = [
         HCPermissions::class,
         HCAdminMenu::class,
         HCForms::class,
         HCAdminURL::class,
+        HCSuperAdmin::class
     ];
 
+    /**
+     * Namespace
+     *
+     * @var string
+     */
     protected $namespace = 'interactivesolutions\honeycombacl\app\http\controllers';
+
+    /**
+     * Provider facade name
+     *
+     * @var string
+     */
     public $serviceProviderNameSpace = 'HCACL';
 
     /**
@@ -35,6 +53,7 @@ class HCACLServiceProvider extends HCBaseServiceProvider
     protected function registerRouterItems(Router $router)
     {
         parent::registerRouterItems($router);
+
         $router->middleware ('acl', HCACLPermissionsMiddleware::class);
         $router->middleware ('auth', HCACLAuthenticate::class);
         $router->pushMiddleWareToGroup ('web', HCACLAdminMenu::class);
