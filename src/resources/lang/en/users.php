@@ -75,8 +75,7 @@ return [
         'mail' => [
             'subject' => 'Account confirmation',
             'from'    => 'Administrator',
-            'email'   => 'In order to login you have to verify your email address <strong>:email</strong>',
-            'link'    => 'Please click given link to activate your account <a href=":link">:link</a>',
+            'text'   => 'In order to login you have to verify your email address <strong>:email</strong>',
         ],
     ],
 
