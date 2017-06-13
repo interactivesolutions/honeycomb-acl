@@ -87,8 +87,11 @@ class HCUsersController extends HCBaseController
 
         $record = HCUsers::create(array_get($data, 'record'));
 
-        //TODO roleUser only
-        $record->roleSuperAdmin();
+        if( HCUsers::count() == 1 ) {
+            $record->roleSuperAdmin();
+        } else {
+            $record->roleMember();
+        }
 
         // create activation
         if( is_null($record->activated_at) ) {
