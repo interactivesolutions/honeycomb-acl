@@ -9,12 +9,14 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\Notifiable;
+use interactivesolutions\honeycombacl\app\models\traits\ActivateUser;
 use interactivesolutions\honeycombacl\app\models\traits\UserRoles;
+use interactivesolutions\honeycombacl\app\notifications\HCResetPassword;
 use interactivesolutions\honeycombcore\models\HCUuidModel;
 
 class HCUsers extends HCUuidModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword, Notifiable, UserRoles;
+    use Authenticatable, Authorizable, CanResetPassword, Notifiable, UserRoles, ActivateUser;
 
     /**
      * The database table used by the model.
@@ -62,33 +64,13 @@ class HCUsers extends HCUuidModel implements AuthenticatableContract, Authorizab
     }
 
     /**
-     * Check if user is activated
+     * Override default password notification sending mail template
      *
-     * @return bool
+     * @param  string  $token
+     * @return void
      */
-    public function isActivated()
+    public function sendPasswordResetNotification($token)
     {
-        return ! ! $this->activated_at;
+        $this->notify(new HCResetPassword($token));
     }
-
-
-    /**
-     * Check if user is not activated
-     *
-     * @return bool
-     */
-    public function isNotActivated()
-    {
-        return ! $this->isActivated();
-    }
-
-    /**
-     * Activate account
-     */
-    public function activate()
-    {
-        $this->activated_at = $this->freshTimestamp();
-        $this->save();
-    }
-
 }
