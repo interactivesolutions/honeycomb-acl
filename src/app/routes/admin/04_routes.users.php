@@ -9,6 +9,7 @@ Route::group (['prefix' => config('hc.admin_url'), 'middleware' => ['web', 'auth
         Route::post ('/', ['middleware' => ['acl:interactivesolutions_honeycomb_acl_users_create'], 'uses' => 'HCUsersController@apiStore']);
         Route::delete ('/', ['middleware' => ['acl:interactivesolutions_honeycomb_acl_users_delete'], 'uses' => 'HCUsersController@apiDestroy']);
 
+        Route::get('list', ['as' => 'admin.api.users.list', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_list'], 'uses' => 'HCUsersController@apiIndex']);
         Route::post ('restore', ['as' => 'admin.api.users.restore', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_update'], 'uses' => 'HCUsersController@apiRestore']);
         Route::post ('merge', ['as' => 'admin.api.users.merge', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_create', 'acl:interactivesolutions_honeycomb_acl_users_delete'], 'uses' => 'HCUsersController@apiMerge']);
         Route::delete ('force', ['as' => 'admin.api.users.force.multi', 'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_force_delete'], 'uses' => 'HCUsersController@apiForceDelete']);
