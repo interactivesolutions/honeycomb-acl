@@ -22,7 +22,7 @@ class HCACLAuthenticate
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->guest(env('AUTH_REDIRECT', 'auth/login'));
+                return redirect()->guest(config('hc.auth_redirect'));
             }
         }
 
