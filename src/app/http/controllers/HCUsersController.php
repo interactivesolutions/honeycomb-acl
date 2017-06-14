@@ -42,7 +42,7 @@ class HCUsersController extends HCBaseController
         if( auth()->user()->can('interactivesolutions_honeycomb_acl_users_delete') )
             $config['actions'][] = 'delete';
 
-        return view('HCCoreUI::admin.content.list', ['config' => $config]);
+        return hcview('HCCoreUI::admin.content.list', ['config' => $config]);
     }
 
     /**

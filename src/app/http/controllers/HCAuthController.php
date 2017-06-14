@@ -57,7 +57,7 @@ class HCAuthController extends HCBaseController
     {
         $config = [];
 
-        return view('HCACL::auth.login', $config);
+        return hcview('HCACL::auth.login', $config);
     }
 
     /**
@@ -117,7 +117,7 @@ class HCAuthController extends HCBaseController
     public function showRegister()
     {
 
-        return view('HCACL::auth.register');
+        return hcview('HCACL::auth.register');
         /*$settings = OCSettings::whereType ('ocv3users')->lists ('value', 'key');
 
         if ($settings['registration_enabled'] === 'true')
@@ -231,7 +231,7 @@ class HCAuthController extends HCBaseController
             }
         }
 
-        return view('HCACL::auth.activation', ['token' => $token, 'message' => $message]);
+        return hcview('HCACL::auth.activation', ['token' => $token, 'message' => $message]);
     }
 
     /**

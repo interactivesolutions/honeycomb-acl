@@ -39,7 +39,7 @@ class ForgotPasswordController extends HCBaseController
      */
     public function showLinkRequestForm()
     {
-        return view('HCACL::password.remind');
+        return hcview('HCACL::password.remind');
     }
 
     /**

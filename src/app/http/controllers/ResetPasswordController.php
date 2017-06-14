@@ -49,7 +49,7 @@ class ResetPasswordController extends HCBaseController
      */
     public function showResetForm(Request $request, $token = null)
     {
-        return view('HCACL::password.reset')->with(
+        return hcview('HCACL::password.reset')->with(
             ['token' => $token, 'email' => $request->email]
         );
     }
