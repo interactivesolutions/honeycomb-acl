@@ -11,6 +11,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\Notifiable;
 use interactivesolutions\honeycombacl\app\models\traits\ActivateUser;
 use interactivesolutions\honeycombacl\app\models\traits\UserRoles;
+use interactivesolutions\honeycombacl\app\notifications\HCAdminWelcomeEmail;
 use interactivesolutions\honeycombacl\app\notifications\HCResetPassword;
 use interactivesolutions\honeycombcore\models\HCUuidModel;
 
@@ -72,5 +73,26 @@ class HCUsers extends HCUuidModel implements AuthenticatableContract, Authorizab
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new HCResetPassword($token));
+    }
+
+    /**
+     * Welcome email
+     */
+    public function sendWelcomeEmail()
+    {
+        $this->notify((new HCAdminWelcomeEmail()));
+    }
+
+    /**
+     * Welcome email with password
+     *
+     * @param string $password
+     */
+    public function sendWelcomeEmailWithPassword(string $password)
+    {
+        $this->notify(
+            (new HCAdminWelcomeEmail())
+                ->withPassword($password)
+        );
     }
 }

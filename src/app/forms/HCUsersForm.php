@@ -16,81 +16,115 @@ class HCUsersForm
      * @param bool $edit
      * @return array
      */
-    public function createForm (bool $edit = false)
+    public function createForm(bool $edit = false)
     {
         $form = [
-            'storageURL' => route ('admin.api.users'),
+            'storageURL' => route('admin.api.users'),
             'buttons'    => [
                 [
                     "class" => "col-centered",
-                    "label" => trans ('HCTranslations::core.buttons.submit'),
+                    "label" => trans('HCTranslations::core.buttons.submit'),
                     "type"  => "submit",
                 ],
             ],
             'structure'  => [
                 [
-                    "type"            => "singleLine",
+                    "type"            => "email",
                     "fieldID"         => "email",
-                    "label"           => trans ("HCACL::users.email"),
-                    "required"        => 1,
-                    "requiredVisible" => 1,
-                ], [
-                    "type"            => "singleLine",
-                    "fieldID"         => "password",
-                    "label"           => trans ("HCACL::users.password"),
+                    "label"           => trans("HCACL::users.email"),
                     "required"        => 1,
                     "requiredVisible" => 1,
                 ],
-                //TODO create active field for user
-                //formManagerYesNo('active', trans ("HCACL::users.active"))
+                [
+                    "type"            => "password",
+                    "fieldID"         => "password",
+                    "label"           => trans("HCACL::users.register.password"),
+                    "required"        => 1,
+                    "requiredVisible" => 1,
+                ],
+                formManagerYesNo('checkBoxList', 'is_active', trans("HCACL::users.active"), 0, 0, null, false),
+                formManagerYesNo('checkBoxList', 'send_welcome_email', trans("HCACL::users.send_welcome_email"), 0, 0, null, false),
+                formManagerYesNo('checkBoxList', 'send_password', trans("HCACL::users.send_password"), 0, 0, null, false),
             ],
         ];
 
-        if ($this->multiLanguage)
+        if( $this->multiLanguage )
             $form['availableLanguages'] = []; //TOTO implement honeycomb-languages package
 
-        if (!$edit)
+        if( ! $edit )
             return $form;
 
         //Make changes to edit form if needed
-        $form['structure'] = array_merge($form['structure'],
 
-            [[
-                "type"            => "singleLine",
-                "fieldID"         => "activated_at",
-                "label"           => trans ("HCACL::users.activated_at"),
+        $form['structure'] = [];
+
+        $form['structure'] = array_merge($form['structure'], [
+            [
+                "type"            => "email",
+                "fieldID"         => "email",
+                "label"           => trans("HCACL::users.email"),
+                "required"        => 1,
+                "requiredVisible" => 1,
+            ],
+            [
+                "type"            => "password",
+                "fieldID"         => "old_password",
+                "label"           => trans('HCACL::users.passwords.old'),
+                "editType"        => 0,
                 "required"        => 0,
                 "requiredVisible" => 0,
-                "readonly"        => 1,
-            ], [
-                "type"            => "singleLine",
-                "fieldID"         => "remember_token",
-                "label"           => trans ("HCACL::users.remember_token"),
+                "properties"      => [
+                    "strength" => "1" // case 0: much, case 1: 4 symbols, case 2: 6 symbols
+                ],
+            ],
+            [
+                "type"            => "password",
+                "fieldID"         => "password",
+                "label"           => trans('HCACL::users.passwords.new'),
+                "editType"        => 0,
                 "required"        => 0,
                 "requiredVisible" => 0,
-                "readonly"        => 1,
-            ], [
+                "properties"      => [
+                    "strength" => "1" // case 0: much, case 1: 4 symbols, case 2: 6 symbols
+                ],
+            ],
+            [
+                "type"            => "password",
+                "fieldID"         => "password_confirmation",
+                "label"           => trans('HCACL::users.passwords.new_again'),
+                "editType"        => 0,
+                "required"        => 0,
+                "requiredVisible" => 0,
+                "properties"      => [
+                    "strength" => "1" // case 0: much, case 1: 4 symbols, case 2: 6 symbols
+                ],
+            ],
+            formManagerYesNo('checkBoxList', 'is_active', trans("HCACL::users.active"), 0, 0, null, false),
+            [
                 "type"            => "singleLine",
                 "fieldID"         => "last_login",
-                "label"           => trans ("HCACL::users.last_login"),
+                "label"           => trans("HCACL::users.last_login"),
                 "required"        => 0,
                 "requiredVisible" => 0,
                 "readonly"        => 1,
-            ], [
-                "type"            => "singleLine",
-                "fieldID"         => "last_visited",
-                "label"           => trans ("HCACL::users.last_visited"),
-                "required"        => 0,
-                "requiredVisible" => 0,
-                "readonly"        => 1,
-            ], [
+            ],
+            [
                 "type"            => "singleLine",
                 "fieldID"         => "last_activity",
-                "label"           => trans ("HCACL::users.last_activity"),
+                "label"           => trans("HCACL::users.last_activity"),
                 "required"        => 0,
                 "requiredVisible" => 0,
                 "readonly"        => 1,
-            ]]);
+            ],
+            [
+                "type"            => "singleLine",
+                "fieldID"         => "activated_at",
+                "label"           => trans("HCACL::users.activation.activated_at"),
+                "required"        => 0,
+                "requiredVisible" => 0,
+                "readonly"        => 1,
+            ],
+        ]);
 
         return $form;
     }

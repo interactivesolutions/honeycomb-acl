@@ -4,6 +4,7 @@ namespace interactivesolutions\honeycombacl\app\http\controllers;
 
 use DB;
 use Carbon\Carbon;
+use HCLog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 use interactivesolutions\honeycombacl\app\validators\HCUsersValidator;
@@ -17,31 +18,31 @@ class HCUsersController extends HCBaseController
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function adminIndex ()
+    public function adminIndex()
     {
         $config = [
-            'title'       => trans ('HCACL::users.page_title'),
-            'listURL'     => route ('admin.api.users'),
-            'newFormUrl'  => route ('admin.api.form-manager', ['users-new']),
-            'editFormUrl' => route ('admin.api.form-manager', ['users-edit']),
-            'imagesUrl'   => route ('resource.get', ['/']),
-            'headers'     => $this->getAdminListHeader (),
+            'title'       => trans('HCACL::users.page_title'),
+            'listURL'     => route('admin.api.users'),
+            'newFormUrl'  => route('admin.api.form-manager', ['users-new']),
+            'editFormUrl' => route('admin.api.form-manager', ['users-edit']),
+            'imagesUrl'   => route('resource.get', ['/']),
+            'headers'     => $this->getAdminListHeader(),
         ];
 
         $config['actions'][] = 'search';
 
-        if (auth()->user()->can ('interactivesolutions_honeycomb_acl_users_create'))
+        if( auth()->user()->can('interactivesolutions_honeycomb_acl_users_create') )
             $config['actions'][] = 'new';
 
-        if (auth()->user()->can ('interactivesolutions_honeycomb_acl_users_update')) {
+        if( auth()->user()->can('interactivesolutions_honeycomb_acl_users_update') ) {
             $config['actions'][] = 'update';
             $config['actions'][] = 'restore';
         }
 
-        if (auth()->user()->can ('interactivesolutions_honeycomb_acl_users_delete'))
+        if( auth()->user()->can('interactivesolutions_honeycomb_acl_users_delete') )
             $config['actions'][] = 'delete';
 
-        return view ('HCCoreUI::admin.content.list', ['config' => $config]);
+        return view('HCCoreUI::admin.content.list', ['config' => $config]);
     }
 
     /**
@@ -49,24 +50,24 @@ class HCUsersController extends HCBaseController
      *
      * @return array
      */
-    public function getAdminListHeader ()
+    public function getAdminListHeader()
     {
         return [
-            'activated_at'   => [
+            'email'         => [
                 "type"  => "text",
-                "label" => trans ('HCACL::users.activated_at'),
+                "label" => trans('HCACL::users.email'),
             ],
-            'last_login'     => [
+            'last_login'    => [
                 "type"  => "text",
-                "label" => trans ('HCACL::users.last_login'),
+                "label" => trans('HCACL::users.last_login'),
             ],
-            'last_visited'   => [
+            'last_activity' => [
                 "type"  => "text",
-                "label" => trans ('HCACL::users.last_visited'),
+                "label" => trans('HCACL::users.last_activity'),
             ],
-            'last_activity'  => [
+            'activated_at'  => [
                 "type"  => "text",
-                "label" => trans ('HCACL::users.last_activity'),
+                "label" => trans('HCACL::users.activation.activated_at'),
             ],
         ];
     }
@@ -77,7 +78,7 @@ class HCUsersController extends HCBaseController
      * @param array|null $data
      * @return mixed
      */
-    protected function __apiStore (array $data = null)
+    protected function __apiStore(array $data = null)
     {
         if( is_null($data) ) {
             $data = $this->getInputData();
@@ -85,18 +86,15 @@ class HCUsersController extends HCBaseController
 
         (new HCUsersValidator())->validateForm();
 
-        $record = HCUsers::create(array_get($data, 'record'));
-
-        if( HCUsers::count() == 1 ) {
-            $record->roleSuperAdmin();
-        } else {
-            $record->roleMember();
-        }
-
-        // create activation
-        if( is_null($record->activated_at) ) {
-            $record->createTokenAndSendActivationCode();
-        }
+        $record = createHCUser(
+            array_get($data, 'record.email'),
+            [],
+            request()->has('is_active'),
+            array_get($data, 'record.password'),
+            [],
+            request()->has('send_welcome_email'),
+            request()->has('send_password')
+        );
 
         return $this->apiShow($record->id);
     }
@@ -107,17 +105,36 @@ class HCUsersController extends HCBaseController
      * @param $id
      * @return mixed
      */
-    protected function __apiUpdate (string $id)
+    protected function __apiUpdate(string $id)
     {
-        $record = HCUsers::findOrFail ($id);
-
         //TODO read request parameters only once fo getting data and validating it
-        $data = $this->getInputData ();
-        (new HCUsersValidator())->validateForm ();
+        $data = $this->getInputData();
 
-        $record->update (array_get ($data, 'record'));
+        (new HCUsersValidator())->setId($id)->validateForm();
 
-        return $this->apiShow ($record->id);
+        $record = HCUsers::findOrFail($id);
+
+        // password changing
+        if( array_get($data, 'record.password') ) {
+            if( Hash::check(array_get($data, 'old_password'), $record->password) ) {
+                array_set($data, 'record.password', Hash::make($data['new_password']));
+
+                array_forget($data, ['new_password', 'old_password']);
+            } else {
+                return HCLog::info('USERS-003', trans('HCACL::users.errors.badOldPass'));
+            }
+        } else {
+            array_forget($data, ['new_password', 'old_password', 'record.password']);
+        }
+
+        $record->update(array_get($data, 'record'));
+
+        // activate user if you want
+        if( request()->has('is_active') && $record->isNotActivated() ) {
+            $record->activate();
+        }
+
+        return $this->apiShow($record->id);
     }
 
     /**
@@ -126,9 +143,9 @@ class HCUsersController extends HCBaseController
      * @param $list
      * @return mixed|void
      */
-    protected function __apiDestroy (array $list)
+    protected function __apiDestroy(array $list)
     {
-        HCUsers::destroy ($list);
+        HCUsers::destroy($list);
     }
 
     /**
@@ -137,9 +154,9 @@ class HCUsersController extends HCBaseController
      * @param $list
      * @return mixed|void
      */
-    protected function __apiForceDelete (array $list)
+    protected function __apiForceDelete(array $list)
     {
-        HCUsers::onlyTrashed ()->whereIn ('id', $list)->forceDelete ();
+        HCUsers::onlyTrashed()->whereIn('id', $list)->forceDelete();
     }
 
     /**
@@ -148,9 +165,9 @@ class HCUsersController extends HCBaseController
      * @param $list
      * @return mixed|void
      */
-    protected function __apiRestore (array $list)
+    protected function __apiRestore(array $list)
     {
-        HCUsers::whereIn ('id', $list)->restore ();
+        HCUsers::whereIn('id', $list)->restore();
     }
 
     /**
@@ -163,7 +180,7 @@ class HCUsersController extends HCBaseController
     {
         $with = [];
 
-        if ($select == null)
+        if( $select == null )
             $select = HCUsers::getFillableFields();
 
         $list = HCUsers::with($with)->select($select)
@@ -193,12 +210,12 @@ class HCUsersController extends HCBaseController
     protected function searchQuery(Builder $query, string $phrase)
     {
         return $query->where(function (Builder $query) use ($phrase) {
-                $query->where ('activated_at', 'LIKE', '%' . $phrase . '%')
-                    ->orWhere ('remember_token', 'LIKE', '%' . $phrase . '%')
-                    ->orWhere ('last_login', 'LIKE', '%' . $phrase . '%')
-                    ->orWhere ('last_visited', 'LIKE', '%' . $phrase . '%')
-                    ->orWhere ('last_activity', 'LIKE', '%' . $phrase . '%');
-            });
+            $query->where('activated_at', 'LIKE', '%' . $phrase . '%')
+                ->orWhere('remember_token', 'LIKE', '%' . $phrase . '%')
+                ->orWhere('last_login', 'LIKE', '%' . $phrase . '%')
+                ->orWhere('last_visited', 'LIKE', '%' . $phrase . '%')
+                ->orWhere('last_activity', 'LIKE', '%' . $phrase . '%');
+        });
     }
 
     /**
@@ -206,12 +223,14 @@ class HCUsersController extends HCBaseController
      *
      * @return mixed
      */
-    protected function getInputData ()
+    protected function getInputData()
     {
-        $_data = request ()->all ();
+        $_data = request()->all();
 
-        array_set ($data, 'record.email', array_get ($_data, 'email'));
-        array_set ($data, 'record.password', Hash::make (array_get ($_data, 'password')));
+        array_set($data, 'record.email', array_get($_data, 'email'));
+        array_set($data, 'record.password', array_get($_data, 'password'));
+        array_set($data, 'new_password', array_get($_data, 'new_password'));
+        array_set($data, 'old_password', array_get($_data, 'old_password'));
 
         return $data;
     }
@@ -222,57 +241,22 @@ class HCUsersController extends HCBaseController
      * @param $id
      * @return mixed
      */
-    public function apiShow (string $id)
+    public function apiShow(string $id)
     {
         $with = [];
 
-        $select = HCUsers::getFillableFields ();
+        $select = HCUsers::getFillableFields();
 
-        $record = HCUsers::with ($with)
-            ->select ($select)
-            ->where ('id', $id)
-            ->firstOrFail ();
+        $record = HCUsers::with($with)
+            ->select($select)
+            ->where('id', $id)
+            ->firstOrFail();
 
-        return $record;
-    }
-
-    /**
-     * Function to create new user from within application
-     *
-     * @param string $email
-     * @param array $roles
-     * @param bool $active
-     * @param string|null $password
-     * @return HCUsers
-     * @throws \Exception
-     */
-    public function createNewUser(string $email, array $roles, bool $active = true, string $password = null)
-    {
-        if (!$password)
-            $password = random_str(10);
-
-        if ($active)
-            $activated_at = Carbon::now();
-        else
-            $activated_at = null;
-
-        DB::beginTransaction ();
-
-        try {
-            $record = HCUsers::create (["email" => $email, "password" => bcrypt($password), "activated_at" => $activated_at]);
-
-            foreach ($roles as $role)
-                $record->assignRole($role);
-
-        } catch (\Exception $e)
-        {
-            DB::rollBack();
-
-            throw new \Exception($e);
-        }
-
-        DB::commit();
+        $record->is_active = [
+            ['id' => $record->activated_at ? 1 : 0],
+        ];
 
         return $record;
     }
+
 }

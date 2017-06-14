@@ -27,7 +27,7 @@ trait UserRoles
     public function assignRole(string $role)
     {
         return $this->roles()->save(
-            Roles::whereSlug($role)->firstOrFail()
+            Roles::where('slug', $role)->firstOrFail()
         );
     }
 

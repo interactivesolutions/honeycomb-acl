@@ -60,6 +60,7 @@ return [
     ],
 
     'activation' => [
+        'activated_at'      => 'Activated at',
         'title'             => 'Account activation',
         'info'              => 'You have to active your account.',
         'activate'          => 'Activate',
@@ -75,7 +76,7 @@ return [
         'mail' => [
             'subject' => 'Account confirmation',
             'from'    => 'Administrator',
-            'text'   => 'In order to login you have to verify your email address <strong>:email</strong>',
+            'text'    => 'In order to login you have to verify your email address <strong>:email</strong>',
         ],
     ],
 
@@ -99,6 +100,16 @@ return [
 
     'send_welcome_email' => 'Send welcome email',
     'send_password'      => 'Send password',
+
+    'welcome_email' => [
+        'greeting'            => 'Congratulations!',
+        'subject'             => 'You have successfully registered!',
+        'text'                => 'Your account has been created!',
+        'show_email'          => 'Email: <strong>:email</strong>',
+        'show_password'       => 'Password: <strong>:password</strong>',
+        'login_link'          => 'Login link',
+        'activation_required' => 'But first you need to activate your account! You will receive and email with activation instructions.',
+    ],
 
     'registered' => [
         'success'       => 'Your new account',
@@ -139,4 +150,30 @@ return [
 
         'member_since' => 'Member since :date',
     ],
+
+    'validator' => [
+        'nickname' => [
+            'required' => 'You must enter nickname!',
+            'unique'   => 'Nickname already exists!',
+            'min'      => 'Nickname must be at least :count characters',
+        ],
+
+        'email'    => [
+            'required' => 'Email address is required!',
+            'unique'   => 'Given email already exists!',
+            'min'      => 'Email must be at least :count characters',
+        ],
+
+        'password' => [
+            'required'  => 'Password is required!',
+            'min'       => 'Password must be at least :count characters',
+            'confirmed' => 'The password confirmation does not match.',
+        ],
+
+        'roles'    => [
+            'required'          => 'Roles are required!',
+            'cant_update_super' => 'You can\'t update super admin role!',
+            'cant_update_roles' => 'You can\'t update roles!',
+        ],
+    ]
 ];
