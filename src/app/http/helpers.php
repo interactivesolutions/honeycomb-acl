@@ -51,7 +51,7 @@ if( ! function_exists('createHCUser') ) {
      * Create user account
      *
      * @param string $email
-     * @param array $roles
+     * @param array $roleIds - array of role ids
      * @param bool $active
      * @param string|null $password
      * @param array $additionalData
@@ -60,7 +60,7 @@ if( ! function_exists('createHCUser') ) {
      * @return static
      * @throws Exception
      */
-    function createHCUser(string $email, array $roles, bool $active = true, string $password = null, array $additionalData = [], $sendWelcomeEmail = true, bool $sendPassword = false)
+    function createHCUser(string $email, array $roleIds, bool $active = true, string $password = null, array $additionalData = [], $sendWelcomeEmail = true, bool $sendPassword = false)
     {
         DB::beginTransaction();
 
@@ -74,12 +74,10 @@ if( ! function_exists('createHCUser') ) {
             );
 
             // create user roles
-            if( empty($roles) ) {
+            if( empty($roleIds) ) {
                 $record->roleMember();
             } else {
-                foreach ( $roles as $role ) {
-                    $record->assignRole($role);
-                }
+                $record->assignRoles($roleIds);
             }
 
             // send welcome email

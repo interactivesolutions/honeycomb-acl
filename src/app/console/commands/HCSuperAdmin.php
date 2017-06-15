@@ -148,7 +148,7 @@ class HCSuperAdmin extends HCCommand
         try {
             // create super-admin user
             $user = HCUsers::create(['email' => $this->email, 'password' => $this->password, 'activated_at' => Carbon::now()->toDateTimeString()]);
-            $user->assignRole('super-admin');
+            $user->assignRoleBySlug('super-admin');
 
         } catch ( \Exception $e ) {
             DB::rollback();
@@ -201,7 +201,7 @@ class HCSuperAdmin extends HCCommand
                 DB::beginTransaction();
 
                 try {
-                    $adminExists->assignRole('super-admin');
+                    $adminExists->assignRoleBySlug('super-admin');
                 } catch ( \Exception $e ) {
                     DB::rollback();
 

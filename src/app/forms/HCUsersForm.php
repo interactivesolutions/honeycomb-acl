@@ -2,6 +2,8 @@
 
 namespace interactivesolutions\honeycombacl\app\forms;
 
+use interactivesolutions\honeycombacl\app\models\acl\Roles;
+
 class HCUsersForm
 {
     // name of the form
@@ -18,6 +20,17 @@ class HCUsersForm
      */
     public function createForm(bool $edit = false)
     {
+        $this->getRolesForUserCreation();
+
+        $rolesStructure = [
+            "type"            => 'checkBoxList',
+            "fieldID"         => 'roles',
+            "label"           => trans("HCACL::users.role_groups"),
+            "required"        => 1,
+            "requiredVisible" => 1,
+            "options"         => $this->getRolesForUserCreation(),
+        ];
+
         $form = [
             'storageURL' => route('admin.api.users'),
             'buttons'    => [
@@ -28,6 +41,7 @@ class HCUsersForm
                 ],
             ],
             'structure'  => [
+                $rolesStructure,
                 [
                     "type"            => "email",
                     "fieldID"         => "email",
@@ -59,6 +73,7 @@ class HCUsersForm
         $form['structure'] = [];
 
         $form['structure'] = array_merge($form['structure'], [
+            $rolesStructure,
             [
                 "type"            => "email",
                 "fieldID"         => "email",
@@ -127,5 +142,33 @@ class HCUsersForm
         ]);
 
         return $form;
+    }
+
+    /**
+     * Get roles for user creation. User can give roles that he owns
+     *
+     * @return array
+     */
+    public function getRolesForUserCreation()
+    {
+        $rolesList = [];
+
+        // logged user
+        $user = auth()->user();
+
+        if( auth()->check() ) {
+            if( $user->isSuperAdmin() ) {
+                $rolesList = Roles::select('id', 'name as label')->orderBy('name')->get();
+            } else {
+                foreach ( $user->roles as $role ) {
+                    $rolesList[] = [
+                        'id'    => $role->id,
+                        'label' => $role->name,
+                    ];
+                }
+            }
+        }
+
+        return $rolesList;
     }
 }

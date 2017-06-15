@@ -24,11 +24,23 @@ trait UserRoles
      * @param  string $role
      * @return mixed
      */
-    public function assignRole(string $role)
+    public function assignRoleBySlug(string $role)
     {
         return $this->roles()->save(
             Roles::where('slug', $role)->firstOrFail()
         );
+    }
+
+    /**
+     * Create roles for user
+     *
+     * @param $roles - role ids
+     */
+    public function assignRoles(array $roles)
+    {
+        if( ! empty($roles) ) {
+            $this->roles()->sync($roles);
+        }
     }
 
     /**

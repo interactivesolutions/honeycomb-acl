@@ -88,7 +88,7 @@ class HCUsersController extends HCBaseController
 
         $record = createHCUser(
             array_get($data, 'record.email'),
-            [],
+            array_get($data, 'roles'),
             request()->has('is_active'),
             array_get($data, 'record.password'),
             [],
@@ -128,6 +128,7 @@ class HCUsersController extends HCBaseController
         }
 
         $record->update(array_get($data, 'record'));
+        $record->assignRoles(array_get($data, 'roles'));
 
         // activate user if you want
         if( request()->has('is_active') && $record->isNotActivated() ) {
@@ -231,6 +232,7 @@ class HCUsersController extends HCBaseController
         array_set($data, 'record.password', array_get($_data, 'password'));
         array_set($data, 'new_password', array_get($_data, 'new_password'));
         array_set($data, 'old_password', array_get($_data, 'old_password'));
+        array_set($data, 'roles', array_get($_data, 'roles', []));
 
         return $data;
     }
@@ -243,7 +245,9 @@ class HCUsersController extends HCBaseController
      */
     public function apiShow(string $id)
     {
-        $with = [];
+        $with = ['roles' => function ($query) {
+            $query->select('id', 'name as label');
+        }];
 
         $select = HCUsers::getFillableFields();
 

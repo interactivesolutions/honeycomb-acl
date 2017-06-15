@@ -55,7 +55,7 @@ class HCUsersValidator extends HCCoreFormValidator
         return [
             'email'                 => 'required|email|min:5|unique:hc_users,email,' . $this->id,
 //            'nickname'              => 'required|min:3|unique:oc_users_personal_data,nickname,' . $this->recordId . ',user_id',
-//            'roles'                 => 'required',
+            'roles'                 => 'required',
             'old_password'          => 'min:5',
             'password'              => 'required_with:old_password|min:5|confirmed',
             'password_confirmation' => 'required_with:password|min:5',
