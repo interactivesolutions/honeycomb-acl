@@ -6,7 +6,7 @@
 
         <div class="login-box">
             <div class="login-logo">
-                <b>{{ settings('project_name') }}</b>
+                <b>{{ config('app.name') }}</b>
             </div>
 
             <h3 class="text-center">{{ trans('HCACL::users.activation.title') }}</h3>
