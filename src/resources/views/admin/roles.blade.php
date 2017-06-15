@@ -1,6 +1,6 @@
 @extends('HCCoreUI::admin.layout')
 
-@if ( isset( $config['title'] ) &&  ! empty($config['title']))
+@if(isset( $config['title'] ) &&  ! empty($config['title']))
     @section('content-header',  $config['title'] )
 @endif
 
@@ -9,7 +9,7 @@
         .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
             padding: 0px 5px 0 5px;
         }
-        
+
         table > tbody > tr > th:first-child {
             width: 30%;
             min-width: 500px;
@@ -17,6 +17,11 @@
 
         table > tbody > tr > td:not(:first-child), table > tbody > tr > th:not(:first-child) {
             text-align: center;
+        }
+
+        tr:first-child
+        {
+            max-width: 640px;
         }
         
     </style>
@@ -121,7 +126,7 @@
                 '<th>' + permissionsHeader + '</th>';
 
             $.each(roles, function (i, v) {
-                html += '<th>' + v.role + '</th>';
+                html += '<th class="to-the-right">' + v.role + '</th>';
             });
 
             return html + '</tr>';
@@ -140,18 +145,18 @@
                     var checked = "";
 
                     $.each(roles.permissions, function (key2, rPermissionId) {
-                        if (permission.id == rPermissionId) {
+                        if (permission.id === rPermissionId) {
                             checked = "checked";
                         }
                     });
 
-                    if (roles.slug == 'project-admin' && jQuery.inArray(roles.slug, currentRolesArray) > -1) {
+                    if (roles.slug === 'project-admin' && jQuery.inArray(roles.slug, currentRolesArray) > -1) {
 
-                        html += '<td>' +
+                        html += '<td class="to-the-right">' +
                             '<input type="checkbox" onclick="updateRole(\'' + permission.id + '\',\'' + roles.id + '\',\'' + updateUrl + '\', jQuery(this).parent())" id="ck' + permission.id + '"' + checked + ' disabled/>' +
                             '</td>';
                     } else {
-                        html += '<td>' +
+                        html += '<td class="to-the-right">' +
                             '<input type="checkbox" onclick="updateRole(\'' + permission.id + '\',\'' + roles.id + '\',\'' + updateUrl + '\', jQuery(this).parent())" id="ck' + permission.id + '"' + checked + '/>' +
                             '</td>';
                     }
