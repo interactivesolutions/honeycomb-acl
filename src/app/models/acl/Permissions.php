@@ -41,4 +41,34 @@ class Permissions extends HCUuidModel
     {
         return $this->belongsToMany(Roles::class, RolesPermissionsConnections::getTableName(), 'permission_id', 'role_id');
     }
+
+    /**
+     * Delete permission with related connection in roles permissions tables
+     *
+     * @param $name
+     * @param $action
+     */
+    public static function permissionDelete($name, $action)
+    {
+        $permission = Permissions::where('name', $name)
+            ->where('action', $action)
+            ->first();
+
+        if( ! is_null($permission) ) {
+            RolesPermissionsConnections::where('permission_id', $permission->id)->delete();
+
+            $permission->forceDelete();
+        }
+    }
+
+    /**
+     * Get name attribute
+     *
+     * @param $value
+     * @return string
+     */
+    public function getNameAttribute($value)
+    {
+        return $this->attributes['name'] = trans($value);
+    }
 }

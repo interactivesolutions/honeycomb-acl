@@ -106,7 +106,7 @@ trait UserRoles
      */
     public function roleNames()
     {
-        return $this->roles()->lists('name')->implode(', ');
+        return $this->roles()->pluck('name')->implode(', ');
     }
 
     /**
@@ -116,7 +116,7 @@ trait UserRoles
      */
     public function currentRolesArray()
     {
-        return $this->roles()->lists('slug');
+        return $this->roles()->pluck('slug');
     }
 
     /**

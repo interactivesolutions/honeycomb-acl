@@ -140,6 +140,10 @@ return [
         "subject"         => "Your password reset link.",
     ],
 
+    'access' => [
+        'title' => 'User access',
+    ],
+
     'admin' => [
         'menu' => [
             'logout'  => 'Logout',
