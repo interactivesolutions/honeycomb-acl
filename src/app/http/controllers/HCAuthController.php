@@ -116,22 +116,25 @@ class HCAuthController extends HCBaseController
      */
     public function showRegister()
     {
+        if( ! config('hc.allow_registration') ) {
+            return redirect('/');
+        }
 
         return hcview('HCACL::auth.register');
-        /*$settings = OCSettings::whereType ('ocv3users')->lists ('value', 'key');
-
-        if ($settings['registration_enabled'] === 'true')
-
-        return redirect ()->back ();*/
     }
 
     /**
      * User registration
      *
      * @return mixed
+     * @throws \Exception
      */
     public function register()
     {
+        if( ! config('hc.allow_registration') ) {
+            throw new \Exception();
+        }
+
         $userController = new HCUsersController();
 
         DB::beginTransaction();
