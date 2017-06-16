@@ -100,7 +100,7 @@ class HCAccessController extends HCBaseController
             $permissions = collect([]);
         }
 
-        $permissions = $permissions->groupBy('name')->sortByDesc('created_at')->sortBy('name');
+        $permissions = $permissions->sortBy('name')->groupBy('name');
 
         return json_encode($permissions);
     }
