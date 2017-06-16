@@ -36,45 +36,52 @@ class HCPermissions extends HCCommand
     private $aclData;
 
     /**
+     * Roles list holder
+     *
+     * @var array
+     */
+    private $rolesList = [];
+
+    /**
      * Execute the console command.
      *
      * @return mixed
      */
-    public function handle ()
+    public function handle()
     {
-        $this->comment ('Scanning permissions..');
+        $this->comment('Scanning permissions..');
 
-        $this->scanRolesAndPermissions ();
-        $this->generateRolesAndPermissions ();
+        $this->scanRolesAndPermissions();
+        $this->generateRolesAndPermissions();
 
-        $this->comment ('-');
+        $this->comment('-');
     }
 
     /**
      * Scans roles and permissions and create roles, permissions and roles_permissions
      */
-    private function scanRolesAndPermissions ()
+    private function scanRolesAndPermissions()
     {
-        $files = $this->getConfigFiles ();
+        $files = $this->getConfigFiles();
 
-        if (!empty($files))
-            foreach ($files as $filePath) {
-                $config = json_decode (file_get_contents ($filePath), true);
+        if( ! empty($files) )
+            foreach ( $files as $filePath ) {
+                $config = json_decode(file_get_contents($filePath), true);
 
-                if (is_null ($config))
-                    $this->info ('Invalid json file: ' . $filePath);
+                if( is_null($config) )
+                    $this->info('Invalid json file: ' . $filePath);
                 else {
-                    $packageName = array_get ($config, 'general.serviceProviderNameSpace');
+                    $packageName = array_get($config, 'general.serviceProviderNameSpace');
 
-                    if (is_null ($packageName) || $packageName == '') {
-                        $this->error ('SKIPPING! Package must have a name! file: ' . $filePath);
+                    if( is_null($packageName) || $packageName == '' ) {
+                        $this->error('SKIPPING! Package must have a name! file: ' . $filePath);
                         continue;
                     }
 
-                    if (array_key_exists ('acl', $config)) {
+                    if( array_key_exists('acl', $config) ) {
                         $this->aclData[] = [
                             'packageName' => $packageName,
-                            'acl'         => array_get ($config, 'acl'),
+                            'acl'         => array_get($config, 'acl'),
                         ];
                     }
                 }
@@ -84,13 +91,20 @@ class HCPermissions extends HCCommand
     /**
      * Create roles, permissions and roles_permissions
      */
-    private function generateRolesAndPermissions ()
+    private function generateRolesAndPermissions()
     {
-        if (!empty($this->aclData))
-            foreach ($this->aclData as $acl) {
-                $this->createPermissions ($acl['acl']);
-                $this->createRolesPermissions ($acl['acl']);
-            }
+        if( empty($this->aclData) ) {
+            $this->error('empty roles and permissions in "generateRolesAndPermissions" method');
+
+            return;
+        }
+
+        foreach ( $this->aclData as $acl ) {
+            $this->createPermissions($acl['acl']);
+            $this->createRoles($acl['acl']);
+        }
+
+        $this->createRolesPermissions($this->aclData);
     }
 
     /**
@@ -98,14 +112,14 @@ class HCPermissions extends HCCommand
      *
      * @param $aclData
      */
-    private function createPermissions (array $aclData)
+    private function createPermissions(array $aclData)
     {
-        if (array_key_exists ('permissions', $aclData)) {
-            foreach ($aclData['permissions'] as $permission) {
-                $this->removeDeletedPermissions ($permission);
+        if( array_key_exists('permissions', $aclData) ) {
+            foreach ( $aclData['permissions'] as $permission ) {
+                $this->removeDeletedPermissions($permission);
 
-                foreach ($permission['actions'] as $action) {
-                    $permissionId = Permissions::firstOrCreate ([
+                foreach ( $permission['actions'] as $action ) {
+                    $permissionId = Permissions::firstOrCreate([
                         'name'       => $permission['name'],
                         'controller' => $permission['controller'],
                         'action'     => $action,
@@ -122,17 +136,36 @@ class HCPermissions extends HCCommand
      *
      * @param $permission
      */
-    private function removeDeletedPermissions (array $permission)
+    private function removeDeletedPermissions(array $permission)
     {
-        $configActions = collect ($permission['actions']);
+        $configActions = collect($permission['actions']);
 
-        $actions = Permissions::where ('name', $permission['name'])->pluck ('action');
+        $actions = Permissions::where('name', $permission['name'])->pluck('action');
 
-        $removedActions = $actions->diff ($configActions);
+        $removedActions = $actions->diff($configActions);
 
-        if (!$removedActions->isEmpty ())
-            foreach ($removedActions as $action)
-                Permissions::deletePermission ($action);
+        if( ! $removedActions->isEmpty() )
+            foreach ( $removedActions as $action )
+                Permissions::deletePermission($action);
+    }
+
+    /**
+     * Create roles
+     *
+     * @param array $aclData
+     */
+    private function createRoles(array $aclData)
+    {
+        if( array_key_exists('rolesActions', $aclData) ) {
+            foreach ( $aclData['rolesActions'] as $role => $actions ) {
+                $roleRecord = Roles::firstOrCreate([
+                    'slug' => $role,
+                    'name' => ucfirst(str_replace(['-', '_'], ' ', $role)),
+                ]);
+
+                $this->rolesList[$roleRecord->id] = $roleRecord;
+            }
+        }
     }
 
     /**
@@ -141,21 +174,70 @@ class HCPermissions extends HCCommand
      * @param $aclData
      * @internal param $acl
      */
-    private function createRolesPermissions (array $aclData)
+    private function createRolesPermissions(array $aclData)
     {
-        //TODO extend DB with "manual" option which stands if user has created this role action connection
-        //TODO gather all actions
-        //TODO if manual connection leave it else delete all connections
+        $allRolesActions = $this->extractAllActions($aclData);
 
-        if (array_key_exists ('rolesActions', $aclData)) {
-            foreach ($aclData['rolesActions'] as $role => $actions) {
-                $roleRecord = Roles::firstOrCreate (['slug' => $role, 'name' => ucfirst (str_replace (['-', '_'], ' ', $role))]);
+        $uncheckedActionsOutput = [];
 
-                foreach ($actions as $action) {
-                    $permission = Permissions::where ('action', $action)->first ();
-                    $connection = RolesPermissionsConnections::firstOrCreate (['role_id' => $roleRecord->id, 'permission_id' => $permission->id]);
+        foreach ( $this->rolesList as $roleRecord ) {
+            // load current role permissions
+            $roleRecord->load('permissions');
+
+            // get current role permissions
+            $currentRolePermissions = $roleRecord->permissions->pluck('action')->toArray();
+
+            // if role already has permissions
+            if( count($currentRolePermissions) ) {
+                // unchecked actions
+                $uncheckedActions = array_diff($allRolesActions[$roleRecord->slug], $currentRolePermissions);
+
+                if( ! empty($uncheckedActions) ) {
+                    $uncheckedActionsOutput[] = [$roleRecord->name, implode("\n", $uncheckedActions)];
+                }
+                
+                continue;
+            }
+
+
+            // if role doesn't have any permissions than create it
+
+            // get all permissions
+            $permissions = Permissions::whereIn('action', $allRolesActions[$roleRecord->slug])->get();
+
+            // sync permissions
+            $roleRecord->permissions()->sync($permissions->pluck('id'));
+        }
+
+        // if role has unchecked actions than show which actions is unchecked
+        if( $uncheckedActionsOutput ) {
+            $this->table(['Role', 'Unchecked actions'], $uncheckedActionsOutput);
+        }
+    }
+
+    /**
+     * Extract all actions from roles config
+     *
+     * @param array $aclData
+     * @return array
+     */
+    private function extractAllActions(array $aclData): array
+    {
+        $allRolesActions = [];
+
+        // get all role actions available
+        foreach ( $aclData as $acl ) {
+            if( isset($acl['acl']['rolesActions']) && ! empty ($acl['acl']['rolesActions']) ) {
+                foreach ( $acl['acl']['rolesActions'] as $role => $actions ) {
+                    if( array_key_exists($role, $allRolesActions) ) {
+                        $allRolesActions[$role] = array_merge($allRolesActions[$role], $actions);
+                    } else {
+                        $allRolesActions[$role] = array_merge([], $actions);
+                    }
                 }
             }
         }
+
+        return $allRolesActions;
     }
 }
