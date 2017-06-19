@@ -49,7 +49,7 @@ trait UserRoles
      * @param  mixed $role
      * @return boolean
      */
-    public function hasRole(string $role)
+    public function hasRole($role)
     {
         if( is_string($role) ) {
             return $this->roles->contains('slug', $role);
