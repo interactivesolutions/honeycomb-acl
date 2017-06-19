@@ -6,6 +6,7 @@ use Artisan;
 use Closure;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+
 class HCACLAdminMenu
 {
     /**
@@ -15,27 +16,28 @@ class HCACLAdminMenu
      * @param  \Closure $next
      * @return mixed
      */
-    public function handle ( Request $request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        if (auth ()->check ()) {
-            if ($request->segment (1) == config('hc.admin_url')) {
-                if (!Cache::has ('hc-admin-menu'))
-                    Artisan::call ('hc:admin-menu');
+        if( auth()->check() ) {
+            if( $request->segment(1) == config('hc.admin_url') ) {
+                if( ! Cache::has('hc-admin-menu') ) {
+                    Artisan::call('hc:admin-menu');
+                }
 
                 // get menu items from cache
-                $menu = Cache::get ('hc-admin-menu');
+                $menu = Cache::get('hc-admin-menu');
+
+                // filter available menu items
+                $menu = $this->filterAvailableMenuItems($menu);
 
                 // format set menu items which have parent path to their parent as child
-                $menu = $this->formatParentMenu ($menu);
-
-                //filter and sort admin menu
-                $menu = $this->filterAdminMenuHolder ($menu);
+                $menu = $this->buildMenuTree($menu);
 
                 // sort menu
-                $menu = $this->sortByAsc ($menu);
+                $menu = $this->sortByAsc($menu);
 
                 // add admin menu as global variable in blades
-                view ()->share ('adminMenu', $menu);
+                view()->share('adminMenu', $menu);
             }
         }
 
@@ -48,22 +50,22 @@ class HCACLAdminMenu
      * @param $menuItems
      * @return array
      */
-    private function filterAdminMenuHolder (array $menuItems)
+    private function filterAdminMenuHolder(array $menuItems)
     {
-        $user = auth ()->user ();
+        $user = auth()->user();
 
-        if (!is_null ($menuItems)) {
-            foreach ($menuItems as $key => &$item) {
-                if (array_key_exists ('aclPermission', $item) && $user->can ($item['aclPermission'])) {
+        if( ! is_null($menuItems) ) {
+            foreach ( $menuItems as $key => &$item ) {
+                if( array_key_exists('aclPermission', $item) && $user->can($item['aclPermission']) ) {
                     // user has access to this menu item
 
-                    if (isset($item['children'])) {
+                    if( isset($item['children']) ) {
                         //has children
-                        $filteredItems = $this->filterAdminMenuHolder ($item['children']);
+                        $filteredItems = $this->filterAdminMenuHolder($item['children']);
 
-                        array_forget ($item, 'children');
+                        array_forget($item, 'children');
 
-                        if (!empty($filteredItems)) {
+                        if( ! empty($filteredItems) ) {
                             $item['children'] = $filteredItems;
                         }
                     }
@@ -72,14 +74,14 @@ class HCACLAdminMenu
                     // user doesn't have access to this menu item
 
                     // unset item
-                    array_forget ($menuItems, $key);
+                    array_forget($menuItems, $key);
 
-                    if (isset($item['children'])) {
+                    if( isset($item['children']) ) {
                         // has children
-                        $filteredItems = $this->filterAdminMenuHolder ($item['children']);
+                        $filteredItems = $this->filterAdminMenuHolder($item['children']);
 
-                        if (!empty($filteredItems)) {
-                            $menuItems = array_merge ($menuItems, $filteredItems);
+                        if( ! empty($filteredItems) ) {
+                            $menuItems = array_merge($menuItems, $filteredItems);
                         }
                     }
                 }
@@ -95,63 +97,62 @@ class HCACLAdminMenu
      * @param $adminMenu
      * @return array
      */
-    private function sortByAsc (array $adminMenu)
+    private function sortByAsc(array $adminMenu)
     {
-        if (is_null ($adminMenu)) {
+        if( is_null($adminMenu) ) {
             return $adminMenu;
         }
 
-        foreach ($adminMenu as &$menuItem) {
-            if (isset($menuItem['children']) && isset($menuItem['children'])) {
-                $menuItem['children'] = collect ($menuItem['children'])->sortBy ('path')->values ()->toArray ();
+        foreach ( $adminMenu as &$menuItem ) {
+            if( isset($menuItem['children']) && isset($menuItem['children']) ) {
+                $menuItem['children'] = collect($menuItem['children'])->sortBy('path')->values()->toArray();
             }
         }
 
-        return collect ($adminMenu)->sortBy ('path', SORT_LOCALE_STRING)->values ()->toArray ();
+        return collect($adminMenu)->sortBy('path', SORT_LOCALE_STRING)->values()->toArray();
     }
 
     /**
-     * Add child menu items to their parents
+     * Build menu tree
      *
-     * @param $menu
+     * @param array $elements
+     * @param string $parentPath
      * @return array
      */
-    private function formatParentMenu (array $menu)
+    private function buildMenuTree(array $elements, $parentPath = '')
     {
-        $children = [];
+        $branch = [];
 
-        if (!empty($menu)) {
-            foreach ($menu as $key => $menuItem) {
-                if (array_key_exists ('parent', $menuItem)) {
+        foreach ( $elements as $element ) {
+            if( array_get($element, 'parent') == $parentPath ) {
 
-                    $children[] = $menuItem;
+                $children = $this->buildMenuTree($elements, $element['path']);
 
-                    array_forget ($menu, $key);
+                if( $children ) {
+                    $element['children'] = $children;
                 }
+
+                $branch[] = $element;
             }
         }
 
-        if (!empty($children)) {
-            foreach ($children as $child) {
-                $parentFound = false;
-
-                foreach ($menu as &$menuItem) {
-
-                    if ($child['parent'] == $menuItem['path']) {
-                        $menuItem['children'][] = $child;
-                        $parentFound = true;
-
-                        continue;
-                    }
-                }
-
-                if (!$parentFound) {
-                    $menu[] = $child;
-                }
-            }
-        }
-
-        return array_values ($menu);
+        return $branch;
     }
 
+    /**
+     * Filter acl permissions
+     *
+     * @param $menus
+     * @return mixed
+     */
+    private function filterAvailableMenuItems($menus)
+    {
+        foreach ( $menus as $key => $menu ) {
+            if( ! array_key_exists('aclPermission', $menu) || auth()->user()->cannot($menu['aclPermission']) ) {
+                unset($menus[$key]);
+            }
+        }
+
+        return array_values($menus);
+    }
 }

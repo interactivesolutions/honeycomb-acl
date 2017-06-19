@@ -12,30 +12,35 @@
     "adminMenu": [
         {
             "path" : "admin/users",
+            "route" : "admin.users.index",
+            "parent" : "admin/hc",
             "translation" : "HCACL::users.page_title",
             "icon" : "fa-users",
-            "aclPermission" : "interactivesolutions_honeycomb_acl_users_list",
-            "children" :
-            [
-                {
-                    "path" : "admin/users/roles",
-                    "translation" : "HCACL::acl_roles.page_title",
-                    "icon" : "fa-user-md",
-                    "aclPermission" : "interactivesolutions_honeycomb_acl_acl_roles_list"
-                },
-                {
-                    "path" : "admin/users/permissions",
-                    "translation" : "HCACL::acl_permissions.page_title",
-                    "icon" : "fa-server",
-                    "aclPermission" : "interactivesolutions_honeycomb_acl_acl_permissions_list"
-                },
-                {
-                    "path" : "admin/users/access",
-                    "translation" : "HCACL::acl_access.page_title",
-                    "icon" : "fa-unlock-alt",
-                    "aclPermission" : "interactivesolutions_honeycomb_acl_acl_access_list"
-                }
-            ]
+            "aclPermission" : "interactivesolutions_honeycomb_acl_users_list"
+        },
+        {
+            "path" : "admin/users/roles",
+            "route" : "admin.acl.roles.index",
+            "parent": "admin/users",
+            "translation" : "HCACL::acl_roles.page_title",
+            "icon" : "fa-user-md",
+            "aclPermission" : "interactivesolutions_honeycomb_acl_acl_roles_list"
+        },
+        {
+            "path" : "admin/users/permissions",
+            "route" : "admin.acl.permissions.index",
+            "parent": "admin/users",
+            "translation" : "HCACL::acl_permissions.page_title",
+            "icon" : "fa-server",
+            "aclPermission" : "interactivesolutions_honeycomb_acl_acl_permissions_list"
+        },
+        {
+            "path" : "admin/users/access",
+            "route" : "admin.acl.access.index",
+            "parent": "admin/users",
+            "translation" : "HCACL::acl_access.page_title",
+            "icon" : "fa-unlock-alt",
+            "aclPermission" : "interactivesolutions_honeycomb_acl_acl_access_list"
         }
     ],
     "acl": {
