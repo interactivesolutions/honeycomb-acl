@@ -138,8 +138,10 @@
 
             $.each(permissionsArray, function (key, permission) {
 
+                var actionName = permission.action.indexOf('_list') !== -1 ? '<td style="text-decoration: underline">' + permission.action + '</td>' : '<td>' + permission.action + '</td>';
+
                 html += '<tr>' +
-                    '<td>' + permission.action + '</td>';
+                    actionName;
 
                 $.each(roles, function (roleKey, roles) {
                     var checked = "";
