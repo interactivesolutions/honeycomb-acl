@@ -69,10 +69,9 @@ class HCACLServiceProvider extends HCBaseServiceProvider
         parent::registerGateItems($gate);
 
         $gate->before (function (HCUsers $user, $ability) {
-            if ($user->isSuperAdmin ())
+            if( $user->isSuperAdmin() ) {
                 return true;
-
-            return false;
+            }
         });
 
         $permissions = getHCPermissions ();
@@ -84,5 +83,9 @@ class HCACLServiceProvider extends HCBaseServiceProvider
                 });
             }
         }
+
+        $gate->define('CMS-MENU-SECTION', function (HCUsers $user) {
+            return true;
+        });
     }
 }
