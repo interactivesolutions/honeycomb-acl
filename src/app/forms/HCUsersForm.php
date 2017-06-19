@@ -25,6 +25,7 @@ class HCUsersForm
         $rolesStructure = [
             "type"            => 'checkBoxList',
             "fieldID"         => 'roles',
+            "tabID"           => trans('HCACL::users.roles'),
             "label"           => trans("HCACL::users.role_groups"),
             "required"        => 1,
             "requiredVisible" => 1,
@@ -41,10 +42,10 @@ class HCUsersForm
                 ],
             ],
             'structure'  => [
-                $rolesStructure,
                 [
                     "type"            => "email",
                     "fieldID"         => "email",
+                    "tabID"           => trans('HCTranslations::core.general'),
                     "label"           => trans("HCACL::users.email"),
                     "required"        => 1,
                     "requiredVisible" => 1,
@@ -52,13 +53,15 @@ class HCUsersForm
                 [
                     "type"            => "password",
                     "fieldID"         => "password",
+                    "tabID"           => trans('HCTranslations::core.general'),
                     "label"           => trans("HCACL::users.register.password"),
                     "required"        => 1,
                     "requiredVisible" => 1,
                 ],
-                formManagerYesNo('checkBoxList', 'is_active', trans("HCACL::users.active"), 0, 0, null, false),
-                formManagerYesNo('checkBoxList', 'send_welcome_email', trans("HCACL::users.send_welcome_email"), 0, 0, null, false),
-                formManagerYesNo('checkBoxList', 'send_password', trans("HCACL::users.send_password"), 0, 0, null, false),
+                formManagerYesNo('checkBoxList', 'is_active', trans("HCACL::users.active"), 0, 0, trans('HCTranslations::core.general'), false),
+                formManagerYesNo('checkBoxList', 'send_welcome_email', trans("HCACL::users.send_welcome_email"), 0, 0, trans('HCTranslations::core.general'), false),
+                formManagerYesNo('checkBoxList', 'send_password', trans("HCACL::users.send_password"), 0, 0, trans('HCTranslations::core.general'), false),
+                $rolesStructure
             ],
         ];
 
@@ -73,10 +76,10 @@ class HCUsersForm
         $form['structure'] = [];
 
         $form['structure'] = array_merge($form['structure'], [
-            $rolesStructure,
             [
                 "type"            => "email",
                 "fieldID"         => "email",
+                "tabID"           => trans('HCTranslations::core.general'),
                 "label"           => trans("HCACL::users.email"),
                 "required"        => 1,
                 "requiredVisible" => 1,
@@ -84,6 +87,7 @@ class HCUsersForm
             [
                 "type"            => "password",
                 "fieldID"         => "old_password",
+                "tabID"           => trans('HCTranslations::core.general'),
                 "label"           => trans('HCACL::users.passwords.old'),
                 "editType"        => 0,
                 "required"        => 0,
@@ -95,6 +99,7 @@ class HCUsersForm
             [
                 "type"            => "password",
                 "fieldID"         => "password",
+                "tabID"           => trans('HCTranslations::core.general'),
                 "label"           => trans('HCACL::users.passwords.new'),
                 "editType"        => 0,
                 "required"        => 0,
@@ -106,6 +111,7 @@ class HCUsersForm
             [
                 "type"            => "password",
                 "fieldID"         => "password_confirmation",
+                "tabID"           => trans('HCTranslations::core.general'),
                 "label"           => trans('HCACL::users.passwords.new_again'),
                 "editType"        => 0,
                 "required"        => 0,
@@ -114,10 +120,12 @@ class HCUsersForm
                     "strength" => "1" // case 0: much, case 1: 4 symbols, case 2: 6 symbols
                 ],
             ],
-            formManagerYesNo('checkBoxList', 'is_active', trans("HCACL::users.active"), 0, 0, null, false),
+            formManagerYesNo('checkBoxList', 'is_active', trans("HCACL::users.active"), 0, 0, trans('HCTranslations::core.general'), false),
+            $rolesStructure,
             [
                 "type"            => "singleLine",
                 "fieldID"         => "last_login",
+                "tabID"           => trans('HCACL::users.activity'),
                 "label"           => trans("HCACL::users.last_login"),
                 "required"        => 0,
                 "requiredVisible" => 0,
@@ -126,6 +134,7 @@ class HCUsersForm
             [
                 "type"            => "singleLine",
                 "fieldID"         => "last_activity",
+                "tabID"           => trans('HCACL::users.activity'),
                 "label"           => trans("HCACL::users.last_activity"),
                 "required"        => 0,
                 "requiredVisible" => 0,
@@ -134,6 +143,7 @@ class HCUsersForm
             [
                 "type"            => "singleLine",
                 "fieldID"         => "activated_at",
+                "tabID"           => trans('HCACL::users.activity'),
                 "label"           => trans("HCACL::users.activation.activated_at"),
                 "required"        => 0,
                 "requiredVisible" => 0,

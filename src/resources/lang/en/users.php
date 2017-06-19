@@ -26,6 +26,8 @@ return [
     'active_true'   => 'Yes',
     'last_login'    => 'Last login',
     'last_activity' => 'Last activity',
+    'roles'         => 'Roles',
+    'activity'      => 'Activity',
 
     'tabs'      => [
         'main'     => 'Main',
