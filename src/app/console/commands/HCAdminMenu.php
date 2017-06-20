@@ -51,12 +51,7 @@ class HCAdminMenu extends HCCommand
         if( ! empty($files) ) {
             foreach ( $files as $file ) {
 
-                $fileContent = json_decode(file_get_contents($file), true);
-
-                // show error if exists
-                if( json_last_error()) {
-                    $this->line(json_last_error_msg() . ' in ' . $file);
-                }
+                $fileContent = validateJSONFromPath($file);
 
                 if( isset($fileContent['adminMenu']) )
                     $this->adminMenuHolder = array_merge($this->adminMenuHolder, $fileContent['adminMenu']);
