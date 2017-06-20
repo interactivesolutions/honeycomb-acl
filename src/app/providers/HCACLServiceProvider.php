@@ -83,9 +83,5 @@ class HCACLServiceProvider extends HCBaseServiceProvider
                 });
             }
         }
-
-        $gate->define('CMS-MENU-SECTION', function (HCUsers $user) {
-            return true;
-        });
     }
 }
