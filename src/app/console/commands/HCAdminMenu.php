@@ -46,19 +46,24 @@ class HCAdminMenu extends HCCommand
      */
     private function generateMenu ()
     {
-        $files = $this->getConfigFiles ();
+        $files = $this->getConfigFiles();
 
-        if (!empty($files)) {
-            foreach ($files as $file) {
+        if( ! empty($files) ) {
+            foreach ( $files as $file ) {
 
-                $file = json_decode (file_get_contents ($file), true);
+                $fileContent = json_decode(file_get_contents($file), true);
 
-                if (isset($file['adminMenu']))
-                    $this->adminMenuHolder = array_merge ($this->adminMenuHolder, $file['adminMenu']);
+                // show error if exists
+                if( json_last_error()) {
+                    $this->line(json_last_error_msg() . ' in ' . $file);
+                }
+
+                if( isset($fileContent['adminMenu']) )
+                    $this->adminMenuHolder = array_merge($this->adminMenuHolder, $fileContent['adminMenu']);
             }
         }
 
-        Cache::forget ('hc-admin-menu');
-        Cache::put ('hc-admin-menu', $this->adminMenuHolder, Carbon::now ()->addWeek ());
+        Cache::forget('hc-admin-menu');
+        Cache::put('hc-admin-menu', $this->adminMenuHolder, Carbon::now()->addWeek());
     }
 }
