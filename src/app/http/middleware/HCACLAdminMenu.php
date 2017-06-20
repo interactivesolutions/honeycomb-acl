@@ -105,28 +105,28 @@ class HCACLAdminMenu
 
         foreach ( $adminMenu as &$menuItem ) {
             if( isset($menuItem['children']) && isset($menuItem['children']) ) {
-                $menuItem['children'] = collect($menuItem['children'])->sortBy('path')->values()->toArray();
+                $menuItem['children'] = collect($menuItem['children'])->sortBy('route')->values()->toArray();
             }
         }
 
-        return collect($adminMenu)->sortBy('path', SORT_LOCALE_STRING)->values()->toArray();
+        return collect($adminMenu)->sortBy('route', SORT_LOCALE_STRING)->values()->toArray();
     }
 
     /**
      * Build menu tree
      *
      * @param array $elements
-     * @param string $parentPath
+     * @param string $parentRoute
      * @return array
      */
-    private function buildMenuTree(array $elements, $parentPath = '')
+    private function buildMenuTree(array $elements, $parentRoute = '')
     {
         $branch = [];
 
         foreach ( $elements as $element ) {
-            if( array_get($element, 'parent') == $parentPath ) {
+            if( array_get($element, 'parent') == $parentRoute ) {
 
-                $children = $this->buildMenuTree($elements, $element['path']);
+                $children = $this->buildMenuTree($elements, $element['route']);
 
                 if( $children ) {
                     $element['children'] = $children;
