@@ -55,8 +55,9 @@ class HCAccessController extends HCBaseController
             $message = 'deleted';
         }
 
-        cache()->forget('adminMenu');
-        cache()->forget('permissions');
+        // clear permissions and menu items cache!
+        cache()->forget('hc-admin-menu');
+        cache()->forget('hc-permissions');
 
         return ['success' => true, 'message' => $message];
     }
