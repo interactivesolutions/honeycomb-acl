@@ -88,8 +88,6 @@ class HCAuthController extends HCBaseController
             return HCLog::info('AUTH-002', trans('HCACL::users.errors.login'));
         }
 
-        $this->sendLoginResponse($request);
-
         // check if user is not activated
         if( auth()->user()->isNotActivated() ) {
             $user = auth()->user();
@@ -106,7 +104,7 @@ class HCAuthController extends HCBaseController
         auth()->user()->updateLastLogin();
 
         //redirect to intended url
-        return response(['success' => true, 'redirectURL' => session('url.intended', url('/'))]);
+        return response(['success' => true, 'redirectURL' => session()->pull('url.intended', url('/'))]);
     }
 
     /**
