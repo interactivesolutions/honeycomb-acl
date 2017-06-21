@@ -28,13 +28,22 @@ class HCACLAdminMenu
                 $menu = Cache::get('hc-admin-menu');
 
                 // filter available menu items
-                $menu = $this->filterAvailableMenuItems($menu);
+                $menuA = $this->filterAvailableMenuItems($menu);
 
                 // format set menu items which have parent path to their parent as child
-                $menu = $this->buildMenuTree($menu);
+                $menu = $this->buildMenuTree($menuA);
+
+                // find without normal parent
+                $withoutExistingParent = [];
+
+                foreach ( $menuA as $key => $item ) {
+                    if( array_key_exists('parent', $item) && ! $this->existInArray($menu, $item['parent']) ) {
+                        $withoutExistingParent[] = $item;
+                    }
+                }
 
                 // sort menu
-                $menu = $this->sortByAsc($menu);
+                $menu = $this->sortByAsc(array_merge($menu, $this->formatWithIncorrectMenu($withoutExistingParent)));
 
                 // add admin menu as global variable in blades
                 view()->share('adminMenu', $menu);
@@ -42,53 +51,6 @@ class HCACLAdminMenu
         }
 
         return $next($request);
-    }
-
-    /**
-     * Filters admins menu by role
-     *
-     * @param $menuItems
-     * @return array
-     */
-    private function filterAdminMenuHolder(array $menuItems)
-    {
-        $user = auth()->user();
-
-        if( ! is_null($menuItems) ) {
-            foreach ( $menuItems as $key => &$item ) {
-                if( array_key_exists('aclPermission', $item) && $user->can($item['aclPermission']) ) {
-                    // user has access to this menu item
-
-                    if( isset($item['children']) ) {
-                        //has children
-                        $filteredItems = $this->filterAdminMenuHolder($item['children']);
-
-                        array_forget($item, 'children');
-
-                        if( ! empty($filteredItems) ) {
-                            $item['children'] = $filteredItems;
-                        }
-                    }
-
-                } else {
-                    // user doesn't have access to this menu item
-
-                    // unset item
-                    array_forget($menuItems, $key);
-
-                    if( isset($item['children']) ) {
-                        // has children
-                        $filteredItems = $this->filterAdminMenuHolder($item['children']);
-
-                        if( ! empty($filteredItems) ) {
-                            $menuItems = array_merge($menuItems, $filteredItems);
-                        }
-                    }
-                }
-            }
-        }
-
-        return $menuItems;
     }
 
     /**
@@ -154,5 +116,76 @@ class HCACLAdminMenu
         }
 
         return array_values($menus);
+    }
+
+    /**
+     * Check if exists in array
+     *
+     * @param $items
+     * @param $routeName
+     * @return bool
+     */
+    private function existInArray($items, $routeName)
+    {
+        foreach ( $items as $item ) {
+
+            if( $item['route'] == $routeName ) {
+                return true;
+            }
+
+            if( array_key_exists('children', $item) ) {
+                $found = $this->existInArray($item['children'], $routeName);
+
+                if( $found ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Add child menu items to their parents. Only two levels
+     *
+     * @param $menu
+     * @return array
+     */
+    private function formatWithIncorrectMenu($menu)
+    {
+        $children = [];
+
+        if( ! empty($menu) ) {
+            foreach ( $menu as $key => $menuItem ) {
+                if( array_key_exists('parent', $menuItem) ) {
+
+                    $children[] = $menuItem;
+
+                    array_forget($menu, $key);
+                }
+            }
+        }
+
+        if( ! empty($children) ) {
+            foreach ( $children as $child ) {
+                $parentFound = false;
+
+                foreach ( $menu as &$menuItem ) {
+
+                    if( $child['parent'] == $menuItem['route'] ) {
+                        $menuItem['children'][] = $child;
+                        $parentFound = true;
+
+                        continue;
+                    }
+                }
+
+                if( ! $parentFound ) {
+                    $menu[] = $child;
+                }
+            }
+        }
+
+        return array_values($menu);
     }
 }
