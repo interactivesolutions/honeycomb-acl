@@ -43,7 +43,7 @@ class HCACLAdminMenu
                 }
 
                 // sort menu
-                $menu = $this->sortByAsc(array_merge($menu, $this->formatWithIncorrectMenu($withoutExistingParent)));
+                $menu = $this->sortByWeight(array_merge($menu, $this->formatWithIncorrectMenu($withoutExistingParent)));
 
                 // add admin menu as global variable in blades
                 view()->share('adminMenu', $menu);
@@ -54,24 +54,34 @@ class HCACLAdminMenu
     }
 
     /**
-     * Sort admin menu
+     * Sort admin menu by given priority DESC
      *
-     * @param $adminMenu
+     * @param array $adminMenu
      * @return array
      */
-    private function sortByAsc(array $adminMenu)
+    private function sortByWeight(array $adminMenu): array
     {
-        if( is_null($adminMenu) ) {
-            return $adminMenu;
-        }
+        usort($adminMenu, function($a, $b) {
+            if( ! array_key_exists('priority', $a) ) {
+                $a['priority'] = 0;
+            }
 
-        foreach ( $adminMenu as &$menuItem ) {
-            if( isset($menuItem['children']) && isset($menuItem['children']) ) {
-                $menuItem['children'] = collect($menuItem['children'])->sortBy('route')->values()->toArray();
+            if( ! array_key_exists('priority', $b) ) {
+                $b['priority'] = 0;
+            }
+
+            return $b['priority'] <=> $a['priority'];
+        });
+
+        foreach ( $adminMenu as &$item ) {
+
+            if( array_key_exists('children', $item) ) {
+                $item['children'] = $this->sortByWeight($item['children']);
             }
         }
 
-        return collect($adminMenu)->sortBy('route', SORT_LOCALE_STRING)->values()->toArray();
+        return $adminMenu;
+
     }
 
     /**

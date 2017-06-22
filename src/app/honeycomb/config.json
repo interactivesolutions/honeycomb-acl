@@ -29,14 +29,16 @@
             "parent": "admin.users.index",
             "translation" : "HCACL::acl_permissions.page_title",
             "icon" : "fa-server",
-            "aclPermission" : "interactivesolutions_honeycomb_acl_acl_permissions_list"
+            "aclPermission" : "interactivesolutions_honeycomb_acl_acl_permissions_list",
+            "priority": 1
         },
         {
             "route" : "admin.acl.access.index",
             "parent": "admin.users.index",
             "translation" : "HCACL::acl_access.page_title",
             "icon" : "fa-unlock-alt",
-            "aclPermission" : "interactivesolutions_honeycomb_acl_acl_access_list"
+            "aclPermission" : "interactivesolutions_honeycomb_acl_acl_access_list",
+            "priority": 2
         }
     ],
     "acl": {
