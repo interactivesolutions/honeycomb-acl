@@ -97,33 +97,39 @@ class RolesController extends HCBaseController
      * Delete records table
      *
      * @param $list
-     * @return mixed|void
+     * @return mixed
      */
     protected function __apiDestroy(array $list)
     {
         Roles::destroy($list);
+
+        return hcSuccess();
     }
 
     /**
      * Delete records table
      *
      * @param $list
-     * @return mixed|void
+     * @return mixed
      */
     protected function __apiForceDelete(array $list)
     {
         Roles::onlyTrashed()->whereIn('id', $list)->forceDelete();
+
+        return hcSuccess();
     }
 
     /**
      * Restore multiple records
      *
      * @param $list
-     * @return mixed|void
+     * @return mixed
      */
     protected function __apiRestore(array $list)
     {
         Roles::whereIn('id', $list)->restore();
+
+        return hcSuccess();
     }
 
     /**
