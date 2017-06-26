@@ -20,6 +20,8 @@ class HCGroupsForm
      */
     public function createForm (bool $edit = false)
     {
+        $users = HCUsers::get();
+
         $form = [
             'storageURL' => route ('admin.api.routes.users.groups'),
             'buttons'    => [
@@ -41,9 +43,9 @@ class HCGroupsForm
                     "type"            => "dropDownList",
                     "fieldID"         => "users",
                     "label"           => trans ("HCACL::users_groups.users"),
-                    "required"        => 1,
-                    "requiredVisible" => 1,
-                    "options"         => HCUsers::get(),
+                    "required"        => 0,
+                    "requiredVisible" => 0,
+                    "options"         => $users,
                     "search"          => [
                         "showNodes" => ['email']
                     ]
@@ -62,9 +64,9 @@ class HCGroupsForm
             "type"            => "dropDownList",
             "fieldID"         => "creator_id",
             "label"           => trans ("HCACL::users_groups.creator_id"),
-            "required"        => 1,
+            "readonly"        => 1,
             "requiredVisible" => 1,
-            "options"         => HCUsers::get(),
+            "options"         => $users,
             "search"          => [
                 "maximumSelectionLength" => 1,
                 "minimumSelectionLength" => 1,
