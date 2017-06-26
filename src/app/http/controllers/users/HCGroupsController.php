@@ -4,6 +4,7 @@ namespace interactivesolutions\honeycombacl\app\http\controllers\users;
 
 use Illuminate\Database\Eloquent\Builder;
 use interactivesolutions\honeycombacl\app\models\users\HCGroups;
+use interactivesolutions\honeycombacl\app\models\users\HCGroupsUsers;
 use interactivesolutions\honeycombacl\app\validators\users\HCGroupsValidator;
 use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 
@@ -186,6 +187,7 @@ class HCGroupsController extends HCBaseController
      */
     protected function __apiForceDelete (array $list)
     {
+        HCGroupsUsers::whereIn ('group_id', $list)->forceDelete ();
         HCGroups::onlyTrashed ()->whereIn ('id', $list)->forceDelete ();
 
         return hcSuccess ();
