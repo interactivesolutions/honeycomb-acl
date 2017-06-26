@@ -7,38 +7,47 @@
         "users-login": "interactivesolutions\\honeycombacl\\app\\forms\\HCUsersLoginForm",
         "users-register": "interactivesolutions\\honeycombacl\\app\\forms\\HCUsersRegisterForm",
         "password-remind": "interactivesolutions\\honeycombacl\\app\\forms\\HCPasswordRemindForm",
-        "password-reset": "interactivesolutions\\honeycombacl\\app\\forms\\HCPasswordResetForm"
+        "password-reset": "interactivesolutions\\honeycombacl\\app\\forms\\HCPasswordResetForm",
+        "users-groups": "interactivesolutions\\honeycombacl\\app\\forms\\users\\HCGroupsForm"
     },
     "adminMenu": [
         {
-            "route" : "admin.users.index",
-            "parent" : "admin.index",
-            "translation" : "HCACL::users.page_title",
-            "icon" : "fa-users",
-            "aclPermission" : "interactivesolutions_honeycomb_acl_users_list"
+            "route": "admin.users.index",
+            "parent": "admin.index",
+            "translation": "HCACL::users.page_title",
+            "icon": "fa-users",
+            "aclPermission": "interactivesolutions_honeycomb_acl_users_list"
         },
         {
-            "route" : "admin.acl.roles.index",
+            "route": "admin.acl.roles.index",
             "parent": "admin.users.index",
-            "translation" : "HCACL::acl_roles.page_title",
-            "icon" : "fa-user-md",
-            "aclPermission" : "interactivesolutions_honeycomb_acl_acl_roles_list"
+            "translation": "HCACL::acl_roles.page_title",
+            "icon": "fa-user-md",
+            "aclPermission": "interactivesolutions_honeycomb_acl_acl_roles_list"
         },
         {
-            "route" : "admin.acl.permissions.index",
+            "route": "admin.acl.permissions.index",
             "parent": "admin.users.index",
-            "translation" : "HCACL::acl_permissions.page_title",
-            "icon" : "fa-server",
-            "aclPermission" : "interactivesolutions_honeycomb_acl_acl_permissions_list",
+            "translation": "HCACL::acl_permissions.page_title",
+            "icon": "fa-server",
+            "aclPermission": "interactivesolutions_honeycomb_acl_acl_permissions_list",
             "priority": 1
         },
         {
-            "route" : "admin.acl.access.index",
+            "route": "admin.acl.access.index",
             "parent": "admin.users.index",
-            "translation" : "HCACL::acl_access.page_title",
-            "icon" : "fa-unlock-alt",
-            "aclPermission" : "interactivesolutions_honeycomb_acl_acl_access_list",
+            "translation": "HCACL::acl_access.page_title",
+            "icon": "fa-unlock-alt",
+            "aclPermission": "interactivesolutions_honeycomb_acl_acl_access_list",
             "priority": 2
+        },
+        {
+            "route": "admin.routes.users.groups.index",
+            "parent": "admin.users.index",
+            "translation": "HCACL::users_groups.page_title",
+            "icon": "fa-users",
+            "aclPermission": "interactivesolutions_honeycomb_acl_routes_users_groups_list",
+            "priority": 10
         }
     ],
     "acl": {
@@ -88,6 +97,17 @@
                     "interactivesolutions_honeycomb_acl_users_delete",
                     "interactivesolutions_honeycomb_acl_users_force_delete"
                 ]
+            },
+            {
+                "name": "admin.routes.users.groups",
+                "controller": "interactivesolutions\\honeycombacl\\app\\http\\controllers\\users\\HCGroupsController",
+                "actions": [
+                    "interactivesolutions_honeycomb_acl_routes_users_groups_list",
+                    "interactivesolutions_honeycomb_acl_routes_users_groups_create",
+                    "interactivesolutions_honeycomb_acl_routes_users_groups_update",
+                    "interactivesolutions_honeycomb_acl_routes_users_groups_delete",
+                    "interactivesolutions_honeycomb_acl_routes_users_groups_force_delete"
+                ]
             }
         ],
         "rolesActions": {
@@ -100,7 +120,11 @@
                 "interactivesolutions_honeycomb_acl_users_list",
                 "interactivesolutions_honeycomb_acl_users_create",
                 "interactivesolutions_honeycomb_acl_users_update",
-                "interactivesolutions_honeycomb_acl_users_delete"
+                "interactivesolutions_honeycomb_acl_users_delete",
+                "interactivesolutions_honeycomb_acl_routes_users_groups_list",
+                "interactivesolutions_honeycomb_acl_routes_users_groups_create",
+                "interactivesolutions_honeycomb_acl_routes_users_groups_update",
+                "interactivesolutions_honeycomb_acl_routes_users_groups_delete"
             ]
         }
     }
