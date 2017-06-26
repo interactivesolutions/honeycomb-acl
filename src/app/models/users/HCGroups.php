@@ -21,6 +21,11 @@ class HCGroups extends HCUuidModel
      */
     protected $fillable = ['id', 'label', 'creator_id'];
 
+    /**
+     * Getting users for groups
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function users ()
     {
         return $this->belongsToMany(HCUsers::class, HCGroupsUsers::getTableName(), 'group_id', 'user_id');
