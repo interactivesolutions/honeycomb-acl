@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 
 class HCACLAdminMenu
 {
+    private $itemsWithoutParent = [];
+
     /**
      * Handle an incoming request.
      *
@@ -19,7 +21,7 @@ class HCACLAdminMenu
     public function handle(Request $request, Closure $next)
     {
         if( auth()->check() ) {
-            if( $request->segment(1) == config('hc.admin_url') ) {
+            if( $request->segment(1) == config('hc.admin_url') && $request->segment(2) != 'api' ) {
                 if( ! Cache::has('hc-admin-menu') ) {
                     Artisan::call('hc:admin-menu');
                 }
@@ -27,23 +29,16 @@ class HCACLAdminMenu
                 // get menu items from cache
                 $menu = Cache::get('hc-admin-menu');
 
-                // filter available menu items
-                $menuA = $this->filterAvailableMenuItems($menu);
+                // get accessible menu items
+                $menuAccessible = $this->getAccessibleMenuItems($menu);
 
                 // format set menu items which have parent path to their parent as child
-                $menu = $this->buildMenuTree($menuA);
-
-                // find without normal parent
-                $withoutExistingParent = [];
-
-                foreach ( $menuA as $key => $item ) {
-                    if( array_key_exists('parent', $item) && ! $this->existInArray($menu, $item['parent']) ) {
-                        $withoutExistingParent[] = $item;
-                    }
-                }
+                $menu = $this->buildMenuTree($menuAccessible, '', true);
 
                 // sort menu
-                $menu = $this->sortByWeight(array_merge($menu, $this->formatWithIncorrectMenu($withoutExistingParent)));
+                $menu = $this->sortByWeight(
+                    array_merge($menu, $this->buildMenuWithoutExistingParent($menuAccessible))
+                );
 
                 // add admin menu as global variable in blades
                 view()->share('adminMenu', $menu);
@@ -61,7 +56,7 @@ class HCACLAdminMenu
      */
     private function sortByWeight(array $adminMenu): array
     {
-        usort($adminMenu, function($a, $b) {
+        usort($adminMenu, function ($a, $b) {
             if( ! array_key_exists('priority', $a) ) {
                 $a['priority'] = 0;
             }
@@ -81,7 +76,6 @@ class HCACLAdminMenu
         }
 
         return $adminMenu;
-
     }
 
     /**
@@ -89,22 +83,32 @@ class HCACLAdminMenu
      *
      * @param array $elements
      * @param string $parentRoute
+     * @param bool $fillIncorrect - add to array incorrect menu items (items which has parent but parent doesnt exist)
      * @return array
      */
-    private function buildMenuTree(array $elements, $parentRoute = '')
+    private function buildMenuTree(array $elements, $parentRoute = '', $fillIncorrect = true)
     {
         $branch = [];
 
         foreach ( $elements as $element ) {
-            if( array_get($element, 'parent') == $parentRoute ) {
+            $parent = array_get($element, 'parent');
 
-                $children = $this->buildMenuTree($elements, $element['route']);
+            if( $parent == $parentRoute ) {
+                $children = $this->buildMenuTree($elements, $element['route'], $fillIncorrect);
 
                 if( $children ) {
                     $element['children'] = $children;
                 }
 
                 $branch[] = $element;
+            } else if( ! is_null($parent) && $fillIncorrect ) {
+                $value = array_first($elements, function ($value, $key) use ($parent) {
+                    return $value['route'] == $parent;
+                }, false);
+
+                if( ! $value ) {
+                    $this->itemsWithoutParent[] = $element;
+                }
             }
         }
 
@@ -117,7 +121,7 @@ class HCACLAdminMenu
      * @param $menus
      * @return mixed
      */
-    private function filterAvailableMenuItems($menus)
+    private function getAccessibleMenuItems($menus)
     {
         foreach ( $menus as $key => $menu ) {
             if( ! array_key_exists('aclPermission', $menu) || auth()->user()->cannot($menu['aclPermission']) ) {
@@ -158,44 +162,21 @@ class HCACLAdminMenu
     /**
      * Add child menu items to their parents. Only two levels
      *
-     * @param $menu
+     * @param $menuAccessible
      * @return array
      */
-    private function formatWithIncorrectMenu($menu)
+    private function buildMenuWithoutExistingParent($menuAccessible)
     {
-        $children = [];
+        $withoutParent = collect($this->itemsWithoutParent)->unique('route')->all();
 
-        if( ! empty($menu) ) {
-            foreach ( $menu as $key => $menuItem ) {
-                if( array_key_exists('parent', $menuItem) ) {
+        foreach ( $withoutParent as &$item ) {
+            $children = $this->buildMenuTree($menuAccessible, $item['route']);
 
-                    $children[] = $menuItem;
-
-                    array_forget($menu, $key);
-                }
+            if( $children ) {
+                $item['children'] = $children;
             }
         }
 
-        if( ! empty($children) ) {
-            foreach ( $children as $child ) {
-                $parentFound = false;
-
-                foreach ( $menu as &$menuItem ) {
-
-                    if( $child['parent'] == $menuItem['route'] ) {
-                        $menuItem['children'][] = $child;
-                        $parentFound = true;
-
-                        continue;
-                    }
-                }
-
-                if( ! $parentFound ) {
-                    $menu[] = $child;
-                }
-            }
-        }
-
-        return array_values($menu);
+        return $withoutParent;
     }
 }
