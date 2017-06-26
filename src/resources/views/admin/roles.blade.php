@@ -19,11 +19,10 @@
             text-align: center;
         }
 
-        tr:first-child
-        {
+        tr:first-child {
             max-width: 640px;
         }
-        
+
     </style>
 @endsection
 
@@ -87,11 +86,24 @@
                 url: updateUrl,
                 type: 'PUT',
                 data: {'permission_id': permissionId, 'role_id': roleId},
+                beforeSend: function(){
+                    item.attr('disabled', true);
+                },
+                complete: function(){
+                    item.attr('disabled', false);
+                },
                 success: function (value) {
                     if (value.success) {
-                        item.css('background', 'rgba(51, 153, 88, 0.52)').delay(1000).animate({backgroundColor: 'transparent'}, 'slow');
+                        if (value.message == 'created') {
+                            item.prop('checked', true);
+                            item.parent().css('background', 'rgba(51, 153, 88, 0.52)').delay(1000).animate({backgroundColor: 'transparent'}, 'slow');
+                        }
+                        else if (value.message == 'deleted') {
+                            item.prop('checked', false);
+                            item.parent().css('background', 'rgba(255, 165, 0, 0.52)').delay(1000).animate({backgroundColor: 'transparent'}, 'slow');
+                        }
                     } else if (value.success === false) {
-                        item.css('background', 'rgba(255, 0, 0, 0.52)').delay(1000).animate({backgroundColor: 'transparent'}, 'slow');
+                        item.parent().css('background', 'rgba(255, 0, 0, 0.52)').delay(1000).animate({backgroundColor: 'transparent'}, 'slow');
                     }
                 }
             });
@@ -155,11 +167,11 @@
                     if (roles.slug === 'project-admin' && jQuery.inArray(roles.slug, currentRolesArray) > -1) {
 
                         html += '<td class="to-the-right">' +
-                            '<input type="checkbox" onclick="updateRole(\'' + permission.id + '\',\'' + roles.id + '\',\'' + updateUrl + '\', jQuery(this).parent())" id="ck' + permission.id + '"' + checked + ' disabled/>' +
+                            '<input type="checkbox" onclick="updateRole(\'' + permission.id + '\',\'' + roles.id + '\',\'' + updateUrl + '\', jQuery(this))" id="ck' + permission.id + '"' + checked + ' disabled/>' +
                             '</td>';
                     } else {
                         html += '<td class="to-the-right">' +
-                            '<input type="checkbox" onclick="updateRole(\'' + permission.id + '\',\'' + roles.id + '\',\'' + updateUrl + '\', jQuery(this).parent())" id="ck' + permission.id + '"' + checked + '/>' +
+                            '<input type="checkbox" onclick="updateRole(\'' + permission.id + '\',\'' + roles.id + '\',\'' + updateUrl + '\', jQuery(this))" id="ck' + permission.id + '"' + checked + '/>' +
                             '</td>';
                     }
                 });
