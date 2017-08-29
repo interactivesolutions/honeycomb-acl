@@ -16,29 +16,30 @@ class HCUsersLoginForm
      * @param bool $edit
      * @return array
      */
-    public function createForm (bool $edit = false)
+    public function createForm(bool $edit = false)
     {
         $form = [
-            'storageURL' => route ('auth.login'),
+            'storageURL' => route('auth.login'),
             'buttons'    => [
                 [
                     "class" => "col-centered btn btn-primary",
-                    "label" => trans ('HCTranslations::core.buttons.login'),
+                    "label" => trans('HCTranslations::core.buttons.login'),
                     "type"  => "submit",
                 ],
             ],
             'structure'  => [
                 [
-                    "type"            => "singleLine",
-                    "fieldID"         => "email",
-                    "label"           => trans ("HCACL::users.login.email"),
-                    "required"        => 1,
+                    "type"     => "singleLine",
+                    "fieldID"  => "email",
+                    "label"    => trans("HCACL::users.login.email"),
+                    "required" => 1,
                 ], [
-                    "type"            => "password",
-                    "fieldID"         => "password",
-                    "label"           => trans ("HCACL::users.login.password"),
-                    "required"        => 1,
+                    "type"     => "password",
+                    "fieldID"  => "password",
+                    "label"    => trans("HCACL::users.login.password"),
+                    "required" => 1,
                 ],
+                formManagerCheckBox('remember', trans('HCACL::users.login.remember')),
             ],
         ];
 

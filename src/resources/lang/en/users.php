@@ -51,6 +51,7 @@ return [
         'email'       => 'E-mail',
         'password'    => 'Password',
         're-password' => 'Retype password',
+        'remember'    => 'Remember me',
     ],
 
     'register' => [
@@ -164,7 +165,7 @@ return [
             'min'      => 'Nickname must be at least :count characters',
         ],
 
-        'email'    => [
+        'email' => [
             'required' => 'Email address is required!',
             'unique'   => 'Given email already exists!',
             'min'      => 'Email must be at least :count characters',
@@ -176,10 +177,10 @@ return [
             'confirmed' => 'The password confirmation does not match.',
         ],
 
-        'roles'    => [
+        'roles' => [
             'required'          => 'Roles are required!',
             'cant_update_super' => 'You can\'t update super admin role!',
             'cant_update_roles' => 'You can\'t update roles!',
         ],
-    ]
+    ],
 ];
