@@ -65,10 +65,12 @@ if( ! function_exists('createHCUser') ) {
         DB::beginTransaction();
 
         try {
+            $password = $password ? bcrypt($password) : bcrypt(random_str(10));
+
             // create user
             $record = \interactivesolutions\honeycombacl\app\models\HCUsers::create([
                     "email"        => $email,
-                    "password"     => $password ? bcrypt($password) : bcrypt(random_str(10)),
+                    "password"     => $password,
                     "activated_at" => $active ? Carbon::now()->toDateTimeString() : null,
                 ] + $additionalData
             );
