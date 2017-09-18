@@ -13,6 +13,7 @@ use interactivesolutions\honeycombacl\app\console\commands\HCSuperAdmin;
 use interactivesolutions\honeycombacl\app\http\middleware\HCACLAdminMenu;
 use interactivesolutions\honeycombacl\app\http\middleware\HCACLAuthenticate;
 use interactivesolutions\honeycombacl\app\http\middleware\HCACLPermissionsMiddleware;
+use interactivesolutions\honeycombacl\app\http\middleware\HCLogLastActivity;
 use interactivesolutions\honeycombacl\app\models\HCUsers;
 use interactivesolutions\honeycombcore\providers\HCBaseServiceProvider;
 
@@ -57,6 +58,7 @@ class HCACLServiceProvider extends HCBaseServiceProvider
         $router->middleware ('acl', HCACLPermissionsMiddleware::class);
         $router->middleware ('auth', HCACLAuthenticate::class);
         $router->pushMiddleWareToGroup ('web', HCACLAdminMenu::class);
+        $router->pushMiddleWareToGroup ('web', HCLogLastActivity::class);
     }
 
     /**
