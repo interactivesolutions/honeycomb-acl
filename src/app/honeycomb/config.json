@@ -3,12 +3,12 @@
         "serviceProviderNameSpace": "HCACL"
     },
     "formData": {
-        "users": "interactivesolutions\\honeycombacl\\app\\forms\\HCUsersForm",
-        "users-login": "interactivesolutions\\honeycombacl\\app\\forms\\HCUsersLoginForm",
-        "users-register": "interactivesolutions\\honeycombacl\\app\\forms\\HCUsersRegisterForm",
-        "password-remind": "interactivesolutions\\honeycombacl\\app\\forms\\HCPasswordRemindForm",
-        "password-reset": "interactivesolutions\\honeycombacl\\app\\forms\\HCPasswordResetForm",
-        "users-groups": "interactivesolutions\\honeycombacl\\app\\forms\\users\\HCGroupsForm"
+        "users": "InteractiveSolutions\\HoneycombAcl\\Forms\\HCUsersForm",
+        "users-login": "InteractiveSolutions\\HoneycombAcl\\Forms\\HCUsersLoginForm",
+        "users-register": "InteractiveSolutions\\HoneycombAcl\\Forms\\HCUsersRegisterForm",
+        "password-remind": "InteractiveSolutions\\HoneycombAcl\\Forms\\HCPasswordRemindForm",
+        "password-reset": "InteractiveSolutions\\HoneycombAcl\\Forms\\HCPasswordResetForm",
+        "users-groups": "InteractiveSolutions\\HoneycombAcl\\Forms\\Users\\HCGroupsForm"
     },
     "adminMenu": [
         {
@@ -54,7 +54,7 @@
         "permissions": [
             {
                 "name": "admin.acl.permissions",
-                "controller": "interactivesolutions\\honeycombacl\\http\\controllers\\acl\\PermissionsController",
+                "controller": "InteractiveSolutions\\HoneycombAcl\\Http\\Controllers\\Acl\\PermissionsController",
                 "actions": [
                     "interactivesolutions_honeycomb_acl_acl_permissions_list"
                 ],
@@ -64,7 +64,7 @@
             },
             {
                 "name": "admin.acl.roles",
-                "controller": "interactivesolutions\\honeycombacl\\http\\controllers\\acl\\RolesController",
+                "controller": "InteractiveSolutions\\HoneycombAcl\\Http\\Controllers\\Acl\\RolesController",
                 "actions": [
                     "interactivesolutions_honeycomb_acl_acl_roles_list",
                     "interactivesolutions_honeycomb_acl_acl_roles_create",
@@ -82,7 +82,7 @@
             },
             {
                 "name": "admin.users",
-                "controller": "interactivesolutions\\honeycombacl\\http\\controllers\\HCUsersController",
+                "controller": "InteractiveSolutions\\HoneycombAcl\\Http\\Controllers\\HCUsersController",
                 "actions": [
                     "interactivesolutions_honeycomb_acl_users_list",
                     "interactivesolutions_honeycomb_acl_users_create",
@@ -100,7 +100,7 @@
             },
             {
                 "name": "admin.routes.users.groups",
-                "controller": "interactivesolutions\\honeycombacl\\app\\http\\controllers\\users\\HCGroupsController",
+                "controller": "InteractiveSolutions\\HoneycombAcl\\Http\\Controllers\\Users\\HCGroupsController",
                 "actions": [
                     "interactivesolutions_honeycomb_acl_routes_users_groups_list",
                     "interactivesolutions_honeycomb_acl_routes_users_groups_create",
