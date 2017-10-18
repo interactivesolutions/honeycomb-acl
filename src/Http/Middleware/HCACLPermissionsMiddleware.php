@@ -25,7 +25,7 @@
  * http://www.interactivesolutions.lt
  */
 
-declare(strict_types =1);
+declare(strict_types = 1);
 
 namespace InteractiveSolutions\HoneycombAcl\Http\Middleware;
 

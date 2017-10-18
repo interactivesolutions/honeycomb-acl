@@ -46,7 +46,7 @@ use InteractiveSolutions\HoneycombAcl\Models\Traits\ActivateUser;
 use InteractiveSolutions\HoneycombAcl\Models\Traits\UserRoles;
 use InteractiveSolutions\HoneycombAcl\Notifications\HCAdminWelcomeEmail;
 use InteractiveSolutions\HoneycombAcl\Notifications\HCResetPassword;
-use interactivesolutions\honeycombcore\models\HCUuidModel;
+use InteractiveSolutions\HoneycombCore\Models\HCUuidModel;
 
 /**
  * Class HCUsers

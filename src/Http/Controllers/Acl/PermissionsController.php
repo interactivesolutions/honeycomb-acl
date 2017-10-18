@@ -31,8 +31,8 @@ namespace InteractiveSolutions\HoneycombAcl\Http\Controllers\Acl;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
-use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Permissions;
+use InteractiveSolutions\HoneycombCore\Http\Controllers\HCBaseController;
 
 /**
  * Class PermissionsController

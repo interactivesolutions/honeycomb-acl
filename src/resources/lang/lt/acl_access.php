@@ -26,6 +26,6 @@
  */
 
 return [
-    'page_title'  => 'Vartotojų prieinamumas',
+    'page_title' => 'Vartotojų prieinamumas',
     'permissions' => 'Leidimai',
 ];

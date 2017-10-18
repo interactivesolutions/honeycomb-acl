@@ -33,7 +33,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\View\View;
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
 use InteractiveSolutions\HoneycombAcl\Validators\Acl\RolesValidator;
-use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
+use InteractiveSolutions\HoneycombCore\Http\Controllers\HCBaseController;
 
 /**
  * Class RolesController

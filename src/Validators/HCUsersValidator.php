@@ -29,7 +29,8 @@ declare(strict_types = 1);
 
 namespace InteractiveSolutions\HoneycombAcl\Validators;
 
-use interactivesolutions\honeycombcore\http\controllers\HCCoreFormValidator;
+use InteractiveSolutions\HoneycombCore\Http\Controllers\HCCoreFormValidator;
+
 
 /**
  * Class HCUsersValidator

@@ -35,8 +35,8 @@ use Illuminate\Database\Connection;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use Illuminate\Http\Request;
+use InteractiveSolutions\HoneycombCore\Http\Controllers\HCBaseController;
 
 /**
  * Class HCAuthController

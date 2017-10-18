@@ -32,7 +32,7 @@ namespace InteractiveSolutions\HoneycombAcl\Console;
 use Carbon\Carbon;
 use DB;
 use InteractiveSolutions\HoneycombAcl\Models\HCUsers;
-use interactivesolutions\honeycombcore\commands\HCCommand;
+use InteractiveSolutions\HoneycombCore\Console\HCCommand;
 use Validator;
 
 /**

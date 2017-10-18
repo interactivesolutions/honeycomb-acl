@@ -20,7 +20,8 @@
                 <a href="{{ route('users.password.remind')}}">{{ trans('HCACL::users.passwords.forgot_password') }}</a><br>
 
                 @if( isset($config['registration_enabled']))
-                    <a href="{{ route('auth.register') }}" class="text-center">{{ trans('HCACL::users.register.title') }}</a>
+                    <a href="{{ route('auth.register') }}"
+                       class="text-center">{{ trans('HCACL::users.register.title') }}</a>
                 @endif
 
             </div>

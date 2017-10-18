@@ -29,7 +29,8 @@ declare(strict_types = 1);
 
 namespace InteractiveSolutions\HoneycombAcl\Console;
 
-use interactivesolutions\honeycombcore\commands\HCCommand;
+use InteractiveSolutions\HoneycombCore\Console\HCCommand;
+
 
 /**
  * Class HCAdminURL

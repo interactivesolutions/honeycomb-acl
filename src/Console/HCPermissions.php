@@ -31,7 +31,7 @@ namespace InteractiveSolutions\HoneycombAcl\Console;
 
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Permissions;
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
-use interactivesolutions\honeycombcore\commands\HCCommand;
+use InteractiveSolutions\HoneycombCore\Console\HCCommand;
 
 /**
  * Class HCPermissions

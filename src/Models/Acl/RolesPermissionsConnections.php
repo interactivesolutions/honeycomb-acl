@@ -31,7 +31,7 @@ namespace InteractiveSolutions\HoneycombAcl\Models\Acl;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use interactivesolutions\honeycombcore\models\HCModel;
+use InteractiveSolutions\HoneycombCore\Models\HCModel;
 
 /**
  * Class RolesPermissionsConnections

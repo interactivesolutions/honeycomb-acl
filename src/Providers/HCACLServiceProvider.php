@@ -41,7 +41,7 @@ use InteractiveSolutions\HoneycombAcl\Http\Middleware\HCACLAuthenticate;
 use InteractiveSolutions\HoneycombAcl\Http\Middleware\HCACLPermissionsMiddleware;
 use InteractiveSolutions\HoneycombAcl\Http\Middleware\HCLogLastActivity;
 use InteractiveSolutions\HoneycombAcl\Models\HCUsers;
-use interactivesolutions\honeycombcore\providers\HCBaseServiceProvider;
+use InteractiveSolutions\HoneycombCore\Providers\HCBaseServiceProvider;
 
 /**
  * Class HCACLServiceProvider

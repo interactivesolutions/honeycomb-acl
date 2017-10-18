@@ -34,7 +34,7 @@ use Illuminate\View\View;
 use InteractiveSolutions\HoneycombAcl\Models\Users\HCGroups;
 use InteractiveSolutions\HoneycombAcl\Models\Users\HCGroupsUsers;
 use InteractiveSolutions\HoneycombAcl\Validators\Users\HCGroupsValidator;
-use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
+use InteractiveSolutions\HoneycombCore\Http\Controllers\HCBaseController;
 
 /**
  * Class HCGroupsController

@@ -19,7 +19,7 @@
 
                 </div>
 
-                <hr />
+                <hr/>
                 <div class="text-center">
                     <a href="{{ route('auth.login') }}">{{ trans('HCACL::users.login.title') }}</a>
                 </div>

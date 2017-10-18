@@ -27,12 +27,12 @@
 
 return [
     'page_title' => 'Leidimai',
-    'id'         => 'Id',
-    'count'      => 'Numeris',
+    'id' => 'Id',
+    'count' => 'Numeris',
     'created_at' => 'Sukurta',
     'updated_at' => 'Atnaujinta',
     'deleted_at' => 'Ištrinta',
-    'name'       => 'Pavadinimas',
+    'name' => 'Pavadinimas',
     'controller' => 'Kontroleris',
-    'action'     => 'Veiksmas',
+    'action' => 'Veiksmas',
 ];

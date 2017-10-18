@@ -86,10 +86,10 @@
                 url: updateUrl,
                 type: 'PUT',
                 data: {'permission_id': permissionId, 'role_id': roleId},
-                beforeSend: function(){
+                beforeSend: function () {
                     item.attr('disabled', true);
                 },
-                complete: function(){
+                complete: function () {
                     item.attr('disabled', false);
                 },
                 success: function (value) {

@@ -27,7 +27,7 @@
 
 return [
     'page_title' => 'Groups',
-    'label'      => 'Label',
+    'label' => 'Label',
     'creator_id' => 'Creator',
 
 ];

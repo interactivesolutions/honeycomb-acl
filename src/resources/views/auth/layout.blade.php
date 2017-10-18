@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Main</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <title>Main</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
 
     @include('HCCoreUI::css.global')
     @include('HCCoreUI::css.core')

@@ -31,7 +31,7 @@ namespace InteractiveSolutions\HoneycombAcl\Console;
 
 use Cache;
 use Carbon\Carbon;
-use interactivesolutions\honeycombcore\commands\HCCommand;
+use InteractiveSolutions\HoneycombCore\Console\HCCommand;
 
 /**
  * Class HCForms

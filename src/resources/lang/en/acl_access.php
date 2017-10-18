@@ -26,6 +26,6 @@
  */
 
 return [
-    'page_title'  => 'User access',
+    'page_title' => 'User access',
     'permissions' => 'Permissions',
 ];

@@ -35,8 +35,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use InteractiveSolutions\HoneycombAcl\Validators\HCUsersValidator;
-use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
 use InteractiveSolutions\HoneycombAcl\Models\HCUsers;
+use InteractiveSolutions\HoneycombCore\Http\Controllers\HCBaseController;
 
 /**
  * Class HCUsersController

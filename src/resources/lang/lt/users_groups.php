@@ -27,7 +27,7 @@
 
 return [
     'page_title' => 'Grupės',
-    'label'      => 'Pavadinimas',
+    'label' => 'Pavadinimas',
     'creator_id' => 'Kurėjas',
 
 ];

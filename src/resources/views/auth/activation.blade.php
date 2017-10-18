@@ -56,9 +56,9 @@
     </div>
 
     {{--<div class="container">--}}
-        {{--<div class="tab-content">--}}
+    {{--<div class="tab-content">--}}
 
-            {{----}}
-        {{--</div>--}}
+    {{----}}
+    {{--</div>--}}
     {{--</div>--}}
 @stop

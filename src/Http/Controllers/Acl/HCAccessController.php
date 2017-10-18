@@ -33,7 +33,7 @@ use Illuminate\View\View;
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Permissions;
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
 use InteractiveSolutions\HoneycombAcl\Models\Acl\RolesPermissionsConnections;
-use interactivesolutions\honeycombcore\http\controllers\HCBaseController;
+use InteractiveSolutions\HoneycombCore\Http\Controllers\HCBaseController;
 
 /**
  * Class HCAccessController
