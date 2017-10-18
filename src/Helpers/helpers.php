@@ -35,7 +35,7 @@ use InteractiveSolutions\HoneycombAcl\Models\Acl\Permissions;
 if (!function_exists('getHCPermissions')) {
     /**
      * @param bool $forceReCache
-     * @return
+     * @return mixed
      * @throws Exception
      */
     function getHCPermissions(bool $forceReCache = false)

@@ -81,6 +81,14 @@ class HCACLServiceProvider extends HCBaseServiceProvider
      */
     public $serviceProviderNameSpace = 'HCACL';
 
+    public function boot(Gate $gate, Router $router)
+    {
+        parent::boot($gate, $router);
+
+        $this->loadViewsFrom ($this->homeDirectory . '/../resources/views', $this->serviceProviderNameSpace);
+        $this->loadTranslationsFrom ($this->homeDirectory . '/../resources/lang', $this->serviceProviderNameSpace);
+    }
+
     /**
      * @param Router $router
      */
@@ -127,5 +135,42 @@ class HCACLServiceProvider extends HCBaseServiceProvider
     protected function registerHelpers(): void
     {
         include_once $this->homeDirectory . '/../Helpers/helpers.php';
+    }
+
+    /**
+     * @param Router $router
+     */
+    protected function registerRoutes(Router $router): void
+    {
+        $routes = [
+            $this->modulePath('Routes/Admin/01_routes.acl.permissions.php'),
+            $this->modulePath('Routes/Admin/02_routes.acl.roles.php'),
+            $this->modulePath('Routes/Admin/03_routes.access.php'),
+            $this->modulePath('Routes/Admin/04__routes.users.groups.php'),
+            $this->modulePath('Routes/Admin/04_routes.users.php'),
+
+            $this->modulePath('Routes/Api/01_routes.acl.permissions.php'),
+            $this->modulePath('Routes/Api/02_routes.acl.roles.php'),
+            $this->modulePath('Routes/Api/04__routes.users.groups.php'),
+            $this->modulePath('Routes/Api/04_routes.users.php'),
+
+            $this->modulePath('Routes/Public/01_routes.auth.php'),
+            $this->modulePath('Routes/Public/02_routes.password.php'),
+        ];
+
+        foreach ($routes as $route) {
+            $router->group(['namespace' => $this->namespace], function($router) use ($route) {
+                require $route;
+            });
+        }
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    private function modulePath(string $path): string
+    {
+        return __DIR__ . '/../' . $path;
     }
 }
