@@ -213,7 +213,7 @@ class HCUsersForm
 
         if (auth()->check()) {
             if ($user->isSuperAdmin()) {
-                $rolesList = Roles::select('id', 'name as label')->orderBy('name')->get();
+                $rolesList = Roles::select('id', 'name as label')->orderBy('name')->get()->toArray();
             } else {
                 foreach ($user->roles as $role) {
                     $rolesList[] = [
