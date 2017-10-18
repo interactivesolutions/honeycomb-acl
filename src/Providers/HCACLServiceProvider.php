@@ -85,8 +85,8 @@ class HCACLServiceProvider extends HCBaseServiceProvider
     {
         parent::boot($gate, $router);
 
-        $this->loadViewsFrom ($this->homeDirectory . '/../resources/views', $this->serviceProviderNameSpace);
-        $this->loadTranslationsFrom ($this->homeDirectory . '/../resources/lang', $this->serviceProviderNameSpace);
+        $this->loadViewsFrom($this->homeDirectory . '/../resources/views', $this->serviceProviderNameSpace);
+        $this->loadTranslationsFrom($this->homeDirectory . '/../resources/lang', $this->serviceProviderNameSpace);
     }
 
     /**
