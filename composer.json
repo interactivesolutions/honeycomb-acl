@@ -16,11 +16,11 @@
     ],
     "repositories": [],
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.1",
         "laravel/framework": "5.3.*",
         "guzzlehttp/guzzle": "~6.0",
         "interactivesolutions/honeycomb-core": "~0.6.0",
-        "interactivesolutions/honeycomb-scripts": "^0.6.3",
+        "interactivesolutions/honeycomb-scripts": "^1.0.0",
         "interactivesolutions/honeycomb-languages": "^0.6.3"
     },
     "require-dev": {

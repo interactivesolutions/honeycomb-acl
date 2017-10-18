@@ -21,11 +21,11 @@
  * SOFTWARE.
  *
  * Contact InteractiveSolutions:
- * E-mail: info@interactivesolutions.lt
+ * E-mail: hello@interactivesolutions.lt
  * http://www.interactivesolutions.lt
  */
 
-declare(strict_types =1);
+declare(strict_types = 1);
 
 namespace Tests;
 

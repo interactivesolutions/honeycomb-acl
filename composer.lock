@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c92a84478e4056213fa61a664f67c6c",
+    "content-hash": "f470a4ab47436c4554b266bad625e52d",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -864,29 +864,36 @@
         },
         {
             "name": "interactivesolutions/honeycomb-scripts",
-            "version": "0.6.3",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/interactivesolutions/honeycomb-scripts.git",
-                "reference": "be2428ded5219dc612ecc51f43aa4dedff3d034d"
+                "reference": "108976a72ffc34dcb736bd658cebee0a7f69f56f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/interactivesolutions/honeycomb-scripts/zipball/be2428ded5219dc612ecc51f43aa4dedff3d034d",
-                "reference": "be2428ded5219dc612ecc51f43aa4dedff3d034d",
+                "url": "https://api.github.com/repos/interactivesolutions/honeycomb-scripts/zipball/108976a72ffc34dcb736bd658cebee0a7f69f56f",
+                "reference": "108976a72ffc34dcb736bd658cebee0a7f69f56f",
                 "shasum": ""
             },
             "require": {
                 "interactivesolutions/honeycomb-core": "~0.6.0",
+                "interactivesolutions/honeycomb-languages": "^0.6.3",
                 "laravel/framework": "5.3.*",
                 "nette/reflection": "^2.4",
-                "php": ">=7.0.0",
+                "php": ">=7.1",
                 "xethron/migrations-generator": "^2.0"
+            },
+            "require-dev": {
+                "brianium/paratest": "^0.14",
+                "mockery/mockery": "^0.9",
+                "orchestra/testbench-browser-kit": "^3.3",
+                "phpunit/phpunit": "^5.7"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "interactivesolutions\\honeycombscripts\\": "src/"
+                    "InteractiveSolutions\\HoneycombScripts\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -894,6 +901,10 @@
                 "MIT"
             ],
             "authors": [
+                {
+                    "name": "Vytautas Rimeikis",
+                    "email": "vytautas.rimeikis@gmail.com"
+                },
                 {
                     "name": "Jevgenij Dmitrijev",
                     "email": "jd@interactivesolutions.lt"
@@ -915,7 +926,7 @@
                 "laravel",
                 "scripts"
             ],
-            "time": "2017-10-13T08:56:29+00:00"
+            "time": "2017-10-18T08:36:03+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -5196,7 +5207,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1.0"
+        "php": ">=7.1"
     },
     "platform-dev": [],
     "platform-overrides": {
