@@ -31,6 +31,7 @@ namespace InteractiveSolutions\HoneycombAcl\Database\Seeds;
 
 use Illuminate\Database\Seeder;
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
+use InteractiveSolutions\HoneycombAcl\Repositories\Acl\RolesRepository;
 
 /**
  * Class UserRolesSeeder
@@ -38,18 +39,6 @@ use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
  */
 class UserRolesSeeder extends Seeder
 {
-
-    // Todo: it really need?
-    const ROLE_SA = 'super-admin';
-    const ROLE_PA = 'project-admin';
-    const ROLE_E = 'editor';
-    const ROLE_A = 'author';
-    const ROLE_C = 'contributor';
-    const ROLE_M = 'moderator';
-    const ROLE_ME = 'member';
-    const ROLE_S = 'subscriber';
-    const ROLE_U = 'user';
-
     /**
      * Run the database seeds.
      * @return void
@@ -58,15 +47,9 @@ class UserRolesSeeder extends Seeder
     {
         // http://stackoverflow.com/q/1598411
         $list = [
-            ["name" => "Super Admin", "slug" => "super-admin"], // Manage everything
-            ["name" => "Project Admin", "slug" => "project-admin"], // Manage most aspects of the site
-            ["name" => "Editor", "slug" => "editor"], // Scheduling and managing content
-            ["name" => "Author", "slug" => "author"], // Write important content
-            ["name" => "Contributor", "slug" => "contributor"], // Authors with limited rights
-            ["name" => "Moderator", "slug" => "moderator"], // Moderate user content
-            ["name" => "Member", "slug" => "member"], // Special user access
-            ["name" => "Subscriber", "slug" => "subscriber"], // Paying Average Joe
-            ["name" => "User", "slug" => "user"], // Average Joe
+            ["name" => "Super Admin", "slug" => RolesRepository::ROLE_SA], // Manage everything
+            ["name" => "Project Admin", "slug" => RolesRepository::ROLE_PA], // Manage most aspects of the site
+            ["name" => "User", "slug" => RolesRepository::ROLE_U], // Average Joe
         ];
 
         foreach ($list as $roleData) {

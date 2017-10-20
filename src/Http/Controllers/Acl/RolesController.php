@@ -54,22 +54,8 @@ class RolesController extends HCBaseController
             'listURL' => route('admin.api.acl.roles'),
             'newFormUrl' => route('admin.api.form-manager', ['acl-roles-new']),
             'editFormUrl' => route('admin.api.form-manager', ['acl-roles-edit']),
-            //    'imagesUrl'   => route ('resource.get', ['/']),
             'headers' => $this->getAdminListHeader(),
         ];
-
-        if (auth()->user()->can('interactivesolutions_honeycomb_acl_acl_roles_create')) {
-            $config['actions'][] = 'new';
-        }
-
-        if (auth()->user()->can('interactivesolutions_honeycomb_acl_acl_roles_update')) {
-            $config['actions'][] = 'update';
-            $config['actions'][] = 'restore';
-        }
-
-        if (auth()->user()->can('interactivesolutions_honeycomb_acl_acl_roles_delete')) {
-            $config['actions'][] = 'delete';
-        }
 
         $config['actions'][] = 'search';
 
@@ -93,82 +79,6 @@ class RolesController extends HCBaseController
                 "label" => trans('HCACL::acl_roles.slug'),
             ],
         ];
-    }
-
-    /**
-     * Create item
-     *
-     * @param array|null $data
-     * @return mixed
-     * @throws \Exception
-     */
-    protected function __apiStore(array $data = null)
-    {
-        if (is_null($data)) {
-            $data = $this->getInputData();
-        }
-
-        $record = Roles::create(array_get($data, 'record'));
-
-        return $this->apiShow($record->id);
-    }
-
-    /**
-     * Updates existing item based on ID
-     *
-     * @param string $id
-     * @return mixed
-     * @throws \Exception
-     */
-    protected function __apiUpdate(string $id)
-    {
-        $record = Roles::findOrFail($id);
-
-        //TODO read request parameters only once fo getting data and validating it
-        $data = $this->getInputData();
-
-        $record->update(array_get($data, 'record'));
-
-        return $this->apiShow($record->id);
-    }
-
-    /**
-     * Delete records table
-     *
-     * @param $list
-     * @return mixed
-     */
-    protected function __apiDestroy(array $list)
-    {
-        Roles::destroy($list);
-
-        return hcSuccess();
-    }
-
-    /**
-     * Delete records table
-     *
-     * @param $list
-     * @return mixed
-     */
-    protected function __apiForceDelete(array $list)
-    {
-        Roles::onlyTrashed()->whereIn('id', $list)->forceDelete();
-
-        return hcSuccess();
-    }
-
-    /**
-     * Restore multiple records
-     *
-     * @param $list
-     * @return mixed
-     */
-    protected function __apiRestore(array $list)
-    {
-        Roles::whereIn('id', $list)->restore();
-
-        return hcSuccess();
     }
 
     /**

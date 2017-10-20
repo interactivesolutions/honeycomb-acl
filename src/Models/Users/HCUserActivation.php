@@ -25,66 +25,52 @@
  * http://www.interactivesolutions.lt
  */
 
-declare(strict_types = 1);
+namespace InteractiveSolutions\HoneycombAcl\Models\Users;
 
-namespace InteractiveSolutions\HoneycombAcl\Models\Traits;
 
-use InteractiveSolutions\HoneycombAcl\Notifications\HCActivationLink;
-use InteractiveSolutions\HoneycombAcl\Services\UserActivationService;
+use Illuminate\Database\Eloquent\Builder;
+use InteractiveSolutions\HoneycombCore\Models\HCModel;
 
 /**
- * Trait ActivateUser
- * @package InteractiveSolutions\HoneycombAcl\Models\Traits
+ * Class HCUserActivation
+ *
+ * @package InteractiveSolutions\HoneycombAcl\Models\Users
+ * @property int $count
+ * @property string $user_id
+ * @property string $token
+ * @property \Carbon\Carbon $created_at
+ * @method static Builder|HCUserActivation whereCount($value)
+ * @method static Builder|HCUserActivation whereCreatedAt($value)
+ * @method static Builder|HCUserActivation whereToken($value)
+ * @method static Builder|HCUserActivation whereUserId($value)
+ * @mixin \Eloquent
  */
-trait ActivateUser
+class HCUserActivation extends HCModel
 {
     /**
-     * Check if user is activated
-     *
-     * @return bool
+     * @var string
      */
-    public function isActivated(): bool
-    {
-        return !!$this->activated_at;
-    }
+    protected $table = 'hc_users_activations';
 
     /**
-     * Check if user is not activated
-     *
-     * @return bool
+     * @var array
      */
-    public function isNotActivated(): bool
-    {
-        return !$this->isActivated();
-    }
+    protected $fillable = [
+        'user_id',
+        'token',
+    ];
 
     /**
-     * Create and send user activation
+     * @var array
      */
-    public function createTokenAndSendActivationCode(): void
-    {
-        $activationService = app(UserActivationService::class);
-
-        $activationService->sendActivationMail($this);
-    }
+    protected $dates = [
+        'created_at',
+    ];
 
     /**
-     * Send the activation link notification.
-     *
-     * @param  string $token
-     * @return void
+     * @var array
      */
-    public function sendActivationLinkNotification($token): void
-    {
-        $this->notify(new HCActivationLink($token));
-    }
-
-    /**
-     * Activate account
-     */
-    public function activate(): void
-    {
-        $this->activated_at = $this->freshTimestamp();
-        $this->save();
-    }
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
 }

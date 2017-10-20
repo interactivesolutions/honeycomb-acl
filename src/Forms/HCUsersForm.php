@@ -121,6 +121,24 @@ class HCUsersForm
 
         $form['structure'] = array_merge($form['structure'], [
             [
+                "type" => "singleLine",
+                "fieldID" => "first_name",
+                "tabID" => trans('HCTranslations::core.general'),
+                "label" => trans("HCACL::users.firstname"),
+                "required" => 0,
+                "requiredVisible" => 0,
+                "readonly" => 0,
+            ],
+            [
+                "type" => "singleLine",
+                "fieldID" => "last_name",
+                "tabID" => trans('HCTranslations::core.general'),
+                "label" => trans("HCACL::users.lastname"),
+                "required" => 0,
+                "requiredVisible" => 0,
+                "readonly" => 0,
+            ],
+            [
                 "type" => "email",
                 "fieldID" => "email",
                 "tabID" => trans('HCTranslations::core.general'),

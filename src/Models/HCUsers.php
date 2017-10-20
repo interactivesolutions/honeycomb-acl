@@ -33,6 +33,7 @@ use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -44,6 +45,7 @@ use Illuminate\Support\Collection;
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
 use InteractiveSolutions\HoneycombAcl\Models\Traits\ActivateUser;
 use InteractiveSolutions\HoneycombAcl\Models\Traits\UserRoles;
+use InteractiveSolutions\HoneycombAcl\Models\Users\HCUserPersonalInfo;
 use InteractiveSolutions\HoneycombAcl\Notifications\HCAdminWelcomeEmail;
 use InteractiveSolutions\HoneycombAcl\Notifications\HCResetPassword;
 use InteractiveSolutions\HoneycombCore\Models\HCUuidModel;
@@ -65,6 +67,7 @@ use InteractiveSolutions\HoneycombCore\Models\HCUuidModel;
  * @property string|null $last_visited
  * @property string|null $last_activity
  * @property-read DatabaseNotificationCollection|DatabaseNotification[] $notifications
+ * @property-read \InteractiveSolutions\HoneycombAcl\Models\Users\HCUserPersonalInfo $personal
  * @property-read Collection|Roles[] $roles
  * @method static Builder|HCUsers whereActivatedAt($value)
  * @method static Builder|HCUsers whereCount($value)
@@ -114,6 +117,23 @@ class HCUsers extends HCUuidModel implements AuthenticatableContract, Authorizab
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'activated_at',
+        'last_login',
+        'last_visited',
+        'last_activity',
+
+    ];
+    protected $casts = [
+        'id' => 'string',
     ];
 
     /**
@@ -172,5 +192,13 @@ class HCUsers extends HCUuidModel implements AuthenticatableContract, Authorizab
             (new HCAdminWelcomeEmail())
                 ->withPassword($password)
         );
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function personal(): HasOne
+    {
+        return $this->hasOne(HCUserPersonalInfo::class, 'user_id', 'id');
     }
 }

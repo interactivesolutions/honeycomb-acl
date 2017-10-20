@@ -27,64 +27,48 @@
 
 declare(strict_types = 1);
 
-namespace InteractiveSolutions\HoneycombAcl\Models\Traits;
+namespace InteractiveSolutions\HoneycombAcl\Models\Users;
 
-use InteractiveSolutions\HoneycombAcl\Notifications\HCActivationLink;
-use InteractiveSolutions\HoneycombAcl\Services\UserActivationService;
+
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use InteractiveSolutions\HoneycombAcl\Models\HCUsers;
+use InteractiveSolutions\HoneycombCore\Models\HCUuidModel;
 
 /**
- * Trait ActivateUser
- * @package InteractiveSolutions\HoneycombAcl\Models\Traits
+ * Class HCUserPersonalInfo
+ *
+ * @package InteractiveSolutions\HoneycombAcl\Models\Users
  */
-trait ActivateUser
+class HCUserPersonalInfo extends HCUuidModel
 {
     /**
-     * Check if user is activated
-     *
-     * @return bool
+     * @var string
      */
-    public function isActivated(): bool
-    {
-        return !!$this->activated_at;
-    }
+    protected $table = 'hc_user_personal_info';
 
     /**
-     * Check if user is not activated
-     *
-     * @return bool
+     * @var array
      */
-    public function isNotActivated(): bool
-    {
-        return !$this->isActivated();
-    }
+    protected $fillable = [
+        'id',
+        'user_id',
+        'first_name',
+        'last_name',
+    ];
 
     /**
-     * Create and send user activation
+     * @var array
      */
-    public function createTokenAndSendActivationCode(): void
-    {
-        $activationService = app(UserActivationService::class);
-
-        $activationService->sendActivationMail($this);
-    }
+    protected $dates = [
+        'created_at',
+        'updated_at',
+    ];
 
     /**
-     * Send the activation link notification.
-     *
-     * @param  string $token
-     * @return void
+     * @return BelongsTo
      */
-    public function sendActivationLinkNotification($token): void
+    public function user(): BelongsTo
     {
-        $this->notify(new HCActivationLink($token));
-    }
-
-    /**
-     * Activate account
-     */
-    public function activate(): void
-    {
-        $this->activated_at = $this->freshTimestamp();
-        $this->save();
+        return $this->belongsTo(HCUsers::class, 'user_id', 'id');
     }
 }

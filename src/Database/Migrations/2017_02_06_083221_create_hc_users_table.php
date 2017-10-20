@@ -45,17 +45,17 @@ class CreateHcUsersTable extends Migration
     public function up(): void
     {
         Schema::create('hc_users', function(Blueprint $table) {
-            $table->integer('count', true);
-            $table->string('id', 36)->unique('id_UNIQUE');
+            $table->increments('count');
+            $table->string('id', 36)->unique();
             $table->timestamps();
             $table->softDeletes();
-            $table->string('email', 100)->unique('email_UNIQUE');
+            $table->string('email', 100)->unique();
             $table->string('password', 60);
-            $table->dateTime('activated_at')->nullable();
             $table->string('remember_token', 100)->nullable();
-            $table->dateTime('last_login')->nullable();
-            $table->dateTime('last_visited')->nullable();
-            $table->dateTime('last_activity')->nullable();
+            $table->timestamp('activated_at')->nullable();
+            $table->timestamp('last_login')->nullable();
+            $table->timestamp('last_visited')->nullable();
+            $table->timestamp('last_activity')->nullable();
         });
     }
 

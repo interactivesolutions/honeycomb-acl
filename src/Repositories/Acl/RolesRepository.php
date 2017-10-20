@@ -27,64 +27,36 @@
 
 declare(strict_types = 1);
 
-namespace InteractiveSolutions\HoneycombAcl\Models\Traits;
+namespace InteractiveSolutions\HoneycombAcl\Repositories\Acl;
 
-use InteractiveSolutions\HoneycombAcl\Notifications\HCActivationLink;
-use InteractiveSolutions\HoneycombAcl\Services\UserActivationService;
+
+use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
+use InteractiveSolutions\HoneycombCore\Repositories\Repository;
 
 /**
- * Trait ActivateUser
- * @package InteractiveSolutions\HoneycombAcl\Models\Traits
+ * Class RolesRepository
+ * @package InteractiveSolutions\HoneycombAcl\Repositories\Acl
  */
-trait ActivateUser
+class RolesRepository extends Repository
 {
     /**
-     * Check if user is activated
      *
-     * @return bool
      */
-    public function isActivated(): bool
-    {
-        return !!$this->activated_at;
-    }
-
+    const ROLE_SA = 'super-admin';
     /**
-     * Check if user is not activated
      *
-     * @return bool
      */
-    public function isNotActivated(): bool
-    {
-        return !$this->isActivated();
-    }
-
+    const ROLE_PA = 'project-admin';
     /**
-     * Create and send user activation
-     */
-    public function createTokenAndSendActivationCode(): void
-    {
-        $activationService = app(UserActivationService::class);
-
-        $activationService->sendActivationMail($this);
-    }
-
-    /**
-     * Send the activation link notification.
      *
-     * @param  string $token
-     * @return void
      */
-    public function sendActivationLinkNotification($token): void
-    {
-        $this->notify(new HCActivationLink($token));
-    }
+    const ROLE_U = 'user';
 
     /**
-     * Activate account
+     * @return string
      */
-    public function activate(): void
+    public function model(): string
     {
-        $this->activated_at = $this->freshTimestamp();
-        $this->save();
+        return Roles::class;
     }
 }

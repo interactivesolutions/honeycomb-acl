@@ -36,6 +36,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use InteractiveSolutions\HoneycombAcl\Services\UserActivationService;
 use InteractiveSolutions\HoneycombCore\Http\Controllers\HCBaseController;
 
 /**
@@ -68,7 +69,7 @@ class HCAuthController extends HCBaseController
     protected $redirectUrl;
 
     /**
-     * @var UserActivation
+     * @var UserActivationService
      */
     private $activation;
 
@@ -80,9 +81,9 @@ class HCAuthController extends HCBaseController
     /**
      * AuthController constructor.
      * @param Connection $connection
-     * @param UserActivation $activation
+     * @param UserActivationService $activation
      */
-    public function __construct(Connection $connection, UserActivation $activation)
+    public function __construct(Connection $connection, UserActivationService $activation)
     {
         $this->connection = $connection;
         $this->activation = $activation;

@@ -25,66 +25,36 @@
  * http://www.interactivesolutions.lt
  */
 
-declare(strict_types = 1);
 
-namespace InteractiveSolutions\HoneycombAcl\Models\Traits;
+namespace InteractiveSolutions\HoneycombAcl\Repositories;
 
-use InteractiveSolutions\HoneycombAcl\Notifications\HCActivationLink;
-use InteractiveSolutions\HoneycombAcl\Services\UserActivationService;
+
+use Illuminate\Database\Eloquent\Model;
+use InteractiveSolutions\HoneycombAcl\Models\HCUsers;
+use InteractiveSolutions\HoneycombCore\Repositories\Repository;
 
 /**
- * Trait ActivateUser
- * @package InteractiveSolutions\HoneycombAcl\Models\Traits
+ * Class HCUserRepository
+ * @package InteractiveSolutions\HoneycombAcl\Repositories
  */
-trait ActivateUser
+class HCUserRepository extends Repository
 {
+
     /**
-     * Check if user is activated
-     *
-     * @return bool
+     * @return string
      */
-    public function isActivated(): bool
+    public function model(): string
     {
-        return !!$this->activated_at;
+        return HCUsers::class;
     }
 
     /**
-     * Check if user is not activated
-     *
-     * @return bool
+     * @param string $userId
+     * @return HCUsers|Model|null
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function isNotActivated(): bool
+    public function getById(string $userId): ? HCUsers
     {
-        return !$this->isActivated();
-    }
-
-    /**
-     * Create and send user activation
-     */
-    public function createTokenAndSendActivationCode(): void
-    {
-        $activationService = app(UserActivationService::class);
-
-        $activationService->sendActivationMail($this);
-    }
-
-    /**
-     * Send the activation link notification.
-     *
-     * @param  string $token
-     * @return void
-     */
-    public function sendActivationLinkNotification($token): void
-    {
-        $this->notify(new HCActivationLink($token));
-    }
-
-    /**
-     * Activate account
-     */
-    public function activate(): void
-    {
-        $this->activated_at = $this->freshTimestamp();
-        $this->save();
+        return $this->makeQuery()->find($userId);
     }
 }

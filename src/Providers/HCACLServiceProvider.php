@@ -41,6 +41,9 @@ use InteractiveSolutions\HoneycombAcl\Http\Middleware\HCACLAuthenticate;
 use InteractiveSolutions\HoneycombAcl\Http\Middleware\HCACLPermissionsMiddleware;
 use InteractiveSolutions\HoneycombAcl\Http\Middleware\HCLogLastActivity;
 use InteractiveSolutions\HoneycombAcl\Models\HCUsers;
+use InteractiveSolutions\HoneycombAcl\Repositories\Acl\RolesRepository;
+use InteractiveSolutions\HoneycombAcl\Repositories\HCUserRepository;
+use InteractiveSolutions\HoneycombAcl\Services\UserActivationService;
 use InteractiveSolutions\HoneycombCore\Providers\HCBaseServiceProvider;
 
 /**
@@ -81,12 +84,27 @@ class HCACLServiceProvider extends HCBaseServiceProvider
      */
     public $serviceProviderNameSpace = 'HCACL';
 
+    /**
+     * @param Gate $gate
+     * @param Router $router
+     */
     public function boot(Gate $gate, Router $router)
     {
         parent::boot($gate, $router);
 
         $this->loadViewsFrom($this->homeDirectory . '/../resources/views', $this->serviceProviderNameSpace);
         $this->loadTranslationsFrom($this->homeDirectory . '/../resources/lang', $this->serviceProviderNameSpace);
+    }
+
+    /**
+     *
+     */
+    public function register(): void
+    {
+        parent::register();
+
+        $this->registerRepositories();
+        $this->registerServices();
     }
 
     /**
@@ -126,6 +144,23 @@ class HCACLServiceProvider extends HCBaseServiceProvider
                     return $user->hasPermission($permission);
                 });
             }
+        }
+    }
+
+    /**
+     *
+     */
+    protected function registerPublishElements(): void
+    {
+        parent::registerPublishElements();
+
+        $directory = $this->homeDirectory . '/../Database/Migrations/';
+
+        // Publish your migrations
+        if (file_exists($directory)) {
+            $this->publishes([
+                $directory => database_path('/migrations'),
+            ], 'migrations');
         }
     }
 
@@ -172,5 +207,22 @@ class HCACLServiceProvider extends HCBaseServiceProvider
     private function modulePath(string $path): string
     {
         return __DIR__ . '/../' . $path;
+    }
+
+    /**
+     *
+     */
+    private function registerRepositories(): void
+    {
+        $this->app->singleton(HCUserRepository::class);
+        $this->app->singleton(RolesRepository::class);
+    }
+
+    /**
+     *
+     */
+    private function registerServices(): void
+    {
+        $this->app->singleton(UserActivationService::class);
     }
 }

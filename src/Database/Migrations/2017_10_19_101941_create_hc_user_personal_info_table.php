@@ -27,64 +27,37 @@
 
 declare(strict_types = 1);
 
-namespace InteractiveSolutions\HoneycombAcl\Models\Traits;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
-use InteractiveSolutions\HoneycombAcl\Notifications\HCActivationLink;
-use InteractiveSolutions\HoneycombAcl\Services\UserActivationService;
-
-/**
- * Trait ActivateUser
- * @package InteractiveSolutions\HoneycombAcl\Models\Traits
- */
-trait ActivateUser
+class CreateHcUserPersonalInfoTable extends Migration
 {
     /**
-     * Check if user is activated
+     * Run the migrations.
      *
-     * @return bool
-     */
-    public function isActivated(): bool
-    {
-        return !!$this->activated_at;
-    }
-
-    /**
-     * Check if user is not activated
-     *
-     * @return bool
-     */
-    public function isNotActivated(): bool
-    {
-        return !$this->isActivated();
-    }
-
-    /**
-     * Create and send user activation
-     */
-    public function createTokenAndSendActivationCode(): void
-    {
-        $activationService = app(UserActivationService::class);
-
-        $activationService->sendActivationMail($this);
-    }
-
-    /**
-     * Send the activation link notification.
-     *
-     * @param  string $token
      * @return void
      */
-    public function sendActivationLinkNotification($token): void
+    public function up()
     {
-        $this->notify(new HCActivationLink($token));
+        Schema::create('hc_user_personal_info', function(Blueprint $table) {
+            $table->increments('count');
+            $table->string('id', 36)->unique();
+            $table->timestamps();
+            $table->string('user_id');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->foreign('user_id')->references('id')->on('hc_users')->onUpdate('cascade')->onDelete('cascade');
+        });
     }
 
     /**
-     * Activate account
+     * Reverse the migrations.
+     *
+     * @return void
      */
-    public function activate(): void
+    public function down()
     {
-        $this->activated_at = $this->freshTimestamp();
-        $this->save();
+        Schema::dropIfExists('hc_user_personal_info');
     }
 }

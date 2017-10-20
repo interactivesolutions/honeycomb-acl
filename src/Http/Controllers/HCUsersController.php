@@ -31,6 +31,7 @@ namespace InteractiveSolutions\HoneycombAcl\Http\Controllers;
 
 use DB;
 use HCLog;
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
@@ -44,6 +45,20 @@ use InteractiveSolutions\HoneycombCore\Http\Controllers\HCBaseController;
  */
 class HCUsersController extends HCBaseController
 {
+    /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * HCUsersController constructor.
+     * @param Connection $connection
+     */
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
     /**
      * Returning configured admin view
      *
@@ -111,6 +126,7 @@ class HCUsersController extends HCBaseController
      * @param array|null $data
      * @return mixed
      * @throws \Exception
+     * @throws \Illuminate\Support\Facades\Exception
      */
     protected function __apiStore(array $data = null)
     {
@@ -120,15 +136,24 @@ class HCUsersController extends HCBaseController
 
         (new HCUsersValidator())->validateForm();
 
-        $record = createHCUser(
-            array_get($data, 'record.email'),
-            array_get($data, 'roles'),
-            request()->has('is_active'),
-            array_get($data, 'record.password'),
-            [],
-            request()->has('send_welcome_email'),
-            request()->has('send_password')
-        );
+        try {
+            $this->connection->beginTransaction();
+
+            $record = createHCUser(
+                array_get($data, 'record.email'),
+                array_get($data, 'roles'),
+                request()->has('is_active'),
+                array_get($data, 'record.password'),
+                [],
+                request()->has('send_welcome_email'),
+                request()->has('send_password')
+            );
+            $this->connection->commit();
+        } catch (\Throwable $exception) {
+            $this->connection->rollBack();
+
+            throw new \Exception('Activation code or mail sending failed');
+        }
 
         return $this->apiShow($record->id);
     }

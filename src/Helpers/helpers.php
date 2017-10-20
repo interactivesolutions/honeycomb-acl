@@ -88,6 +88,7 @@ if (!function_exists('createHCUser')) {
      * @param bool $sendPassword
      * @return static
      * @throws Exception
+     * @throws \Illuminate\Support\Facades\Exception
      */
     function createHCUser(
         string $email,
@@ -98,47 +99,36 @@ if (!function_exists('createHCUser')) {
         $sendWelcomeEmail = true,
         bool $sendPassword = false
     ) {
-        DB::beginTransaction();
+        $password = $password ? $password : random_str(10);
 
-        try {
-            $password = $password ? $password : random_str(10);
+        // create user
+        $record = \InteractiveSolutions\HoneycombAcl\Models\HCUsers::create([
+                "email" => $email,
+                "password" => bcrypt($password),
+                "activated_at" => $active ? Carbon::now()->toDateTimeString() : null,
+            ] + $additionalData
+        );
 
-            // create user
-            $record = \InteractiveSolutions\HoneycombAcl\Models\HCUsers::create([
-                    "email" => $email,
-                    "password" => bcrypt($password),
-                    "activated_at" => $active ? Carbon::now()->toDateTimeString() : null,
-                ] + $additionalData
-            );
-
-            // create user roles
-            if (empty($roleIds)) {
-                $record->roleMember();
-            } else {
-                $record->assignRoles($roleIds);
-            }
-
-            // send welcome email
-            if ($sendWelcomeEmail || $sendPassword) {
-                if ($sendPassword) {
-                    $record->sendWelcomeEmailWithPassword($password);
-                } else {
-                    $record->sendWelcomeEmail();
-                }
-            }
-
-            // create user activation
-            if (is_null($record->activated_at)) {
-                $record->createTokenAndSendActivationCode();
-            }
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            throw new \Exception($e);
+        // create user roles
+        if (empty($roleIds)) {
+            $record->roleMember();
+        } else {
+            $record->assignRoles($roleIds);
         }
 
-        DB::commit();
+        // send welcome email
+        if ($sendWelcomeEmail || $sendPassword) {
+            if ($sendPassword) {
+                $record->sendWelcomeEmailWithPassword($password);
+            } else {
+                $record->sendWelcomeEmail();
+            }
+        }
+
+        // create user activation
+        if (is_null($record->activated_at)) {
+            $record->createTokenAndSendActivationCode();
+        }
 
         return $record;
     }
