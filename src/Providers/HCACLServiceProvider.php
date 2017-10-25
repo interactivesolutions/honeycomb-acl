@@ -114,8 +114,8 @@ class HCACLServiceProvider extends HCBaseServiceProvider
     {
         parent::registerRouterItems($router);
 
-        $router->middleware('acl', HCACLPermissionsMiddleware::class);
-        $router->middleware('auth', HCACLAuthenticate::class);
+        $router->aliasMiddleware('acl', HCACLPermissionsMiddleware::class);
+        $router->aliasMiddleware('auth', HCACLAuthenticate::class);
         $router->pushMiddleWareToGroup('web', HCACLAdminMenu::class);
         $router->pushMiddleWareToGroup('web', HCLogLastActivity::class);
     }
@@ -130,7 +130,7 @@ class HCACLServiceProvider extends HCBaseServiceProvider
     {
         parent::registerGateItems($gate);
 
-        $gate->before(function(HCUsers $user, $ability) {
+        $gate->before(function(HCUsers $user) {
             if ($user->isSuperAdmin()) {
                 return true;
             }
