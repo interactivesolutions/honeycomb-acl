@@ -142,11 +142,11 @@ class HCUsersController extends HCBaseController
             $record = createHCUser(
                 array_get($data, 'record.email'),
                 array_get($data, 'roles'),
-                request()->has('is_active'),
+                request()->filled('is_active'),
                 array_get($data, 'record.password'),
                 [],
-                request()->has('send_welcome_email'),
-                request()->has('send_password')
+                request()->filled('send_welcome_email'),
+                request()->filled('send_password')
             );
             $this->connection->commit();
         } catch (\Throwable $exception) {
@@ -191,7 +191,7 @@ class HCUsersController extends HCBaseController
         $record->assignRoles(array_get($data, 'roles'));
 
         // activate user if you want
-        if (request()->has('is_active') && $record->isNotActivated()) {
+        if (request()->filled('is_active') && $record->isNotActivated()) {
             $record->activate();
         }
 
