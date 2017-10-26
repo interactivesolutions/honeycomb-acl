@@ -764,16 +764,16 @@
         },
         {
             "name": "interactivesolutions/honeycomb-core",
-            "version": "v1.1.0",
+            "version": "v1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/interactivesolutions/honeycomb-core.git",
-                "reference": "ffadf8577b0170ad091707fc9dbc4104b41ed390"
+                "reference": "660dee320a9ea3bc21f108ea6fb3a153c4bb6e80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/interactivesolutions/honeycomb-core/zipball/ffadf8577b0170ad091707fc9dbc4104b41ed390",
-                "reference": "ffadf8577b0170ad091707fc9dbc4104b41ed390",
+                "url": "https://api.github.com/repos/interactivesolutions/honeycomb-core/zipball/660dee320a9ea3bc21f108ea6fb3a153c4bb6e80",
+                "reference": "660dee320a9ea3bc21f108ea6fb3a153c4bb6e80",
                 "shasum": ""
             },
             "require": {
@@ -821,7 +821,7 @@
                 "honeycomb",
                 "laravel"
             ],
-            "time": "2017-10-25T07:40:43+00:00"
+            "time": "2017-10-26T09:05:15+00:00"
         },
         {
             "name": "interactivesolutions/honeycomb-languages",
@@ -896,16 +896,16 @@
         },
         {
             "name": "interactivesolutions/honeycomb-scripts",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/interactivesolutions/honeycomb-scripts.git",
-                "reference": "cf2964a0a7496bf12cb61c34e744da8115134af1"
+                "reference": "132153301c9f03d91c9e32bd41e4d6c5f9fa846a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/interactivesolutions/honeycomb-scripts/zipball/cf2964a0a7496bf12cb61c34e744da8115134af1",
-                "reference": "cf2964a0a7496bf12cb61c34e744da8115134af1",
+                "url": "https://api.github.com/repos/interactivesolutions/honeycomb-scripts/zipball/132153301c9f03d91c9e32bd41e4d6c5f9fa846a",
+                "reference": "132153301c9f03d91c9e32bd41e4d6c5f9fa846a",
                 "shasum": ""
             },
             "require": {
@@ -958,7 +958,7 @@
                 "laravel",
                 "scripts"
             ],
-            "time": "2017-10-25T07:59:08+00:00"
+            "time": "2017-10-25T13:07:48+00:00"
         },
         {
             "name": "jenssegers/rollbar",
@@ -1014,16 +1014,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.5.18",
+            "version": "v5.5.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "1cc21baac11551377734b8c17ead17db4c34fe21"
+                "reference": "c678100e84934ec85c9f8bc26bd0a60222682719"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/1cc21baac11551377734b8c17ead17db4c34fe21",
-                "reference": "1cc21baac11551377734b8c17ead17db4c34fe21",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/c678100e84934ec85c9f8bc26bd0a60222682719",
+                "reference": "c678100e84934ec85c9f8bc26bd0a60222682719",
                 "shasum": ""
             },
             "require": {
@@ -1141,7 +1141,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-10-19T12:50:26+00:00"
+            "time": "2017-10-25T19:10:45+00:00"
         },
         {
             "name": "league/flysystem",
