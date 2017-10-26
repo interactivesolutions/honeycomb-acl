@@ -30,6 +30,7 @@ declare(strict_types = 1);
 namespace InteractiveSolutions\HoneycombAcl\Forms;
 
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
+use InteractiveSolutions\HoneycombAcl\Models\HCUsers;
 
 /**
  * Class HCUsersForm
@@ -148,18 +149,6 @@ class HCUsersForm
             ],
             [
                 "type" => "password",
-                "fieldID" => "old_password",
-                "tabID" => trans('HCTranslations::core.general'),
-                "label" => trans('HCACL::users.passwords.old'),
-                "editType" => 0,
-                "required" => 0,
-                "requiredVisible" => 0,
-                "properties" => [
-                    "strength" => "1" // case 0: much, case 1: 4 symbols, case 2: 6 symbols
-                ],
-            ],
-            [
-                "type" => "password",
                 "fieldID" => "password",
                 "tabID" => trans('HCTranslations::core.general'),
                 "label" => trans('HCACL::users.passwords.new'),
@@ -226,7 +215,7 @@ class HCUsersForm
     {
         $rolesList = [];
 
-        // logged user
+        /** @var HCUsers $user */
         $user = auth()->user();
 
         if (auth()->check()) {

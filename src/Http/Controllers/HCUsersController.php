@@ -61,8 +61,8 @@ class HCUsersController extends HCBaseController
 
     /**
      * Returning configured admin view
-     *
      * @return View
+     * @throws \Illuminate\Container\EntryNotFoundException
      */
     public function adminIndex(): View
     {
@@ -172,19 +172,14 @@ class HCUsersController extends HCBaseController
 
         (new HCUsersValidator())->setId($id)->validateForm();
 
+        /** @var HCUsers $record */
         $record = HCUsers::findOrFail($id);
 
         // password changing
         if (array_get($data, 'record.password')) {
-            if (Hash::check(array_get($data, 'old_password'), $record->password)) {
-                array_set($data, 'record.password', Hash::make($data['new_password']));
-
-                array_forget($data, ['new_password', 'old_password']);
-            } else {
-                return HCLog::info('USERS-003', trans('HCACL::users.errors.badOldPass'));
-            }
+            array_set($data, 'record.password', Hash::make($data['record']['password']));
         } else {
-            array_forget($data, ['new_password', 'old_password', 'record.password']);
+            array_forget($data, ['record.password']);
         }
 
         $record->update(array_get($data, 'record'));
@@ -298,8 +293,6 @@ class HCUsersController extends HCBaseController
 
         array_set($data, 'record.email', array_get($_data, 'email'));
         array_set($data, 'record.password', array_get($_data, 'password'));
-        array_set($data, 'new_password', array_get($_data, 'new_password'));
-        array_set($data, 'old_password', array_get($_data, 'old_password'));
         array_set($data, 'roles', array_get($_data, 'roles', []));
 
         return $data;
