@@ -82,19 +82,7 @@ class HCACLServiceProvider extends HCBaseServiceProvider
      *
      * @var string
      */
-    public $serviceProviderNameSpace = 'HCACL';
-
-    /**
-     * @param Gate $gate
-     * @param Router $router
-     */
-    public function boot(Gate $gate, Router $router)
-    {
-        parent::boot($gate, $router);
-
-        $this->loadViewsFrom($this->homeDirectory . '/../resources/views', $this->serviceProviderNameSpace);
-        $this->loadTranslationsFrom($this->homeDirectory . '/../resources/lang', $this->serviceProviderNameSpace);
-    }
+    protected $serviceProviderNameSpace = 'HCACL';
 
     /**
      *
@@ -150,23 +138,6 @@ class HCACLServiceProvider extends HCBaseServiceProvider
     /**
      *
      */
-    protected function registerPublishElements(): void
-    {
-        parent::registerPublishElements();
-
-        $directory = $this->homeDirectory . '/../Database/Migrations/';
-
-        // Publish your migrations
-        if (file_exists($directory)) {
-            $this->publishes([
-                $directory => database_path('/migrations'),
-            ], 'migrations');
-        }
-    }
-
-    /**
-     *
-     */
     protected function registerHelpers(): void
     {
         include_once $this->homeDirectory . '/../Helpers/helpers.php';
@@ -198,6 +169,30 @@ class HCACLServiceProvider extends HCBaseServiceProvider
                 require $route;
             });
         }
+    }
+
+    /**
+     *
+     */
+    protected function loadViews(): void
+    {
+        $this->loadViewsFrom($this->homeDirectory . '/../resources/views', $this->serviceProviderNameSpace);
+    }
+
+    /**
+     *
+     */
+    protected function loadMigrations(): void
+    {
+        $this->loadMigrationsFrom($this->homeDirectory . '/../Database/Migrations');
+    }
+
+    /**
+     *
+     */
+    protected function loadTranslations(): void
+    {
+        $this->loadTranslationsFrom($this->homeDirectory . '/../resources/lang', $this->serviceProviderNameSpace);
     }
 
     /**
