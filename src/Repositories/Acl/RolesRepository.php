@@ -59,4 +59,43 @@ class RolesRepository extends Repository
     {
         return Roles::class;
     }
+
+    /**
+     * @return string
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function getRoleSuperAdminId(): string
+    {
+        return $this->getIdBySlug(self::ROLE_SA);
+    }
+
+    /**
+     * @return string
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function getRoleProjectAdminId(): string
+    {
+        return $this->getIdBySlug(self::ROLE_PA);
+    }
+
+    /**
+     * @return string
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function getRoleUserId(): string
+    {
+        return $this->getIdBySlug(self::ROLE_U);
+    }
+
+    /**
+     * @param string $slug
+     * @return string
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    private function getIdBySlug(string $slug): string
+    {
+        return $this->makeQuery()
+            ->where('slug', '=', $slug)
+            ->value('id');
+    }
 }
