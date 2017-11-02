@@ -31,6 +31,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+/**
+ * Class CreateHcUserPersonalInfoTable
+ */
 class CreateHcUserPersonalInfoTable extends Migration
 {
     /**
@@ -38,7 +41,7 @@ class CreateHcUserPersonalInfoTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('hc_user_personal_info', function(Blueprint $table) {
             $table->increments('count');
@@ -56,7 +59,7 @@ class CreateHcUserPersonalInfoTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('hc_user_personal_info');
     }
