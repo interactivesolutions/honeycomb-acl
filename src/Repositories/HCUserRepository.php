@@ -57,4 +57,14 @@ class HCUserRepository extends Repository
     {
         return $this->makeQuery()->find($userId);
     }
+
+    /**
+     * @param string $userId
+     * @return HCUsers|Model|null
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function getByIdWithPersonal(string $userId): ? HCUsers
+    {
+        return $this->makeQuery()->with('personal')->where('id', '=', $userId)->firstOrFail();
+    }
 }

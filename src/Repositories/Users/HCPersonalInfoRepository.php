@@ -27,49 +27,24 @@
 
 declare(strict_types = 1);
 
-namespace InteractiveSolutions\HoneycombAcl\Models\Users;
+namespace InteractiveSolutions\HoneycombAcl\Repositories\Users;
 
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use InteractiveSolutions\HoneycombAcl\Models\HCUsers;
-use InteractiveSolutions\HoneycombCore\Models\HCUuidModel;
+use InteractiveSolutions\HoneycombAcl\Models\Users\HCUserPersonalInfo;
+use InteractiveSolutions\HoneycombCore\Repositories\Repository;
 
 /**
- * Class HCUserPersonalInfo
- *
- * @package InteractiveSolutions\HoneycombAcl\Models\Users
+ * Class HCPersonalInfoRepository
+ * @package InteractiveSolutions\HoneycombAcl\Repositories\Users
  */
-class HCUserPersonalInfo extends HCUuidModel
+class HCPersonalInfoRepository extends Repository
 {
-    /**
-     * @var string
-     */
-    protected $table = 'hc_user_personal_info';
 
     /**
-     * @var array
+     * @return string
      */
-    protected $fillable = [
-        'id',
-        'user_id',
-        'first_name',
-        'last_name',
-    ];
-
-    /**
-     * @var array
-     */
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
-
-    /**
-     * @return BelongsTo
-     */
-    public function user(): BelongsTo
+    public function model(): string
     {
-        return $this->belongsTo(HCUsers::class, 'user_id', 'id');
+        return HCUserPersonalInfo::class;
     }
 }
