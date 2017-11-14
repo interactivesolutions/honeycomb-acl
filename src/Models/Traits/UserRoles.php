@@ -164,8 +164,8 @@ trait UserRoles
     public function roleUser(): void
     {
         RolesUsersConnections::create([
-            'user_id' => $this - id,
-            'role_id' => Roles::where('slug', 'user')->first()['id'],
+            'user_id' => $this->id,
+            'role_id' => Roles::where('slug', 'user')->firstOrFail()->id,
         ]);
     }
 
@@ -176,7 +176,7 @@ trait UserRoles
     {
         RolesUsersConnections::create([
             'user_id' => $this->id,
-            'role_id' => Roles::where('slug', 'super-admin')->first()['id'],
+            'role_id' => Roles::where('slug', 'super-admin')->firstOrFail()->id,
         ]);
     }
 
@@ -187,7 +187,7 @@ trait UserRoles
     {
         RolesUsersConnections::create([
             'user_id' => $this->id,
-            'role_id' => Roles::where('slug', 'project-admin')->first()['id'],
+            'role_id' => Roles::where('slug', 'project-admin')->firstOrFail()->id,
         ]);
     }
 
@@ -198,7 +198,7 @@ trait UserRoles
     {
         RolesUsersConnections::create([
             'user_id' => $this->id,
-            'role_id' => Roles::where('slug', 'editor')->first()['id'],
+            'role_id' => Roles::where('slug', 'editor')->firstOrFail()->id,
         ]);
     }
 
@@ -209,7 +209,7 @@ trait UserRoles
     {
         RolesUsersConnections::create([
             'user_id' => $this->id,
-            'role_id' => Roles::where('slug', 'author')->first()['id'],
+            'role_id' => Roles::where('slug', 'author')->firstOrFail()->id,
         ]);
     }
 
@@ -220,7 +220,7 @@ trait UserRoles
     {
         RolesUsersConnections::create([
             'user_id' => $this->id,
-            'role_id' => Roles::where('slug', 'contributor')->first()['id'],
+            'role_id' => Roles::where('slug', 'contributor')->firstOrFail()->id,
         ]);
     }
 
@@ -231,7 +231,7 @@ trait UserRoles
     {
         RolesUsersConnections::create([
             'user_id' => $this->id,
-            'role_id' => Roles::where('slug', 'moderator')->first()['id'],
+            'role_id' => Roles::where('slug', 'moderator')->firstOrFail()->id,
         ]);
     }
 
@@ -242,7 +242,7 @@ trait UserRoles
     {
         RolesUsersConnections::create([
             'user_id' => $this->id,
-            'role_id' => Roles::where('slug', 'subscriber')->first()['id'],
+            'role_id' => Roles::where('slug', 'subscriber')->firstOrFail()->id,
         ]);
     }
 
@@ -253,7 +253,7 @@ trait UserRoles
     {
         RolesUsersConnections::create([
             'user_id' => $this->id,
-            'role_id' => Roles::where('slug', 'subscriber')->first()['id'],
+            'role_id' => Roles::where('slug', 'subscriber')->firstOrFail()->id,
         ]);
     }
 }
