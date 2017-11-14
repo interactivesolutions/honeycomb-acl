@@ -111,7 +111,7 @@ if (!function_exists('createHCUser')) {
 
         // create user roles
         if (empty($roleIds)) {
-            $record->roleMember();
+            $record->roleUser();
         } else {
             $record->assignRoles($roleIds);
         }
