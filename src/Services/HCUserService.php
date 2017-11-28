@@ -29,7 +29,6 @@ declare(strict_types = 1);
 
 namespace InteractiveSolutions\HoneycombAcl\Services;
 
-
 use InteractiveSolutions\HoneycombAcl\Repositories\HCUserRepository;
 use InteractiveSolutions\HoneycombAcl\Repositories\Users\HCPersonalInfoRepository;
 
@@ -66,9 +65,22 @@ class HCUserService
      * @param array $personalData
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function updateUserInfoWithPersonal(array $userData, string $userId, array $personalData = []): void
+    public function updateUser(array $userData, string $userId, array $personalData = []): void
     {
         $this->userRepository->update($userData, $userId);
         $this->personalInfoRepository->updateOrCreate(['user_id' => $userId], $personalData);
+    }
+
+    /**
+     * @param array $userData
+     * @param array $personalData
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function createUser(array $userData, array $personalData = []): void
+    {
+        $record = $this->userRepository->create($userData);
+        $personalData['user_id'] = $record->id;
+
+        $this->personalInfoRepository->updateOrCreate(['user_id' => $record->id], $personalData);
     }
 }
