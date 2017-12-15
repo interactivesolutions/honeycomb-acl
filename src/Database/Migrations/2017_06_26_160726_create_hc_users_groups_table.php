@@ -46,7 +46,7 @@ class CreateHcUsersGroupsTable extends Migration
     {
         Schema::create('hc_users_groups', function(Blueprint $table) {
             $table->integer('count', true);
-            $table->string('id', 36)->unique('id_UNIQUE');
+            $table->string('id', 36)->unique();
             $table->timestamps();
             $table->softDeletes();
             $table->string('label');

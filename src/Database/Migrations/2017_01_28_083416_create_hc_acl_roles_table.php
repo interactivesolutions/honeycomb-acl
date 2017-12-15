@@ -45,12 +45,12 @@ class CreateHcAclRolesTable extends Migration
     public function up(): void
     {
         Schema::create('hc_acl_roles', function(Blueprint $table) {
-            $table->string('id', 36)->unique('id_UNIQUE');
+            $table->string('id', 36)->unique();
             $table->integer('count', true);
             $table->timestamps();
             $table->softDeletes();
-            $table->string('name', 36)->unique('name_UNIQUE');
-            $table->string('slug', 768)->unique('slug_UNIQUE');
+            $table->string('name', 36)->unique();
+            $table->string('slug', 768)->unique();
         });
     }
 

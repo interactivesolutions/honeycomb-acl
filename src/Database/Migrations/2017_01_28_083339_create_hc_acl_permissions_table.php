@@ -45,13 +45,13 @@ class CreateHcAclPermissionsTable extends Migration
     public function up(): void
     {
         Schema::create('hc_acl_permissions', function(Blueprint $table) {
-            $table->string('id', 36)->unique('id_UNIQUE');
+            $table->string('id', 36)->unique();
             $table->integer('count', true);
             $table->timestamps();
             $table->softDeletes();
             $table->string('name', 768);
             $table->text('controller', 65535);
-            $table->string('action', 768)->unique('action_UNIQUE');
+            $table->string('action', 768)->unique();
         });
     }
 
