@@ -27,37 +27,12 @@
 
 declare(strict_types = 1);
 
-namespace InteractiveSolutions\HoneycombAcl\Database\Seeds;
-
-use Illuminate\Database\Seeder;
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
-use InteractiveSolutions\HoneycombAcl\Repositories\Acl\RolesRepository;
 
-/**
- * Class UserRolesSeeder
- * @package InteractiveSolutions\HoneycombAcl\Database\Seeds
- */
-class UserRolesSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     * @return void
-     */
-    public function run(): void
-    {
-        // http://stackoverflow.com/q/1598411
-        $list = [
-            ['name' => 'Super Admin', 'slug' => RolesRepository::ROLE_SA], // Manage everything
-            ['name' => 'Project Admin', 'slug' => RolesRepository::ROLE_PA], // Manage most aspects of the site
-            ['name' => 'User', 'slug' => RolesRepository::ROLE_U], // Average Joe
-        ];
-
-        foreach ($list as $roleData) {
-            $role = Roles::where('slug', $roleData['slug'])->first();
-
-            if (!$role) {
-                Roles::create($roleData);
-            }
-        }
-    }
-}
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(Roles::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->title,
+        'slug' => $faker->slug,
+    ];
+});

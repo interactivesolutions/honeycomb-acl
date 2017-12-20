@@ -27,37 +27,52 @@
 
 declare(strict_types = 1);
 
-namespace InteractiveSolutions\HoneycombAcl\Database\Seeds;
+namespace InteractiveSolutions\HoneycombAcl\Traits;
 
-use Illuminate\Database\Seeder;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Collection;
 use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
+use InteractiveSolutions\HoneycombAcl\Models\HCUsers;
+use InteractiveSolutions\HoneycombAcl\Models\Traits\UserRoles;
 use InteractiveSolutions\HoneycombAcl\Repositories\Acl\RolesRepository;
 
-/**
- * Class UserRolesSeeder
- * @package InteractiveSolutions\HoneycombAcl\Database\Seeds
- */
-class UserRolesSeeder extends Seeder
+trait AuthenticateAs
 {
-    /**
-     * Run the database seeds.
-     * @return void
-     */
-    public function run(): void
-    {
-        // http://stackoverflow.com/q/1598411
-        $list = [
-            ['name' => 'Super Admin', 'slug' => RolesRepository::ROLE_SA], // Manage everything
-            ['name' => 'Project Admin', 'slug' => RolesRepository::ROLE_PA], // Manage most aspects of the site
-            ['name' => 'User', 'slug' => RolesRepository::ROLE_U], // Average Joe
-        ];
+    public function authenticateAs(
+        array $roles = [RolesRepository::ROLE_SA],
+        bool $remember = false,
+        array $data = []
+    ): Authenticatable {
+        /** @var Authenticatable|UserRoles $user */
+        $user = factory(HCUsers::class)->create($data);
 
-        foreach ($list as $roleData) {
-            $role = Roles::where('slug', $roleData['slug'])->first();
-
-            if (!$role) {
-                Roles::create($roleData);
-            }
+        if ($roles) {
+            $this->createRoles($user, $roles);
         }
+
+        auth()->login($user, $remember);
+
+        return $user;
+    }
+
+    /**
+     * @param Authenticatable|UserRoles $user
+     * @param array $roles
+     */
+    private function createRoles(Authenticatable $user, array &$roles): void
+    {
+        /** @var Collection|UserRoles[] $createdRoles */
+        $createdRoles = collect();
+        foreach ($roles as $role) {
+            $createdRoles->offsetSet(
+                $role,
+                factory(Roles::class)->create([
+                    'name' => ucwords(str_replace('-', ' ', $role), ' '),
+                    'slug' => $role,
+                ])
+            );
+        }
+
+        $user->roles()->sync($createdRoles->pluck('id'));
     }
 }

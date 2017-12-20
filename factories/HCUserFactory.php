@@ -27,37 +27,15 @@
 
 declare(strict_types = 1);
 
-namespace InteractiveSolutions\HoneycombAcl\Database\Seeds;
+use InteractiveSolutions\HoneycombAcl\Models\HCUsers;
 
-use Illuminate\Database\Seeder;
-use InteractiveSolutions\HoneycombAcl\Models\Acl\Roles;
-use InteractiveSolutions\HoneycombAcl\Repositories\Acl\RolesRepository;
+/** @var \Illuminate\Database\Eloquent\Factory $factory */
+$factory->define(HCUsers::class, function (Faker\Generator $faker) {
+    static $password;
 
-/**
- * Class UserRolesSeeder
- * @package InteractiveSolutions\HoneycombAcl\Database\Seeds
- */
-class UserRolesSeeder extends Seeder
-{
-    /**
-     * Run the database seeds.
-     * @return void
-     */
-    public function run(): void
-    {
-        // http://stackoverflow.com/q/1598411
-        $list = [
-            ['name' => 'Super Admin', 'slug' => RolesRepository::ROLE_SA], // Manage everything
-            ['name' => 'Project Admin', 'slug' => RolesRepository::ROLE_PA], // Manage most aspects of the site
-            ['name' => 'User', 'slug' => RolesRepository::ROLE_U], // Average Joe
-        ];
-
-        foreach ($list as $roleData) {
-            $role = Roles::where('slug', $roleData['slug'])->first();
-
-            if (!$role) {
-                Roles::create($roleData);
-            }
-        }
-    }
-}
+    return [
+        'email' => $faker->unique()->safeEmail,
+        'password' => $password ?: $password = bcrypt('secret'),
+        'activated_at' => $faker->dateTime(),
+    ];
+});

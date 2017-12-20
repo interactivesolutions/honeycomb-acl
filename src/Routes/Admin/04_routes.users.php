@@ -27,14 +27,13 @@
 
 declare(strict_types = 1);
 
-Route::group(['prefix' => config('hc.admin_url'), 'middleware' => ['web', 'auth']], function() {
+Route::group(['prefix' => config('hc.admin_url'), 'middleware' => ['web', 'auth']], function () {
     Route::get('users', [
-        'as' => 'admin.users.index',
         'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_list'],
         'uses' => 'HCUsersController@adminIndex',
-    ]);
+    ])->name('admin.users.index');
 
-    Route::group(['prefix' => 'api/users'], function() {
+    Route::group(['prefix' => 'api/users'], function () {
         Route::get('/', [
             'as' => 'admin.api.users',
             'middleware' => ['acl:interactivesolutions_honeycomb_acl_users_list'],
@@ -73,7 +72,7 @@ Route::group(['prefix' => config('hc.admin_url'), 'middleware' => ['web', 'auth'
             'uses' => 'HCUsersController@apiForceDelete',
         ]);
 
-        Route::group(['prefix' => '{id}'], function() {
+        Route::group(['prefix' => '{id}'], function () {
 
             Route::get('/', [
                 'as' => 'admin.api.users.single',
